@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+.env
+.clip_cache/
+.trim_cache/
+.vidpipe_*/
+
+# Regenerable caches (briefs/timestamps cost API $ to rebuild, but are machine-local)
+cache/
+
+# Local Claude Code settings (machine-specific)
+.claude/
+
+# All render output is generated
+output/
+
+logs/*.json
+tests/reports/report_*.json
+
+*.egg-info/
+dist/
+build/

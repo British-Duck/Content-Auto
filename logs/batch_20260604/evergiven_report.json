@@ -1,0 +1,221 @@
+{
+  "stages": {
+    "creative_director": "OK \u2014 ever-given-suez-canal-blockage",
+    "researcher": "OK \u2014 6 clips",
+    "render": "OK \u2014 ever-given-suez-canal-blockage.mp4",
+    "quality_gate": "PASSED \u2014 7/7",
+    "content_reviewer": "PUBLISH \u2014 9.1/10"
+  },
+  "output": "C:\\dev\\Content Automation\\Enhanced games\\output\\ever-given-suez-canal-blockage.mp4",
+  "quality": {
+    "passed": true,
+    "checks": {
+      "resolution": {
+        "passed": true,
+        "detail": "1080x1920 (expected 1080x1920)"
+      },
+      "duration": {
+        "passed": true,
+        "detail": "31.40s vs 31.40s (diff 0.00s)"
+      },
+      "fps": {
+        "passed": true,
+        "detail": "30.0 (expected 30)"
+      },
+      "file_size": {
+        "passed": true,
+        "detail": "10.18 MB (limit 50.0)"
+      },
+      "audio": {
+        "passed": true,
+        "detail": "present"
+      },
+      "black_frames": {
+        "passed": true,
+        "detail": "none"
+      },
+      "codec": {
+        "passed": true,
+        "detail": "h264"
+      }
+    },
+    "frames_dir": "C:\\dev\\Content Automation\\Enhanced games\\output\\ever-given-suez-canal-blockage_frames"
+  },
+  "review": {
+    "decision": "PUBLISH",
+    "scores": {
+      "factual_accuracy": {
+        "score": 9,
+        "reason": "All claims, numbers, and dates are highly accurate and verifiable, with only a minor rounding in the hourly cost that remains consistent with the daily figure."
+      },
+      "hook_strength": {
+        "score": 9,
+        "reason": "The juxtaposition of the tiny excavator and the massive ship creates immediate, compelling visual tension that demands attention."
+      },
+      "narrative_coherence": {
+        "score": 9,
+        "reason": "The narrative builds effectively from the initial absurd image to the global impact and eventual resolution, with each screen advancing the story."
+      },
+      "watchability": {
+        "score": 9,
+        "reason": "The concise text, varied pacing, and complementary voiceover ensure high retention and a compelling viewing experience to the end."
+      },
+      "engagement_potential": {
+        "score": 9,
+        "reason": "The video is packed with shareable, shocking facts and a dramatic narrative that will provoke discussion and saves."
+      },
+      "tone_brand_fit": {
+        "score": 10,
+        "reason": "The authoritative voice, dramatic scheme, and factual, provocative content align perfectly with the brand's documentary authority."
+      }
+    },
+    "overall_score": 9.09,
+    "summary": "This video is exceptionally well-crafted, leveraging a powerful visual hook and escalating narrative to tell a compelling story. Its factual accuracy, engaging presentation, and strong brand fit make it an ideal candidate for immediate publication.",
+    "fixes": []
+  },
+  "success": true,
+  "elapsed": 309.2,
+  "cost": {
+    "gemini_text_calls": 9,
+    "gemini_video_calls": 5,
+    "gemini_cached_calls": 0,
+    "est_input_tokens": 99862,
+    "est_output_tokens": 1911,
+    "est_thinking_tokens": 0,
+    "total_video_seconds_uploaded": 300.0,
+    "videos_downloaded": 5,
+    "videos_from_cache": 1,
+    "cache_hits": 2,
+    "cache_misses": 14,
+    "est_cost_usd": 0.016126,
+    "elapsed_seconds": 309.2,
+    "calls_detail": [
+      {
+        "stage": "creative_director_generate",
+        "type": "text",
+        "input_tokens": 2644,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "creative_director_critique",
+        "type": "text",
+        "input_tokens": 1214,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2399,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15910,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2454,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15910,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2528,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15963,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2528,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15908,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15908,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2493,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2499,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "content_reviewer",
+        "type": "text",
+        "input_tokens": 1504,
+        "output_tokens": 390,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      }
+    ]
+  }
+}

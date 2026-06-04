@@ -1,0 +1,13 @@
+========================================================================
+  boeing-737-max-scandal  |  dark_red  |  20.7s  |  4 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   2.8  CLIP              6GV0W-rj3VE@0.0s–3.0s         "THE 'SAFE' PLANE..." / "Killed 346 people."
+   2   2.5  CLIP              CcuNaz6tR70@23.0s–26.0s       "Two crashes." / "Five months apart."
+   3   3.2  GRADIENT                                        "Internal emails revealed:" / "The software was dea"
+   4   3.0  CLIP              I0aiUaBYLFo@22.0s–25.0s       "Boeing concealed the defect." / "From regulators."
+   5   2.7  GRADIENT                                        "$2.5 BILLION." / "The settlement."
+   6   3.5  CLIP              -rmZ4r3E8_A@8.0s–12.5s        "But for 346 lives..." / "No executive was cha"
+   7   3.0  GRADIENT                                        "What price accountability?"
+========================================================================

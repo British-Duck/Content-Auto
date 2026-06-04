@@ -1,0 +1,14 @@
+========================================================================
+  gamestop-short-squeeze-robinhood  |  dark_red  |  32.5s  |  3 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   3.5  GRADIENT                                        "ONE STOCK." / "$17 → $483 in 14 day"
+   2   3.5  CLIP              3jp8zUlSpXg@3.0s–5.4s         "The target: A failing video "
+   3   4.0  GRADIENT                                        "Wall Street bet billions on " / "They shorted over 14"
+   4   3.5  GRADIENT                                        "Their opponent: A Reddit for" ⚠ consecutive
+   5   4.5  CLIP              Ic7NhQ62njg@197.0s–202.5s     "THE SQUEEZE."
+   6   3.5  GRADIENT                                        "Hedge funds began to collaps"
+   7   5.0  CLIP              HuxgKFzfP7w@0.0s–5.0s         "Then, the #1 trading app hal"
+   8   5.0  GRADIENT                                        "Was the game rigged from the"
+========================================================================

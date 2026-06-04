@@ -1,0 +1,105 @@
+{
+  "id": "gamestop-short-squeeze-robinhood",
+  "label": "THE GAMESTOP SAGA",
+  "scheme": "dark_red",
+  "voice": "en-US-GuyNeural",
+  "voice_script": "In 2021, Wall Street giants were sure GameStop was dead. They bet billions on its failure, shorting over 140% of the company's entire stock—a seemingly impossible number. But they overlooked a small army of investors on a Reddit forum called WallStreetBets. They saw the hedge funds' over-exposed position and attacked, buying shares and driving the price from seventeen dollars to over four hundred. It was a historic squeeze, pushing the giants towards bankruptcy. Then, right at the peak, the popular trading app Robinhood suddenly banned users from buying the stock. They said it was to protect investors. But to millions, it looked like the system was rigging the game to save its own.",
+  "screens": [
+    {
+      "text": "ONE STOCK.",
+      "duration": 3.5,
+      "text_size": 92,
+      "panel": false,
+      "subtitle": "$17 → $483 in 14 days.",
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "The target: A failing video game store.",
+      "duration": 3.5,
+      "text_size": 80,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "GameStop store exterior",
+      "clip_moment": "daylight shot of a generic GameStop storefront with logo visible",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=3jp8zUlSpXg",
+        "start": 3.0,
+        "end": 5.4
+      }
+    },
+    {
+      "text": "Wall Street bet billions on its failure.",
+      "duration": 4,
+      "text_size": 82,
+      "panel": false,
+      "subtitle": "They shorted over 140% of its stock.",
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "Their opponent: A Reddit forum.",
+      "duration": 3.5,
+      "text_size": 86,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "WallStreetBets subreddit page",
+      "clip_moment": "scrolling through the WallStreetBets forum showing GME tickers and rocket emojis",
+      "clip": null
+    },
+    {
+      "text": "THE SQUEEZE.",
+      "duration": 4.5,
+      "text_size": 95,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "GameStop stock ticker January 2021",
+      "clip_moment": "GME price chart showing a near-vertical climb past $300",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Ic7NhQ62njg",
+        "start": 197.0,
+        "end": 202.5
+      }
+    },
+    {
+      "text": "Hedge funds began to collapse.",
+      "duration": 3.5,
+      "text_size": 82,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "Then, the #1 trading app halted all buying.",
+      "duration": 5,
+      "text_size": 78,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "News report Robinhood halts GameStop trading",
+      "clip_moment": "news anchor announcing the trading restriction or an on-screen graphic stating 'ROBINHOOD RESTRICTS TRADING'",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=HuxgKFzfP7w",
+        "start": 0.0,
+        "end": 5.0
+      }
+    },
+    {
+      "text": "Was the game rigged from the start?",
+      "duration": 5,
+      "text_size": 78,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "stress_negative_duration",
+  "label": "NEG DUR",
+  "scheme": "dark_gold",
+  "screens": [
+    {
+      "text": "Negative duration\nmust be rejected",
+      "duration": -1
+    }
+  ]
+}

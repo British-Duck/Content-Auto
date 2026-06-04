@@ -1,0 +1,144 @@
+COST TUNING GUIDE
+=================
+All settings are in config.py. Adjust these if quality drops or you want
+to spend even less.
+
+
+1. THINKING BUDGETS (biggest cost lever)
+────────────────────────────────────────
+Thinking tokens cost ~6x more than normal output ($3.50/1M vs $0.60/1M).
+Each setting controls how many thinking tokens Gemini is allowed to use.
+0 = disabled (cheapest), max for Flash = 24576.
+
+  THINKING_BUDGET_CREATIVE = None (UNCAPPED)
+    What: Creative Director — generates the video spec from your brief.
+    Why uncapped: The prompt is ~4000 words of detailed rules about hooks,
+    narrative arcs, open loops, clip descriptions. Capping thinking caused
+    weak hooks, duplicate clip descriptions, and generic narrative arcs.
+    Quality is the priority here — this call determines the entire video.
+    To save money: Set to 16384 (moderate quality loss) or 8192 (noticeable).
+    Cost: ~$0.03-0.09 per call depending on how much the model thinks.
+
+  THINKING_BUDGET_CRITIQUE = None (UNCAPPED)
+    What: Self-critique pass — reviews and fixes the draft spec.
+    Why uncapped: Needs genuine reasoning to catch rule violations.
+    To save money: Set to 8192 (usually fine) or 4096 (may miss issues).
+    Cost: ~$0.02-0.06 per call.
+
+  THINKING_BUDGET_TIMESTAMPS = 1024
+    What: Video analysis — finding clip timestamps in YouTube videos.
+    Why capped: This is the one stage where limiting thinking is safe.
+    Visual matching ("what second does X appear at") needs some reasoning
+    but not deep chains. 1024 is the sweet spot.
+    If timestamps are wrong: Increase to 2048.
+    To save more: Can go to 0 but accuracy drops.
+    Cost impact: ~$0.004 per call at 1024 vs ~$0.03+ uncapped.
+
+  THINKING_BUDGET_REVIEWER = None (UNCAPPED)
+    What: Content Reviewer — scores the spec on 6 dimensions.
+    Why uncapped: With capped thinking, the reviewer became a rubber stamp
+    (9.4/10 for mediocre specs). Uncapped gives genuinely critical reviews
+    that catch factual errors and weak narratives.
+    To save money: Set to 8192 (slightly less critical) or 4096 (lenient).
+    Cost: ~$0.01-0.04 per call.
+
+
+2. RESEARCHER CANDIDATES (second biggest lever)
+────────────────────────────────────────────────
+  RESEARCHER_MAX_SEARCH_RESULTS = 5
+    How many YouTube videos to find per clip search. Kept at 5 because
+    searching is free (yt-dlp, no API cost). Only ranking uses this.
+
+  RESEARCHER_MAX_DOWNLOAD_CANDIDATES = 3
+    How many of the ranked results to actually download and potentially
+    upload to Gemini. Was effectively 5 (tried all).
+    Why reduced: Top 3 ranked by title relevance usually contain the
+    right clip. Going to 5 adds bandwidth and extra Gemini calls.
+    If clips are often wrong/missing: Increase to 4 or 5.
+    To save money: Can go to 2 but expect more gradient fallbacks.
+    Cost impact: Each extra candidate = up to 1 Gemini video call
+    (~$0.005 per call with thinking at 1024).
+
+
+3. CACHING LAYERS (free savings)
+────────────────────────────────
+These don't affect quality — they just avoid repeating identical work.
+All caches are on by default. Clearing them forces fresh API calls.
+
+  cache/briefs/     Brief → spec mapping. Same brief = same spec without
+                    calling Creative Director again. Delete to regenerate,
+                    or use --force-regen flag.
+
+  cache/searches/   YouTube search results by query. Expires naturally
+                    as you search for new topics.
+
+  cache/metadata/   Video descriptions and chapters by video ID.
+
+  cache/timestamps/ Gemini timestamp results by video+description hash.
+
+  .clip_cache/      Downloaded YouTube videos by video ID.
+
+  .trim_cache/      Trimmed videos prepared for Gemini upload.
+
+  To clear all caches:
+    rmdir /s /q cache .clip_cache .trim_cache
+
+
+4. METADATA-FIRST OPTIMISATION
+──────────────────────────────
+Before uploading any video to Gemini ($), the researcher now checks
+the video's description and chapter markers for timestamps (free).
+This has no config setting — it always runs. If metadata gives a
+match, Gemini is skipped entirely for that screen.
+
+If metadata matches are inaccurate: This is unlikely since the keyword
+overlap threshold is conservative (requires 2+ word matches). But if
+you notice wrong timestamps labelled "source: metadata" in the spec,
+the Gemini fallback will catch it on re-run after you delete the
+cached timestamp file.
+
+
+5. RATE LIMITING
+────────────────
+  GEMINI_RPM_SLEEP = 2.5
+    Seconds between API calls. Set for the free tier (15 RPM).
+    On the paid tier you get 2000 RPM — you can safely reduce this
+    to 0.5 or even 0 for faster runs. Won't affect cost, only speed.
+
+
+6. ESTIMATED COSTS PER RUN (with current settings)
+───────────────────────────────────────────────────
+  Creative Director (2 text calls):      ~$0.045
+  Researcher (0-4 video calls):          $0.000 – $0.012
+  Content Reviewer (1 text call):        ~$0.008
+  ──────────────────────────────────────────────────
+  Total per video:                       ~$0.01 – $0.07
+
+  With £10 top-up (~$12.50):             ~180 – 1250 videos
+
+  Use --dry-run to preview cost before each run:
+    python orchestrate.py "your brief" --dry-run
+
+
+7. QUICK RECIPES
+────────────────
+  CHEAPEST (may reduce creative quality):
+    THINKING_BUDGET_CREATIVE = 0
+    THINKING_BUDGET_CRITIQUE = 0
+    THINKING_BUDGET_TIMESTAMPS = 0
+    THINKING_BUDGET_REVIEWER = 0
+    RESEARCHER_MAX_DOWNLOAD_CANDIDATES = 1
+    → ~$0.002 per video
+
+  BALANCED (current defaults):
+    Uncapped thinking on creative/critique/reviewer. Capped on timestamps.
+    Best quality with cost savings from caching and smart research.
+    → ~$0.10 – $0.20 per video
+
+  HIGH QUALITY (more expensive):
+    THINKING_BUDGET_CREATIVE = 24576
+    THINKING_BUDGET_CRITIQUE = 8192
+    THINKING_BUDGET_TIMESTAMPS = 2048
+    THINKING_BUDGET_REVIEWER = 8192
+    RESEARCHER_MAX_DOWNLOAD_CANDIDATES = 4
+    → ~$0.10 – $0.25 per video

@@ -1,0 +1,120 @@
+{
+  "id": "maradona-hand-of-god-vs-goal-of-century",
+  "label": "THE PLAYBOOK",
+  "scheme": "dark_purple",
+  "voice": "en-US-GuyNeural",
+  "voice_script": "June 22nd, 1986. A World Cup quarter-final loaded with political tension between Argentina and England. At the 51-minute mark, Diego Maradona commits one of the most infamous fouls in football history, punching the ball into the net. The referee doesn't see it. But just four minutes later, the same man would score what many consider the single greatest goal ever recorded. In one game, Maradona became both the ultimate villain and the ultimate hero, defining his complicated legacy forever.",
+  "screens": [
+    {
+      "text": "The most blatant CHEAT in sports history.",
+      "duration": 3.0,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Maradona Hand of God goal 1986",
+      "clip_moment": "Maradona's left hand clearly connecting with the football above the goalkeeper's head.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=fqQfUlVnQXQ",
+        "start": 6.5,
+        "end": 9.5
+      }
+    },
+    {
+      "text": "He punched it in.",
+      "duration": 2.5,
+      "text_size": 94,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Maradona Hand of God goal 1986",
+      "clip_moment": "A replay angle showing the fist making contact with the ball.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=fqQfUlVnQXQ",
+        "start": 6.5,
+        "end": 9.5
+      }
+    },
+    {
+      "text": "The referee allowed it.",
+      "duration": 3.0,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Maradona Hand of God goal 1986",
+      "clip_moment": "English players, especially goalkeeper Peter Shilton, protesting furiously to referee Ali Bennaceur.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=-ccNkksrfls",
+        "start": 31.0,
+        "end": 35.0
+      }
+    },
+    {
+      "text": "4 minutes later, he did this.",
+      "duration": 3.0,
+      "text_size": 88,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Maradona Goal of the Century 1986",
+      "clip_moment": "Maradona receiving the ball inside his own half and starting his dribble.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Da_CDPRG2j0",
+        "start": 49.5,
+        "end": 53.5
+      }
+    },
+    {
+      "text": "60 yards. 10 seconds. 5 defenders beaten.",
+      "duration": 6.0,
+      "text_size": 82,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": "ambient",
+      "clip_description": "Maradona Goal of the Century 1986",
+      "clip_moment": "The full dribble sequence, weaving through multiple English players at speed.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Da_CDPRG2j0",
+        "start": 0.0,
+        "end": null
+      }
+    },
+    {
+      "text": "The 'Goal of the Century'.",
+      "duration": 4.0,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Maradona Goal of the Century 1986",
+      "clip_moment": "Maradona rounding the goalkeeper and slotting the ball into the net.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=fqQfUlVnQXQ",
+        "start": 11.4,
+        "end": 13.2
+      }
+    },
+    {
+      "text": "The Villain. The Hero. In the same match.",
+      "duration": 4.5,
+      "text_size": 90,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "Cheat or genius?",
+      "duration": 4.0,
+      "text_size": 100,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Maradona celebrating World Cup 1986",
+      "clip_moment": "Maradona on his teammates' shoulders, holding the World Cup trophy aloft.",
+      "clip": null
+    }
+  ]
+}

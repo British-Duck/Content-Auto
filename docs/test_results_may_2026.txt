@@ -1,0 +1,197 @@
+================================================================================
+ROBUSTNESS TEST RESULTS — 5 TOPICS — 2026-05-30
+================================================================================
+Pipeline test across 5 unrelated domains to verify general-purpose performance.
+No topic-specific code or hardcoding. All results from identical pipeline.
+
+--------------------------------------------------------------------------------
+PIPELINE METRICS TABLE
+--------------------------------------------------------------------------------
+
+                   | BOLT 9.58    | BOEING MAX   | SHAQ FT      | GAMESTOP     | TIGER 2019
+-------------------|--------------|--------------|--------------|--------------|---------------
+Scheme             | dark_gold    | dark_red     | dark_purple  | dark_red     | dark_gold
+Screens            | 6            | 7            | 6            | 8            | 8
+Clips assigned     | 6            | 5            | 5            | 7            | 7
+Clips found        | 5/6          | 4/5          | 4/5          | 6/7          | 6/7
+Clip miss reason   | Walking post-| CEO hearing  | Hack-a-Shaq  | $19B loss    | 2008 win clip
+                   | race not     | download     | deliberate   | graphic      | (wrong era
+                   | found        | failed       | foul (too    | doesn't      | video)
+                   |              |              | specific)    | exist        |
+Quality gate       | PASS 7/7     | PASS 7/7     | PASS 7/7     | PASS 7/7     | PASS 7/7
+Content verdict    | REVISE 7.4   | PUBLISH 9.6  | PUBLISH 8.8  | REVISE 5.9   | REJECT 7.6
+Factual flag       | "17 years"   | None — clean | None — clean | "$4 start"   | "5 surgeries"
+                   | (reviewer    |              |              | (brief error,| (brief error,
+                   | date         |              |              | was ~$17)    | was 4 by 2019)
+                   | confused)    |              |              |              |
+Voice script issue | None         | None         | None         | Too long for | None
+                   |              |              |              | duration     |
+                   |              |              |              | (watchable:3)|
+KB clips saved     | 5            | 4            | 5            | 6            | 5
+Run time           | 319s         | 516s         | 351s         | 503s         | 727s
+Est. cost          | ~$0.015      | ~$0.018      | ~$0.016      | ~$0.019      | ~$0.022
+
+--------------------------------------------------------------------------------
+USER VISUAL OBSERVATIONS
+--------------------------------------------------------------------------------
+
+GENERAL — ALL VIDEOS:
+  [ISSUE] Small underhanging text element distracts from the frame. Identified
+          as the screen counter pill ("1/6") and the subtitle at fixed 26px
+          relative to 90-100px main text. Both look like annotations.
+  [ISSUE] Cannot hear audio from clips or voiceover. (User notes this may be
+          a local player/device issue — to investigate tomorrow.)
+  [ISSUE] Clips appear zoomed in / awkwardly cropped. Root cause: landscape
+          16:9 source videos (1920x1080) are scaled so height=1920, then the
+          center 1080px of the 3413px-wide frame is cropped. Only 31% of
+          horizontal content is visible.
+  [NOTE]  Video length target: push toward 45 seconds where story supports it.
+
+1. USAIN BOLT — Rating: BEST SO FAR ⭐
+   [LIKE]  Most captivating and visually strong of the five.
+   [LIKE]  Clip timing is well-chosen and adds real watchability.
+   [LIKE]  The story flows — you feel the progression from race to legend.
+   [ISSUE] "2060" prediction feels uncertain (was in the brief, not verified).
+   [ISSUE] "Retired undefeated" — contentious claim to make this directly.
+   [ISSUE] Cropping occasionally off but manageable. Not the worst offender.
+
+2. TIGER WOODS 2019 — Rating: GOOD TIER ⭐
+   [LIKE]  Good overall quality compared to earlier pipeline versions.
+   [LIKE]  Clips are captivating — good footage choices.
+   [ISSUE] Story slightly sloppy — narrative doesn't land as cleanly as Bolt.
+   [ISSUE] Clips sometimes awkwardly framed — cropping issue is present.
+   [ISSUE] "Five surgeries" was brief error (four by 2019). Reviewer caught it.
+
+3. SHAQ FREE THROWS — Rating: WEAKEST STORY 🔶
+   [ISSUE] Story flows poorly — beats don't connect well narratively.
+   [ISSUE] Clips not captivating enough — hard to tell what's happening.
+   [ISSUE] Worst offender for awkward cropped/framed clips.
+   [NOTE]  Time segments are okay but not great. The multi-source (different
+           events from different years) makes it harder to thread than
+           single-event stories like Bolt or Tiger.
+
+4. GAMESTOP SHORT SQUEEZE — Rating: MIXED BAG 🔶
+   [LIKE]  Good clip variety — different sources add visual energy.
+   [LIKE]  Some clips land well (Robinhood halt news, WSB Reddit interface).
+   [ISSUE] News clips mean audio context is critical — couldn't evaluate
+           without hearing the audio.
+   [ISSUE] Some clips awkwardly framed.
+   [ISSUE] Can't tell what news anchors are saying — this matters for context.
+   [ISSUE] Start price was wrong in brief ($4 — should have been ~$17).
+   [ISSUE] Voice script too long for screen durations (watchability scored 3).
+
+5. BOEING 737 MAX — Rating: GOOD CLIP VARIATION ⭐
+   [LIKE]  Better clip variation than GameStop.
+   [LIKE]  Don't be afraid to let news/talking clips run longer — the speech
+           carries context that screen text can't replace.
+   [LIKE]  Questions at the end work well for this story. Controversy angle
+           benefits from open questions — keeps the audience thinking.
+   [NOTE]  Couldn't evaluate news audio without hearing it.
+   [NOTE]  Information correctness couldn't be assessed by user.
+
+--------------------------------------------------------------------------------
+CHANGES MADE AS A RESULT OF THIS REPORT
+--------------------------------------------------------------------------------
+
+CHANGE 1: Remove screen counter pill from text overlay
+  What:   The "1/6", "2/6" counter in the top-right corner of every screen
+          has been removed from vidpipe/text.py.
+  Why:    It is a production annotation — tells the developer how many screens
+          there are. On a finished social media video it looks like a developer
+          watermark. The progress bar at the bottom already orients the viewer
+          on how far through the video they are.
+  File:   vidpipe/text.py — counter pill block removed.
+
+CHANGE 2: Fix subtitle text size to be proportional, not fixed
+  What:   Subtitle text size changed from fixed int(26 * scale) to
+          int(text_size * 0.42 * scale). At text_size=90, this gives ~38px
+          instead of 26px.
+  Why:    With main text at 90-100px, a 26px subtitle looks like a tiny
+          annotation hanging beneath the headline. Proportional sizing makes
+          it read as a deliberate secondary line, not an afterthought.
+  File:   vidpipe/text.py — subtitle font size formula updated.
+
+CHANGE 3: Explicit audio stream mapping + loudnorm in voiceover mix
+  What:   Added -map 0:v:0 and -map 1:a:0 to the ffmpeg voiceover mix command.
+          Added -af loudnorm=I=-16:TP=-1.5:LRA=11 audio normalization.
+  Why:    Without explicit mapping, ffmpeg auto-selects streams and can behave
+          unexpectedly across different players when the video has no prior
+          audio track. Loudnorm ensures consistent, broadcast-standard volume
+          regardless of TTS output level.
+  File:   vidpipe/voiceover.py — mix_voiceover function updated.
+
+CHANGE 4: Video length target raised to 30-50 seconds (target 35-45s)
+  What:   Creative director prompt updated to target 35-45 seconds. Screen
+          count extended to 5-12. Minimum duration raised from 10s to 20s.
+          Validation in creative_director.py updated to match.
+  Why:    Previous 15-25s output was too brief to land emotionally. User
+          observed that richer stories (Boeing, Tiger) needed more breathing
+          room. 45 seconds is within TikTok/Reels retention range while
+          allowing enough screens to build narrative arc.
+  Files:  prompts/creative_director.txt, creative_director.py.
+
+CHANGE 5: Parallel cleanup bug fixed (exit code 1 on all parallel runs)
+  What:   _cleanup_intermediates() now only deletes the CURRENT run's vidpipe
+          directory (.vidpipe_{spec_id}), not all .vidpipe_* directories.
+          Entire cleanup wrapped in try/except.
+  Why:    Running 5 tests simultaneously, each cleanup was attempting to delete
+          the vidpipe working dirs of still-running sibling processes, causing
+          PermissionError on Windows, propagating as exit code 1 after an
+          otherwise successful run.
+  File:   orchestrate.py — _cleanup_intermediates() refactored.
+
+CHANGE 6: Clip cropping fix — blurred background fill (renderer.py)
+  What:   Landscape source videos (16:9) now use a blurred background fill
+          rather than a center crop. The clip is scaled to fill the 1080px
+          width at natural proportions, centered vertically. A blurred,
+          darkened copy fills the remaining vertical space.
+  Why:    The previous approach scaled the clip so its HEIGHT filled 1920px,
+          then cropped the center 1080px of a 3413px-wide frame. Only 31% of
+          horizontal content was visible — the "zoomed in" effect. The
+          blurred background approach shows the full width of every clip
+          while keeping the vertical format.
+  File:   vidpipe/renderer.py — _render_clip_screen updated.
+
+--------------------------------------------------------------------------------
+NEXT FEATURE TO DESIGN: PER-SCREEN AUDIO MODE
+--------------------------------------------------------------------------------
+
+PROBLEM:
+  Currently all clip audio is stripped (-an in ffmpeg). The voiceover TTS
+  narrates over silent video. This works for sports action clips. For news
+  clips, testimony, or any clip where a speaker is conveying meaning that
+  cannot be replicated in screen text — this is wrong. The viewer needs to
+  HEAR the Boeing CEO testimony or the Robinhood explanation.
+
+PROPOSED SOLUTION — audio_mode field in spec:
+
+  Each screen gets an optional "audio_mode" field:
+
+    "audio_mode": null           — DEFAULT: strip clip audio, use voiceover
+    "audio_mode": "clip_audio"   — Keep clip's original audio, voiceover silent
+                                   during this screen's time window
+    "audio_mode": "ducked"       — Clip audio at 30% volume, voiceover at full
+
+  Changes required across the pipeline:
+    1. prompts/creative_director.txt — guidance on when to use each mode
+    2. creative_director.py — add audio_mode to _fixup validation
+    3. vidpipe/spec.py — add audio_mode to Screen dataclass
+    4. vidpipe/renderer.py — don't apply -an when audio_mode is clip_audio/ducked
+    5. vidpipe/assembler.py — handle mixed audio/silent segments in concat
+    6. vidpipe/voiceover.py — for clip_audio screens, generate voiceover for
+       all OTHER screens only, then use ffmpeg filter_complex to mix:
+       - Silence during clip_audio windows
+       - TTS narration during voiceover windows
+
+  Creative director guidance (to be added):
+    "For any clip where the person speaking is delivering factual content
+    that cannot be summarised in 8 words of screen text, set
+    audio_mode: 'clip_audio'. The pipeline will keep the original audio and
+    pause the voiceover. Use this for: testimony, news anchor explanations,
+    key speeches, court rulings being read."
+
+STATUS: Designed, not yet implemented. Will be built in a future session.
+
+================================================================================
+END OF REPORT
+================================================================================

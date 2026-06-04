@@ -1,0 +1,11 @@
+{
+  "id": "stress_zero_duration",
+  "label": "ZERO DUR",
+  "scheme": "dark_gold",
+  "screens": [
+    {
+      "text": "Zero duration\nshould fail or be clamped",
+      "duration": 0
+    }
+  ]
+}

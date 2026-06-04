@@ -1,0 +1,251 @@
+{
+  "stages": {
+    "creative_director": "OK \u2014 ftx-collapse-sam-bankman-fried",
+    "spec_review_loop": "PUBLISH \u2014 9.1/10 after 1 pass(es)",
+    "researcher": "OK \u2014 2 clips",
+    "render": "OK \u2014 ftx-collapse-sam-bankman-fried.mp4",
+    "quality_gate": "PASSED \u2014 7/7",
+    "content_reviewer": "PUBLISH \u2014 9.2/10"
+  },
+  "output": "C:\\dev\\Content Automation\\Enhanced games\\output\\ftx-collapse-sam-bankman-fried.mp4",
+  "quality": {
+    "passed": true,
+    "checks": {
+      "resolution": {
+        "passed": true,
+        "detail": "1080x1920 (expected 1080x1920)"
+      },
+      "duration": {
+        "passed": true,
+        "detail": "29.20s vs 29.20s (diff 0.00s)"
+      },
+      "fps": {
+        "passed": true,
+        "detail": "30.0 (expected 30)"
+      },
+      "file_size": {
+        "passed": true,
+        "detail": "7.26 MB (limit 50.0)"
+      },
+      "audio": {
+        "passed": true,
+        "detail": "present"
+      },
+      "black_frames": {
+        "passed": true,
+        "detail": "none"
+      },
+      "codec": {
+        "passed": true,
+        "detail": "h264"
+      }
+    },
+    "frames_dir": "C:\\dev\\Content Automation\\Enhanced games\\output\\ftx-collapse-sam-bankman-fried_frames"
+  },
+  "review": {
+    "decision": "PUBLISH",
+    "scores": {
+      "factual_accuracy": {
+        "score": 10,
+        "reason": "All figures, timelines, and legal outcomes presented are verifiable and accurately reflect the public record of the case."
+      },
+      "hook_strength": {
+        "score": 9,
+        "reason": "The opening screen's contrast between a '$32 Billion Empire' and it being 'Gone in 8 days' creates immediate and powerful intrigue."
+      },
+      "narrative_coherence": {
+        "score": 9,
+        "reason": "The story follows a classic and effective arc from perceived genius to catastrophic failure, culminating in a decisive legal judgment."
+      },
+      "watchability": {
+        "score": 9,
+        "reason": "Varied screen durations and concise text create a compelling pace, while the voiceover adds depth without repeating the on-screen information."
+      },
+      "engagement_potential": {
+        "score": 8,
+        "reason": "The sheer scale of the fraud and the definitive 25-year sentence are highly likely to provoke strong reactions and comments."
+      },
+      "tone_brand_fit": {
+        "score": 9,
+        "reason": "The dark red scheme and authoritative voice perfectly match the serious, documentary tone of a major financial crime story."
+      }
+    },
+    "overall_score": 9.18,
+    "summary": "This is an excellent, publish-ready video that nails the core requirements. It combines a powerful hook with a factually sound, coherent narrative and a tone that perfectly fits our brand, making it highly watchable and engaging.",
+    "fixes": []
+  },
+  "success": true,
+  "spec_review": {
+    "passes": [
+      {
+        "pass": 1,
+        "decision": "PUBLISH",
+        "score": 9.1
+      }
+    ],
+    "final_decision": "PUBLISH",
+    "final_score": 9.1
+  },
+  "elapsed": 541.6,
+  "cost": {
+    "gemini_text_calls": 8,
+    "gemini_video_calls": 8,
+    "gemini_cached_calls": 0,
+    "est_input_tokens": 143370,
+    "est_output_tokens": 2444,
+    "est_thinking_tokens": 0,
+    "total_video_seconds_uploaded": 480.0,
+    "videos_downloaded": 8,
+    "videos_from_cache": 0,
+    "cache_hits": 0,
+    "cache_misses": 19,
+    "est_cost_usd": 0.022972,
+    "elapsed_seconds": 541.6,
+    "calls_detail": [
+      {
+        "stage": "creative_director_generate",
+        "type": "text",
+        "input_tokens": 2652,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "creative_director_critique",
+        "type": "text",
+        "input_tokens": 1170,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "content_reviewer",
+        "type": "text",
+        "input_tokens": 1267,
+        "output_tokens": 390,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2423,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15903,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15903,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15903,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2445,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2425,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15904,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15904,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15904,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2459,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "content_reviewer",
+        "type": "text",
+        "input_tokens": 1296,
+        "output_tokens": 390,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      }
+    ]
+  }
+}

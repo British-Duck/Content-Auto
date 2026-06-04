@@ -1,0 +1,233 @@
+{
+  "stages": {
+    "creative_director": "OK \u2014 maradona-hand-of-god-vs-goal-of-century",
+    "spec_review_loop": "PUBLISH \u2014 9.4/10 after 1 pass(es)",
+    "researcher": "OK \u2014 6 clips",
+    "render": "OK \u2014 maradona-hand-of-god-vs-goal-of-century.mp4",
+    "quality_gate": "PASSED \u2014 7/7",
+    "content_reviewer": "PUBLISH \u2014 9.5/10"
+  },
+  "output": "C:\\dev\\Content Automation\\Enhanced games\\output\\maradona-hand-of-god-vs-goal-of-century.mp4",
+  "quality": {
+    "passed": true,
+    "checks": {
+      "resolution": {
+        "passed": true,
+        "detail": "1080x1920 (expected 1080x1920)"
+      },
+      "duration": {
+        "passed": true,
+        "detail": "27.90s vs 27.90s (diff 0.00s)"
+      },
+      "fps": {
+        "passed": true,
+        "detail": "30.0 (expected 30)"
+      },
+      "file_size": {
+        "passed": true,
+        "detail": "15.59 MB (limit 50.0)"
+      },
+      "audio": {
+        "passed": true,
+        "detail": "present"
+      },
+      "black_frames": {
+        "passed": true,
+        "detail": "none"
+      },
+      "codec": {
+        "passed": true,
+        "detail": "h264"
+      }
+    },
+    "frames_dir": "C:\\dev\\Content Automation\\Enhanced games\\output\\maradona-hand-of-god-vs-goal-of-century_frames"
+  },
+  "review": {
+    "decision": "PUBLISH",
+    "scores": {
+      "factual_accuracy": {
+        "score": 10,
+        "reason": "All claims, including the time between goals and the stats for the second goal, are verifiable and accurate."
+      },
+      "hook_strength": {
+        "score": 9,
+        "reason": "The superlative claim 'most blatant CHEAT' is provocative and creates immediate intrigue."
+      },
+      "narrative_coherence": {
+        "score": 10,
+        "reason": "The video presents a perfectly structured narrative of villainy followed by genius, creating a powerful dramatic arc."
+      },
+      "watchability": {
+        "score": 9,
+        "reason": "The pacing is excellent, with varied screen times and concise text that complements the iconic footage."
+      },
+      "engagement_potential": {
+        "score": 10,
+        "reason": "The final 'Cheat or genius?' screen is a direct and effective prompt for debate that will ignite the comments section."
+      },
+      "tone_brand_fit": {
+        "score": 9,
+        "reason": "The dramatic tone, authoritative voice, and factual storytelling are perfectly aligned with the brand's identity."
+      }
+    },
+    "overall_score": 9.5,
+    "summary": "This is an exceptional video that perfectly executes a classic sports narrative. The hook is strong, the facts are precise, and the structure is built to maximize both watch time and engagement.",
+    "fixes": []
+  },
+  "success": true,
+  "spec_review": {
+    "passes": [
+      {
+        "pass": 1,
+        "decision": "PUBLISH",
+        "score": 9.4
+      }
+    ],
+    "final_decision": "PUBLISH",
+    "final_score": 9.4
+  },
+  "elapsed": 225.2,
+  "cost": {
+    "gemini_text_calls": 10,
+    "gemini_video_calls": 4,
+    "gemini_cached_calls": 0,
+    "est_input_tokens": 84982,
+    "est_output_tokens": 2236,
+    "est_thinking_tokens": 0,
+    "total_video_seconds_uploaded": 240.0,
+    "videos_downloaded": 4,
+    "videos_from_cache": 1,
+    "cache_hits": 1,
+    "cache_misses": 10,
+    "est_cost_usd": 0.014089,
+    "elapsed_seconds": 225.2,
+    "calls_detail": [
+      {
+        "stage": "creative_director_generate",
+        "type": "text",
+        "input_tokens": 2641,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "creative_director_critique",
+        "type": "text",
+        "input_tokens": 1124,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "content_reviewer",
+        "type": "text",
+        "input_tokens": 1354,
+        "output_tokens": 390,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2453,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2451,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2471,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2445,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2444,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2444,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15958,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15904,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15960,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "content_reviewer",
+        "type": "text",
+        "input_tokens": 1427,
+        "output_tokens": 390,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      }
+    ]
+  }
+}

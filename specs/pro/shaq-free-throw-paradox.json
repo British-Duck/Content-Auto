@@ -1,0 +1,114 @@
+{
+  "id": "shaq-free-throw-paradox",
+  "label": "SPORTS ANOMALY",
+  "scheme": "dark_purple",
+  "voice": "en-US-GuyNeural",
+  "voice_script": "This man was the most destructive force the NBA had ever seen. A true physical anomaly. But there was a glitch in his programming. A weakness so profound, entire teams built their strategy around it. The plan was simple: Foul him. Put him on the free throw line, where the most dominant player on earth was helpless. Over his career, he would miss more than five thousand, three hundred free throws. A mental block that turned a 15-foot shot into an impossible challenge for a giant.",
+  "screens": [
+    {
+      "text": "The most dominant player in NBA history.",
+      "duration": 3.5,
+      "text_size": 88,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Shaq breaking backboard",
+      "clip_moment": "Shaquille O'Neal dunking so hard the entire basket structure collapses and he runs away from the falling backboard.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=ASGBDmZj6o0",
+        "start": 33.0,
+        "end": 36.0
+      }
+    },
+    {
+      "text": "Had one glaring weakness.",
+      "duration": 3.0,
+      "text_size": 90,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "The easiest shot in basketball.",
+      "duration": 4.0,
+      "text_size": 94,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Shaq worst free throw misses",
+      "clip_moment": "Shaq shooting a free throw that completely misses the rim, often called an airball. He looks embarrassed or frustrated after the shot.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=v-gzPWaHglE",
+        "start": 50.0,
+        "end": 53.0
+      }
+    },
+    {
+      "text": "Teams invented a strategy just to exploit it.",
+      "duration": 4.5,
+      "text_size": 80,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Hack-a-Shaq strategy",
+      "clip_moment": "A player from an opposing team grabbing and fouling Shaq intentionally while he doesn't have the ball, far away from the basket.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=rIOhlfy40wk",
+        "start": 24.5,
+        "end": 26.5
+      }
+    },
+    {
+      "text": "Hack-a-Shaq",
+      "duration": 3.0,
+      "text_size": 100,
+      "panel": true,
+      "subtitle": "The only way to stop him",
+      "clip_mode": null,
+      "clip_description": "Hack-a-Shaq strategy",
+      "clip_moment": "A different instance of Shaq being fouled on purpose, perhaps by a much smaller player, to send him to the free throw line.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=rIOhlfy40wk",
+        "start": 24.5,
+        "end": 26.5
+      }
+    },
+    {
+      "text": "Career Free Throw %",
+      "duration": 5.0,
+      "text_size": 82,
+      "panel": false,
+      "subtitle": "52.7%",
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "He missed 5,317 free throws in his career.",
+      "duration": 5.0,
+      "text_size": 84,
+      "panel": true,
+      "subtitle": "More than most players attempt",
+      "clip_mode": null,
+      "clip_description": "Shaq frustrated at free throw line",
+      "clip_moment": "Shaq's face at the free throw line showing clear frustration or disappointment after a miss.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=v-gzPWaHglE",
+        "start": 50.0,
+        "end": 53.0
+      }
+    },
+    {
+      "text": "The unstoppable player, stopped by himself.",
+      "duration": 5.5,
+      "text_size": 82,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    }
+  ]
+}

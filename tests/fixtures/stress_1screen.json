@@ -1,0 +1,13 @@
+{
+  "id": "stress_1screen",
+  "label": "STRESS 1",
+  "scheme": "dark_gold",
+  "screens": [
+    {
+      "text": "Single screen\n[GOLD]only one",
+      "duration": 3.0,
+      "text_size": 72,
+      "panel": true
+    }
+  ]
+}

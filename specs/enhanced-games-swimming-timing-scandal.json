@@ -1,0 +1,75 @@
+{
+  "id": "enhanced-games-swimming-timing-scandal",
+  "label": "ENHANCED GAMES",
+  "scheme": "dark_red",
+  "voice": "en-GB-RyanNeural",
+  "voice_script": "The Enhanced Games promised a revolution in sport. And when 20.81 seconds flashed on screen for the 50m freestyle, it seemed they delivered a world record. But look closer. Rewind the tape. Did he actually touch? The official clock stopped *before* contact. Hand-timers caught the real finish: 21.0 to 21.1 seconds. Still fast, but nowhere near the legitimate world record of 20.88. So, what exactly is 'enhanced' here? The athletes, or the official results?",
+  "screens": [
+    {
+      "text": "The 'New World Record'",
+      "duration": 2.0,
+      "text_size": 80,
+      "panel": true,
+      "subtitle": "20.81 seconds. Incredible... right?",
+      "clip_mode": null,
+      "clip_description": "Enhanced Games 50m freestyle 20.81 official time",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=6tegkS-U_Mo",
+        "start": 31.5,
+        "end": 34.0
+      }
+    },
+    {
+      "text": "Enhanced Games: 'Pushing Limits'",
+      "duration": 2.5,
+      "text_size": 70,
+      "panel": false,
+      "subtitle": "But are they pushing the truth too?",
+      "clip_mode": null,
+      "clip_description": null
+    },
+    {
+      "text": "Hold on... Did he even finish?",
+      "duration": 3.0,
+      "text_size": 70,
+      "panel": true,
+      "subtitle": "The clock stopped BEFORE he touched.",
+      "clip_mode": null,
+      "clip_description": "Enhanced Games 50m freestyle finish controversy slow motion",
+      "clip": null
+    },
+    {
+      "text": "The TRUTH emerges.",
+      "duration": 2.5,
+      "text_size": 80,
+      "panel": true,
+      "subtitle": "Real time: 21.0-21.1s. NO record.",
+      "clip_mode": null,
+      "clip_description": "Enhanced Games 50m freestyle finish controversy slow motion",
+      "clip": null
+    },
+    {
+      "text": "A TRUE WORLD RECORD:",
+      "duration": 3.0,
+      "text_size": 70,
+      "panel": false,
+      "subtitle": "20.88s. The gold standard.",
+      "clip_mode": null,
+      "clip_description": null
+    },
+    {
+      "text": "Enhanced Games: Credibility?",
+      "duration": 3.5,
+      "text_size": 70,
+      "panel": true,
+      "subtitle": "Is this 'fairer' future a lie?",
+      "clip_mode": "ambient",
+      "clip_description": "Enhanced Games 50m freestyle race full",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Bppuvjo5ZAo",
+        "start": 0.0,
+        "end": null
+      }
+    }
+  ]
+}

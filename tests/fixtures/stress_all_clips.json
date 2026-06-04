@@ -1,0 +1,46 @@
+{
+  "id": "stress_all_clips",
+  "label": "ALL CLIPS",
+  "scheme": "dark_red",
+  "_note": "All screens use clips. Requires network to download from YouTube.",
+  "screens": [
+    {
+      "text": "Clip screen 1",
+      "duration": 3.0,
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Bppuvjo5ZAo",
+        "start": 3,
+        "end": 6
+      }
+    },
+    {
+      "text": "Clip screen 2\n[GOLD]mid-race",
+      "duration": 3.0,
+      "panel": true,
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Bppuvjo5ZAo",
+        "start": 8,
+        "end": 11
+      }
+    },
+    {
+      "text": "Clip screen 3\napproaching wall",
+      "duration": 3.0,
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Bppuvjo5ZAo",
+        "start": 14,
+        "end": 17
+      }
+    },
+    {
+      "text": "Clip screen 4\nfinish",
+      "duration": 3.0,
+      "panel": true,
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Bppuvjo5ZAo",
+        "start": 19,
+        "end": 22
+      }
+    }
+  ]
+}

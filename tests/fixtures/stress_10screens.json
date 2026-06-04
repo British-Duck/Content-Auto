@@ -1,0 +1,19 @@
+{
+  "id": "stress_10screens",
+  "label": "STRESS 10",
+  "scheme": "dark_blue",
+  "screens": [
+    { "text": "Screen 1\n[GOLD]First",        "duration": 2.0 },
+    { "text": "Screen 2\n[GOLD]Second",       "duration": 2.0, "panel": true },
+    { "text": "Screen 3\n[GOLD]Third",        "duration": 1.5 },
+    { "text": "Screen 4\n[GOLD]Fourth",       "duration": 2.5 },
+    { "text": "Screen 5\n[GOLD]Fifth",        "duration": 2.0, "text_size": 80 },
+    { "text": "Screen 6\n[GOLD]Sixth",        "duration": 1.5, "panel": true },
+    { "text": "Screen 7\n[GOLD]Seventh",      "duration": 2.0 },
+    { "text": "Screen 8\n[GOLD]Eighth",       "duration": 2.0, "text_size": 56 },
+    { "text": "Screen 9\n[GOLD]Ninth",        "duration": 2.5 },
+    { "text": "Screen 10\n[GOLD]Tenth",       "duration": 2.0, "panel": true },
+    { "text": "Screen 11\n[GOLD]Eleventh",    "duration": 1.5 },
+    { "text": "Screen 12\n[GOLD]Twelfth",     "duration": 2.0 }
+  ]
+}

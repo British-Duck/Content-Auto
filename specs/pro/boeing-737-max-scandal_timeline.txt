@@ -1,0 +1,15 @@
+========================================================================
+  boeing-737-max-scandal  |  dark_red  |  36.5s  |  5 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   3.0  CLIP              7yyo03MJoZw@26.0s–29.5s       "The 'Safest' Plane Ever Buil"
+   2   2.5  GRADIENT                                        "Killed 346 People"
+   3   4.0  CLIP              WSX7A5bwMMg@5.7s–7.5s         "The Cause: A Single Faulty S"
+   4   4.5  GRADIENT                                        "...triggered an unstoppable " / "A system called MCAS"
+   5   4.0  CLIP              1pkfl2ru11I@20.0s–22.0s       "Lion Air Flight 610" / "189 Dead"
+   6   4.0  CLIP              CcuNaz6tR70@16.8s–19.2s       "Ethiopian Airlines Flight 30" / "157 Dead"
+   7   5.5  CLIP              encNQN1yg-I@18.0s–21.6s       "Boeing Knew About The Flaw." / "And sold the plane a"
+   8   4.0  GRADIENT                                        "The Entire 737 MAX Fleet: Gr" / "For 20 months"
+   9   5.0  GRADIENT                                        "346 lives lost. Zero executi" ⚠ consecutive
+========================================================================

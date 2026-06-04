@@ -1,0 +1,22 @@
+{
+  "id": "stress_unicode",
+  "label": "UNICODE",
+  "scheme": "dark_purple",
+  "screens": [
+    {
+      "text": "Unicode text test\nCafe élève naïve rôle\nDeutsch: Überprüfung",
+      "duration": 3.0,
+      "text_size": 56
+    },
+    {
+      "text": "Special chars\n<angle brackets> & ampersands\n\"double quotes\" 'apostrophes'\n100% complete",
+      "duration": 3.0,
+      "panel": true
+    },
+    {
+      "text": "CJK characters\n日本語テスト\n中文测试\n한국어 테스트",
+      "duration": 3.0,
+      "text_size": 52
+    }
+  ]
+}

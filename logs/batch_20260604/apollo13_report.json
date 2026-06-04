@@ -1,0 +1,266 @@
+{
+  "stages": {
+    "creative_director": "OK \u2014 apollo-13-successful-failure",
+    "researcher": "OK \u2014 8 clips",
+    "render": "OK \u2014 apollo-13-successful-failure.mp4",
+    "quality_gate": "PASSED \u2014 7/7",
+    "content_reviewer": "PUBLISH \u2014 9.3/10"
+  },
+  "output": "C:\\dev\\Content Automation\\Enhanced games\\output\\apollo-13-successful-failure.mp4",
+  "quality": {
+    "passed": true,
+    "checks": {
+      "resolution": {
+        "passed": true,
+        "detail": "1080x1920 (expected 1080x1920)"
+      },
+      "duration": {
+        "passed": true,
+        "detail": "31.63s vs 31.60s (diff 0.03s)"
+      },
+      "fps": {
+        "passed": true,
+        "detail": "30.0 (expected 30)"
+      },
+      "file_size": {
+        "passed": true,
+        "detail": "13.82 MB (limit 50.0)"
+      },
+      "audio": {
+        "passed": true,
+        "detail": "present"
+      },
+      "black_frames": {
+        "passed": true,
+        "detail": "none"
+      },
+      "codec": {
+        "passed": true,
+        "detail": "h264"
+      }
+    },
+    "frames_dir": "C:\\dev\\Content Automation\\Enhanced games\\output\\apollo-13-successful-failure_frames"
+  },
+  "review": {
+    "decision": "PUBLISH",
+    "scores": {
+      "factual_accuracy": {
+        "score": 10,
+        "reason": "All claims, numbers, and historical details are precisely stated and verifiable, distinguishing facts from common interpretations like 'successful failure'."
+      },
+      "hook_strength": {
+        "score": 9,
+        "reason": "The opening immediately establishes a dire, high-stakes situation far from home, compelling viewers to understand how such a crisis unfolded."
+      },
+      "narrative_coherence": {
+        "score": 9,
+        "reason": "The story progresses with a clear dramatic arc, escalating from the initial explosion to the CO2 threat, then to the ingenious solution and triumphant return."
+      },
+      "watchability": {
+        "score": 9,
+        "reason": "The concise, impactful screen text, varied pacing, and complementary voice script ensure the video holds attention and encourages full completion."
+      },
+      "engagement_potential": {
+        "score": 9,
+        "reason": "The iconic story of ingenuity against impossible odds, culminating in a 'successful failure,' is highly shareable and likely to spark discussion."
+      },
+      "tone_brand_fit": {
+        "score": 9,
+        "reason": "The dark blue scheme, authoritative voice, and factual yet dramatic storytelling perfectly align with a brand focused on provocative documentary authority."
+      }
+    },
+    "overall_score": 9.27,
+    "summary": "This video is an excellent example of compelling storytelling, leveraging a well-known historical event with precision and dramatic flair. The narrative is tight, the hook is strong, and the execution ensures high watchability and engagement. It perfectly embodies the brand's authoritative and provocative tone.",
+    "fixes": []
+  },
+  "success": true,
+  "elapsed": 522.1,
+  "cost": {
+    "gemini_text_calls": 11,
+    "gemini_video_calls": 8,
+    "gemini_cached_calls": 0,
+    "est_input_tokens": 149068,
+    "est_output_tokens": 2158,
+    "est_thinking_tokens": 0,
+    "total_video_seconds_uploaded": 480.0,
+    "videos_downloaded": 8,
+    "videos_from_cache": 3,
+    "cache_hits": 5,
+    "cache_misses": 20,
+    "est_cost_usd": 0.023655,
+    "elapsed_seconds": 522.1,
+    "calls_detail": [
+      {
+        "stage": "creative_director_generate",
+        "type": "text",
+        "input_tokens": 2646,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "creative_director_critique",
+        "type": "text",
+        "input_tokens": 1458,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1761,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15910,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1827,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15964,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1894,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15908,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1957,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15912,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15912,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2017,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15910,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15963,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2086,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15903,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2141,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 2177,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "content_reviewer",
+        "type": "text",
+        "input_tokens": 1722,
+        "output_tokens": 390,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      }
+    ]
+  }
+}

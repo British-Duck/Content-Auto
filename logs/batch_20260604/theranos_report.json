@@ -1,0 +1,266 @@
+{
+  "stages": {
+    "creative_director": "OK \u2014 theranos-elizabeth-holmes-fraud",
+    "researcher": "OK \u2014 4 clips",
+    "render": "OK \u2014 theranos-elizabeth-holmes-fraud.mp4",
+    "quality_gate": "PASSED \u2014 7/7",
+    "content_reviewer": "PUBLISH \u2014 9.3/10"
+  },
+  "output": "C:\\dev\\Content Automation\\Enhanced games\\output\\theranos-elizabeth-holmes-fraud.mp4",
+  "quality": {
+    "passed": true,
+    "checks": {
+      "resolution": {
+        "passed": true,
+        "detail": "1080x1920 (expected 1080x1920)"
+      },
+      "duration": {
+        "passed": true,
+        "detail": "26.40s vs 26.40s (diff 0.00s)"
+      },
+      "fps": {
+        "passed": true,
+        "detail": "30.0 (expected 30)"
+      },
+      "file_size": {
+        "passed": true,
+        "detail": "10.17 MB (limit 50.0)"
+      },
+      "audio": {
+        "passed": true,
+        "detail": "present"
+      },
+      "black_frames": {
+        "passed": true,
+        "detail": "none"
+      },
+      "codec": {
+        "passed": true,
+        "detail": "h264"
+      }
+    },
+    "frames_dir": "C:\\dev\\Content Automation\\Enhanced games\\output\\theranos-elizabeth-holmes-fraud_frames"
+  },
+  "review": {
+    "decision": "PUBLISH",
+    "scores": {
+      "factual_accuracy": {
+        "score": 9,
+        "reason": "All claims, including specific numbers and events, are verifiable and accurately presented."
+      },
+      "hook_strength": {
+        "score": 9,
+        "reason": "The bold claim 'THE BIGGEST SCAM IN SILICON VALLEY' combined with the iconic image of Elizabeth Holmes immediately creates tension."
+      },
+      "narrative_coherence": {
+        "score": 10,
+        "reason": "The story flows perfectly from the audacious promise to the dramatic downfall and consequences, with each screen advancing the plot."
+      },
+      "watchability": {
+        "score": 9,
+        "reason": "The varied pacing, concise text, and complementary voice script ensure high engagement and easy comprehension throughout."
+      },
+      "engagement_potential": {
+        "score": 9,
+        "reason": "The controversial topic and concrete facts presented are highly likely to provoke discussion and sharing among viewers."
+      },
+      "tone_brand_fit": {
+        "score": 10,
+        "reason": "The dark red scheme, authoritative voice, and factual, provocative content perfectly align with the brand's documentary style."
+      }
+    },
+    "overall_score": 9.27,
+    "summary": "This video is a strong, compelling piece that effectively tells the dramatic story of Elizabeth Holmes and Theranos. The narrative is tight, the facts are accurate, and the presentation is highly engaging, making it a perfect fit for the brand's tone and style.",
+    "fixes": []
+  },
+  "success": true,
+  "elapsed": 581.3,
+  "cost": {
+    "gemini_text_calls": 8,
+    "gemini_video_calls": 11,
+    "gemini_cached_calls": 0,
+    "est_input_tokens": 186951,
+    "est_output_tokens": 2275,
+    "est_thinking_tokens": 0,
+    "total_video_seconds_uploaded": 660.0,
+    "videos_downloaded": 11,
+    "videos_from_cache": 1,
+    "cache_hits": 2,
+    "cache_misses": 26,
+    "est_cost_usd": 0.029408,
+    "elapsed_seconds": 581.3,
+    "calls_detail": [
+      {
+        "stage": "creative_director_generate",
+        "type": "text",
+        "input_tokens": 2644,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "creative_director_critique",
+        "type": "text",
+        "input_tokens": 1151,
+        "output_tokens": 520,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1271,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15907,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15907,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15907,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1328,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1328,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15906,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1391,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15903,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "kb_match",
+        "type": "text",
+        "input_tokens": 1446,
+        "output_tokens": 26,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      },
+      {
+        "stage": "researcher",
+        "type": "video",
+        "input_tokens": 15958,
+        "output_tokens": 65,
+        "thinking_tokens": 0,
+        "video_sec": 60,
+        "cached": false
+      },
+      {
+        "stage": "content_reviewer",
+        "type": "text",
+        "input_tokens": 1374,
+        "output_tokens": 390,
+        "thinking_tokens": 0,
+        "video_sec": 0.0,
+        "cached": false
+      }
+    ]
+  }
+}

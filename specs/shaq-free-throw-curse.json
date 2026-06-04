@@ -1,0 +1,90 @@
+{
+  "id": "shaq-free-throw-curse",
+  "label": "HACK-A-SHAQ",
+  "scheme": "dark_purple",
+  "voice": "en-US-ChristopherNeural",
+  "voice_script": "Imagine a force of nature, an NBA titan so dominant he literally broke backboards. That was Shaquille O'Neal. Yet, this colossus of the court harbored a bizarre, almost comical, secret weakness: the humble free throw line. For a man who redefined power, his career 52.7% from just fifteen feet away was an enigma. This glaring flaw wasn't just a personal struggle; it sparked a controversial tactic. Teams would deliberately foul him, even far from the basket, forcing him to the line. This 'Hack-a-Shaq' strategy wasn't pretty, but it worked. Over his legendary career, Shaq missed an astonishing 5,317 free throws. That's thousands of potential points lost, games altered, and an entire defensive playbook forever changed. It's the ultimate irony: the game's most dominant player, humbled by its simplest shot.",
+  "screens": [
+    {
+      "text": "SHAQUILLE O'NEAL: A TITAN.",
+      "duration": 2.0,
+      "text_size": 85,
+      "panel": true,
+      "subtitle": "UNSTOPPABLE. ALMOST.",
+      "clip_mode": null,
+      "clip_description": "Shaquille O'Neal dunk",
+      "clip_moment": "Shaq powerfully dunking the basketball",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=dkrPBAhVFn0",
+        "start": 40.0,
+        "end": 42.0
+      }
+    },
+    {
+      "text": "His ONE WEAKNESS?",
+      "duration": 2.0,
+      "text_size": 88,
+      "panel": true,
+      "subtitle": "The free throw line.",
+      "clip_mode": null,
+      "clip_description": "Shaquille O'Neal free throw miss",
+      "clip_moment": "Shaq at the free throw line, ball hitting the rim and bouncing out",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=_SHPyD7BZ2U",
+        "start": 7.0,
+        "end": 9.0
+      }
+    },
+    {
+      "text": "A career 52.7%",
+      "duration": 2.5,
+      "text_size": 100,
+      "panel": false,
+      "subtitle": "From 15 feet away.",
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "ENTER: HACK-A-SHAQ.",
+      "duration": 2.5,
+      "text_size": 85,
+      "panel": true,
+      "subtitle": "The Controversial Tactic.",
+      "clip_mode": null,
+      "clip_description": "Hack a Shaq foul",
+      "clip_moment": "A defender intentionally fouling Shaquille O'Neal away from the ball",
+      "clip": null
+    },
+    {
+      "text": "5,317 MISSED.",
+      "duration": 3.0,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": "A Game-Changing Flaw.",
+      "clip_mode": null,
+      "clip_description": "Shaquille O'Neal free throw miss",
+      "clip_moment": "Shaq looking dejected or frustrated after a missed free throw",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=_SHPyD7BZ2U",
+        "start": 25.8,
+        "end": 27.6
+      }
+    },
+    {
+      "text": "A LEGEND'S RIDDLE.",
+      "duration": 3.0,
+      "text_size": 88,
+      "panel": true,
+      "subtitle": "The Easiest Shot, His Hardest Battle.",
+      "clip_mode": null,
+      "clip_description": "Shaquille O'Neal reaction",
+      "clip_moment": "Shaq shrugging or showing a humorous/exasperated reaction to a situation",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=dAgndof_-vM",
+        "start": 28.8,
+        "end": 30.6
+      }
+    }
+  ]
+}

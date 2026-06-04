@@ -1,0 +1,16 @@
+========================================================================
+  boeing-starliner-failed-test  |  dark_blue  |  34.7s  |  8 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   2.5  CLIP              nakcpWGBcWQ@14.5s–17.5s       "Boeing's 8-day mission." / "June 5, 2024."
+   2   3.0  CLIP              nakcpWGBcWQ@14.5s–17.5s       "It became 9 months." / "Astronauts returned "
+   3   3.2  CLIP              cR7PYBcafMg@8.0s–12.0s        "A 'test flight' for crew." / "To qualify Starliner"
+   4   3.5  CLIP              cR7PYBcafMg@13.0s–17.0s       "Then the helium leaks began." / "Multiple helium leak"
+   5   3.8  CLIP              cR7PYBcafMg@13.0s–17.0s       "Followed by thruster failure" / "Multiple thrusters i"
+   6   3.5  CLIP              TM3jAvRgXfo@20.7s–22.7s       "NASA: Too risky to return." / "Unsafe for crew retu"
+   7   3.7  CLIP              8naHjr_pvHc@41.0s–45.0s       "Starliner returned. Empty." / "Uncrewed, September "
+   8   3.6  CLIP              pN_sKX4Ggkc@24.0s–26.4s       "Wilmore & Williams: Stranded" / "Stuck on ISS for mon"
+   9   3.9  GRADIENT                                        "SpaceX rescued them." / "March 2025."
+  10   4.0  GRADIENT                                        "The test proved one thing: I" ⚠ consecutive
+========================================================================

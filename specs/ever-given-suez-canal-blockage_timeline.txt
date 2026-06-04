@@ -1,0 +1,14 @@
+========================================================================
+  ever-given-suez-canal-blockage  |  dark_gold  |  33.5s  |  6 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   3.5  CLIP              NTRtmSQvRMc@5.4s–7.5s         "This tiny excavator..."
+   2   3.5  CLIP              BP3SXI9L1Iw@18.0s–21.0s       "...was the first attempt to "
+   3   4.0  CLIP              BP3SXI9L1Iw@40.0s–44.0s       "A 400-meter ship blocking 12"
+   4   4.5  GRADIENT                                        "The cost: $400 Million PER H" / "Halting $10 billion "
+   5   4.5  CLIP              268okM--Cv8@62.0s–67.0s       "Creating a 400-ship traffic "
+   6   4.0  CLIP              BP3SXI9L1Iw@18.0s–21.0s       "It took a fleet of 14 tugboa"
+   7   5.0  CLIP              dVNHaUMK4eA@18.0s–24.0s       "...and the pull of a Supermo"
+   8   4.5  GRADIENT                                        "One ship. Six days. Global c"
+========================================================================

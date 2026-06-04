@@ -1,0 +1,11 @@
+{
+  "id": "stress_no_clips",
+  "label": "NO CLIPS",
+  "scheme": "dark_gold",
+  "screens": [
+    { "text": "Gradient A\n[GOLD]all backgrounds", "duration": 2.0 },
+    { "text": "Gradient B\nno clips at all",  "duration": 2.0, "panel": true },
+    { "text": "Gradient C\n[GOLD]pure overlay", "duration": 2.0 },
+    { "text": "Gradient D\nfinal screen",      "duration": 2.0, "text_size": 72 }
+  ]
+}

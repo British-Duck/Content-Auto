@@ -1,0 +1,13 @@
+========================================================================
+  ftx-collapse-sam-bankman-fried  |  dark_red  |  31.0s  |  2 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   3.0  GRADIENT                                        "$32 BILLION EMPIRE" / "Gone in 8 days."
+   2   4.5  GRADIENT                                        "The world called him a geniu" ⚠ consecutive
+   3   4.5  GRADIENT                                        "$8 BILLION of customer money" ⚠ consecutive
+   4   4.5  CLIP              Ow-MN7qJnIY@29.5s–34.5s       "Panic spread across the glob"
+   5   4.5  GRADIENT                                        "His excuse: 'A series of mis"
+   6   4.0  GRADIENT                                        "The jury took 4 hours to dec" / "Guilty. On all count" ⚠ consecutive
+   7   6.0  CLIP              E-w37ixdhsw@0.5s–4.0s         "His new home: Federal Prison" / "Sentence: 25 years."
+========================================================================

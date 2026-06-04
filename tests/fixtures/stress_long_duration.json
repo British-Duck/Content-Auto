@@ -1,0 +1,17 @@
+{
+  "id": "stress_long_duration",
+  "label": "LONG DUR",
+  "scheme": "dark_green",
+  "screens": [
+    {
+      "text": "Fifteen second\nscreen",
+      "duration": 15.0,
+      "panel": true
+    },
+    {
+      "text": "Twenty second\n[GOLD]marathon screen",
+      "duration": 20.0,
+      "text_size": 68
+    }
+  ]
+}

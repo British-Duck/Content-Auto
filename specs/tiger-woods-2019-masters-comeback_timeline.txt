@@ -1,0 +1,14 @@
+========================================================================
+  tiger-woods-2019-masters-comeback  |  dark_gold  |  26.0s  |  6 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   2.5  CLIP              ldsAXXuVSSc@0.0s–3.0s         "2500 to 1." / "The ultimate long sh"
+   2   3.0  GRADIENT                                        "Last major? 2008." / "Eleven long years ag"
+   3   3.5  CLIP              MH6_4Rse0uY@33.0s–37.5s       "5 back surgeries." / "A shattered body."
+   4   3.0  CLIP              US4DgyiRiMA@10.8s–14.0s       "A DUI. 2 years away." / "Lost years. Lost hop"
+   5   3.5  GRADIENT                                        "Experts wrote him off." / "The golf world moved"
+   6   3.0  CLIP              pE-aOBGN8UM@7.5s–9.5s         "But then... Augusta." / "The impossible run."
+   7   4.0  CLIP              pE-aOBGN8UM@9.5s–11.5s        "The putt heard 'round the wo" / "History made."
+   8   3.5  CLIP              pE-aOBGN8UM@15.0s–19.0s       "The greatest comeback ever." / "The GOAT returns."
+========================================================================

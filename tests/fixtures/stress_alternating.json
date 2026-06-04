@@ -1,0 +1,40 @@
+{
+  "id": "stress_alternating",
+  "label": "ALTERNATING",
+  "scheme": "dark_blue",
+  "_note": "Odd-indexed screens have clips. Requires network.",
+  "screens": [
+    {
+      "text": "Gradient screen\nno clip",
+      "duration": 2.0
+    },
+    {
+      "text": "Clip screen\n[GOLD]with footage",
+      "duration": 3.0,
+      "panel": true,
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Bppuvjo5ZAo",
+        "start": 3,
+        "end": 6
+      }
+    },
+    {
+      "text": "Gradient again\nno clip",
+      "duration": 2.0
+    },
+    {
+      "text": "Another clip\n[GOLD]back to footage",
+      "duration": 3.0,
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=Bppuvjo5ZAo",
+        "start": 10,
+        "end": 13
+      }
+    },
+    {
+      "text": "Final gradient\nthe end",
+      "duration": 2.0,
+      "panel": true
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "id": "apollo-13-successful-failure",
+  "label": "SPACE HISTORY",
+  "scheme": "dark_blue",
+  "voice": "en-US-GuyNeural",
+  "voice_script": "On April 13th, 1970, a routine stir of an oxygen tank triggered a catastrophic explosion, crippling the Apollo 13 command module. Astronaut Jack Swigert's calm words, 'Houston, we've had a problem,' became one of history's most famous understatements. The three astronauts lost their main sources of power, heat, and water, forcing them into the tiny lunar module—a lifeboat designed for two men for only two days. But a deadlier problem was emerging. As they exhaled, carbon dioxide levels began to rise, threatening to suffocate them long before they could reach Earth. The command module's square CO2 filters wouldn't fit the lunar module's round receptacles. It was an impossible puzzle with lives on the line. Back in Houston, engineers dumped every item available on the spacecraft onto a table and, using duct tape, plastic bags, and cardboard, invented a solution. They relayed the instructions step-by-step to the freezing, exhausted crew. Against all odds, the makeshift adapter worked. The crew guided their crippled ship around the moon and back to Earth, splashing down safely in the Pacific. Though it never reached the moon, the mission is remembered as NASA's finest hour—a 'successful failure' that proved human ingenuity could conquer the void.",
+  "screens": [
+    {
+      "text": "200,000 miles from Earth.",
+      "duration": 3.5,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": "And their spacecraft was dead.",
+      "clip_mode": null,
+      "clip_description": "Apollo 13 mission control reaction",
+      "clip_moment": "Tense faces of mission control staff looking at their monitors immediately following the explosion report.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=lJiRA6GtxSA",
+        "start": 45.0,
+        "end": 49.0
+      }
+    },
+    {
+      "text": "A catastrophic explosion crippled their command module.",
+      "duration": 3.5,
+      "text_size": 86,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Apollo 13 mission control reaction",
+      "clip_moment": "Flight director Gene Kranz in his vest, listening intently and directing the response from his console.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=lJiRA6GtxSA",
+        "start": 54.0,
+        "end": 57.0
+      }
+    },
+    {
+      "text": "They were stranded in a cold, dark, powerless ship.",
+      "duration": 3.0,
+      "text_size": 84,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "But a deadlier threat was emerging.",
+      "duration": 4.0,
+      "text_size": 88,
+      "panel": true,
+      "subtitle": "Their own air was turning to poison.",
+      "clip_mode": null,
+      "clip_description": "Apollo 13 astronauts in lunar module",
+      "clip_moment": "Footage of the astronauts looking tired and cold inside the dark, cramped lunar module.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=bqa7FRG3rkY",
+        "start": 8.4,
+        "end": 11.4
+      }
+    },
+    {
+      "text": "The command module's square CO2 filters wouldn't fit the lunar module's round system.",
+      "duration": 4.0,
+      "text_size": 82,
+      "panel": true,
+      "subtitle": "A square peg in a round hole.",
+      "clip_mode": null,
+      "clip_description": "Apollo 13 engineers solve filter problem",
+      "clip_moment": "Engineers on the ground gathered around a table with all the spare parts laid out, looking puzzled.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=ry55--J4_VQ",
+        "start": 45.0,
+        "end": 50.0
+      }
+    },
+    {
+      "text": "So engineers invented a solution.",
+      "duration": 4.0,
+      "text_size": 96,
+      "panel": true,
+      "subtitle": "Using only what the astronauts had onboard.",
+      "clip_mode": null,
+      "clip_description": "Apollo 13 engineers solve filter problem",
+      "clip_moment": "Engineers' hands building the makeshift filter adapter using duct tape, flight plan covers, and hoses.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=ry55--J4_VQ",
+        "start": 58.0,
+        "end": 60.0
+      }
+    },
+    {
+      "text": "This 'mailbox' saved their lives.",
+      "duration": 3.5,
+      "text_size": 84,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Apollo 13 makeshift CO2 filter",
+      "clip_moment": "A clear photograph of the actual, cobbled-together CO2 filter device.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=58lJuR1JvDw",
+        "start": 9.6,
+        "end": 11.1
+      }
+    },
+    {
+      "text": "Against all odds, they made it home.",
+      "duration": 4.0,
+      "text_size": 100,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Apollo 13 splashdown",
+      "clip_moment": "The command module, with its three main parachutes fully deployed, splashing down into the ocean.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=kmGP4o272ac",
+        "start": 157.0,
+        "end": 162.0
+      }
+    },
+    {
+      "text": "NASA's finest hour.",
+      "duration": 4.5,
+      "text_size": 92,
+      "panel": true,
+      "subtitle": "A 'successful failure'.",
+      "clip_mode": null,
+      "clip_description": "Apollo 13 crew recovery",
+      "clip_moment": "The three astronauts (Lovell, Haise, Swigert) smiling and waving on the deck of the recovery ship.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=A82Ol8J1g_I",
+        "start": 362.0,
+        "end": 367.5
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "stress_long_text",
+  "label": "LONG TEXT",
+  "scheme": "dark_red",
+  "screens": [
+    {
+      "text": "This is an extremely long piece of text designed to stress the word-wrapping and layout engine by forcing it to break lines many times across the full vertical height of the screen at a medium font size",
+      "duration": 5.0,
+      "text_size": 52
+    },
+    {
+      "text": "[BIG]BIG LINE ONE\nNormal size line that is quite long and should wrap at least once\n[SMALL]This is a very tiny line with lots of content that goes on for quite a while testing small font wrapping\n[GOLD]GOLD LINE TO CLOSE IT OUT",
+      "duration": 5.0,
+      "text_size": 60,
+      "panel": true
+    },
+    {
+      "text": "Line one\nLine two\nLine three\nLine four\nLine five\nLine six\nLine seven\nLine eight\nLine nine\nLine ten",
+      "duration": 4.0,
+      "text_size": 56
+    }
+  ]
+}

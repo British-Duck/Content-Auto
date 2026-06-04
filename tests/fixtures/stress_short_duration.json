@@ -1,0 +1,19 @@
+{
+  "id": "stress_short_duration",
+  "label": "SHORT DUR",
+  "scheme": "dark_purple",
+  "screens": [
+    {
+      "text": "Half second\nscreen",
+      "duration": 0.5
+    },
+    {
+      "text": "Normal duration\nfor comparison",
+      "duration": 2.0
+    },
+    {
+      "text": "Also short\nscreen",
+      "duration": 0.3
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "id": "tiger-woods-2019-masters-comeback",
+  "label": "GOLF HISTORY",
+  "scheme": "dark_gold",
+  "voice": "en-US-ChristopherNeural",
+  "voice_script": "Nobody gave him a chance. After eleven years without a major championship, five grueling back surgeries, a public DUI arrest, and two years away from the professional tour, even his most loyal fans had to wonder if Tiger Woods was truly done. Experts gave him 2500 to 1 odds to win the 2019 Masters. Yet, there he stood, at 43 years old, defying every single expectation, poised to achieve what many called the greatest comeback in sports history. With a final, legendary putt, he etched his name once again into the record books, proving that true champions never really leave.",
+  "screens": [
+    {
+      "text": "2500 to 1.",
+      "duration": 2.5,
+      "text_size": 100,
+      "panel": true,
+      "subtitle": "The ultimate long shot.",
+      "clip_mode": null,
+      "clip_description": "Tiger Woods 2019 Masters celebration",
+      "clip_moment": "Tiger Woods walking confidently on the course, focused, early in the final round, crowds in background.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=ldsAXXuVSSc",
+        "start": 0.0,
+        "end": 3.0
+      }
+    },
+    {
+      "text": "Last major? 2008.",
+      "duration": 3.0,
+      "text_size": 85,
+      "panel": true,
+      "subtitle": "Eleven long years ago.",
+      "clip_mode": null,
+      "clip_description": "Tiger Woods 2008 US Open win",
+      "clip_moment": "Tiger Woods celebrating immediately after winning the 2008 US Open playoff.",
+      "clip": null
+    },
+    {
+      "text": "5 back surgeries.",
+      "duration": 3.5,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": "A shattered body.",
+      "clip_mode": null,
+      "clip_description": "Tiger Woods interview back surgery",
+      "clip_moment": "Tiger Woods speaking in an interview, looking slightly pained or serious, discussing his physical recovery.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=MH6_4Rse0uY",
+        "start": 33.0,
+        "end": 37.5
+      }
+    },
+    {
+      "text": "A DUI. 2 years away.",
+      "duration": 3.0,
+      "text_size": 82,
+      "panel": true,
+      "subtitle": "Lost years. Lost hope.",
+      "clip_mode": null,
+      "clip_description": "Tiger Woods 2017 Hero World Challenge",
+      "clip_moment": "Tiger Woods making a golf shot during his return at the 2017 Hero World Challenge, showing he's back competing.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=US4DgyiRiMA",
+        "start": 10.8,
+        "end": 14.0
+      }
+    },
+    {
+      "text": "Experts wrote him off.",
+      "duration": 3.5,
+      "text_size": 85,
+      "panel": false,
+      "subtitle": "The golf world moved on.",
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "But then... Augusta.",
+      "duration": 3.0,
+      "text_size": 88,
+      "panel": true,
+      "subtitle": "The impossible run.",
+      "clip_mode": null,
+      "clip_description": "Tiger Woods 2019 Masters celebration",
+      "clip_moment": "Tiger Woods making a crucial shot or fist pump earlier in the 2019 Masters final round, showing determination.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=pE-aOBGN8UM",
+        "start": 7.5,
+        "end": 9.5
+      }
+    },
+    {
+      "text": "The putt heard 'round the world.",
+      "duration": 4.0,
+      "text_size": 88,
+      "panel": true,
+      "subtitle": "History made.",
+      "clip_mode": null,
+      "clip_description": "Tiger Woods 2019 Masters celebration",
+      "clip_moment": "Tiger Woods sinking the final putt on the 18th hole, immediately followed by his triumphant roar.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=pE-aOBGN8UM",
+        "start": 9.5,
+        "end": 11.5
+      }
+    },
+    {
+      "text": "The greatest comeback ever.",
+      "duration": 3.5,
+      "text_size": 85,
+      "panel": true,
+      "subtitle": "The GOAT returns.",
+      "clip_mode": null,
+      "clip_description": "Tiger Woods 2019 Masters celebration",
+      "clip_moment": "Tiger Woods embracing his son Charlie and daughter Sam after the win, a deeply emotional moment.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=pE-aOBGN8UM",
+        "start": 15.0,
+        "end": 19.0
+      }
+    }
+  ]
+}

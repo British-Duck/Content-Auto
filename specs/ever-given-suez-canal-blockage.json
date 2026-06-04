@@ -1,0 +1,119 @@
+{
+  "id": "ever-given-suez-canal-blockage",
+  "label": "GLOBAL TRADE",
+  "scheme": "dark_gold",
+  "voice": "en-US-GuyNeural",
+  "voice_script": "In March 2021, a single ship brought global trade to its knees. The Ever Given, a vessel longer than the Eiffel Tower is tall, became hopelessly wedged across the Suez Canal, one of the planet's most vital arteries. The result? A traffic jam of over 400 ships and a staggering economic toll: ten billion dollars... per day. For six tense days, the world watched as a tiny excavator, and later a fleet of powerful tugboats, battled to free the giant. It took a Supermoon high tide and a monumental effort to finally break the deadlock. The incident was a stunning reminder of how a single point of failure can threaten the entire global supply chain.",
+  "screens": [
+    {
+      "text": "This tiny excavator...",
+      "duration": 3.5,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Ever Given Suez Canal digger",
+      "clip_moment": "The small yellow excavator digging sand away from the bow of the massive container ship.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=NTRtmSQvRMc",
+        "start": 5.4,
+        "end": 7.5
+      }
+    },
+    {
+      "text": "...was the first attempt to move this.",
+      "duration": 3.5,
+      "text_size": 90,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Ever Given stuck Suez Canal aerial view",
+      "clip_moment": "High aerial drone shot revealing the entire 400m ship wedged completely from bank to bank.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=BP3SXI9L1Iw",
+        "start": 18.0,
+        "end": 21.0
+      }
+    },
+    {
+      "text": "A 400-meter ship blocking 12% of world trade.",
+      "duration": 4.0,
+      "text_size": 82,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Ever Given stuck Suez Canal aerial view",
+      "clip_moment": "A shot looking down the length of the ship, showing thousands of containers stacked high.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=BP3SXI9L1Iw",
+        "start": 40.0,
+        "end": 44.0
+      }
+    },
+    {
+      "text": "The cost: $400 Million PER HOUR",
+      "duration": 4.5,
+      "text_size": 84,
+      "panel": false,
+      "subtitle": "Halting $10 billion of goods daily",
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    },
+    {
+      "text": "Creating a 400-ship traffic jam visible from space.",
+      "duration": 4.5,
+      "text_size": 80,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Suez Canal ship traffic jam",
+      "clip_moment": "Satellite view showing a massive queue of ships in the Red Sea and Mediterranean.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=268okM--Cv8",
+        "start": 62.0,
+        "end": 67.0
+      }
+    },
+    {
+      "text": "It took a fleet of 14 tugboats...",
+      "duration": 4.0,
+      "text_size": 86,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Ever Given freed by tugboats",
+      "clip_moment": "Multiple tugboats surrounding the stern of the Ever Given, pushing and pulling against the massive hull.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=BP3SXI9L1Iw",
+        "start": 18.0,
+        "end": 21.0
+      }
+    },
+    {
+      "text": "...and the pull of a Supermoon high tide.",
+      "duration": 5.0,
+      "text_size": 82,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Ever Given freed by tugboats",
+      "clip_moment": "The moment the ship begins to visibly move and straighten in the canal, with tugboats celebrating with horns and water cannons.",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=dVNHaUMK4eA",
+        "start": 18.0,
+        "end": 24.0
+      }
+    },
+    {
+      "text": "One ship. Six days. Global chaos.",
+      "duration": 4.5,
+      "text_size": 88,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+========================================================================
+  enhanced-games-swimming-timing-scandal  |  dark_red  |  16.5s  |  2 clips  |  1 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   2.0  CLIP              6tegkS-U_Mo@31.5s–34.0s       "The 'New World Record'" / "20.81 seconds. Incre"
+   2   2.5  GRADIENT                                        "Enhanced Games: 'Pushing Lim" / "But are they pushing"
+   3   3.0  GRADIENT                                        "Hold on... Did he even finis" / "The clock stopped BE" ⚠ consecutive
+   4   2.5  GRADIENT                                        "The TRUTH emerges." / "Real time: 21.0-21.1" ⚠ consecutive
+   5   3.0  GRADIENT                                        "A TRUE WORLD RECORD:" / "20.88s. The gold sta" ⚠ consecutive
+   6   3.5  AMBIENT           Bppuvjo5ZAo@0.0s–ambient      "Enhanced Games: Credibility?" / "Is this 'fairer' fut"
+========================================================================

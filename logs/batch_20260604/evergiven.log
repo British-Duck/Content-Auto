@@ -1,0 +1,686 @@
+14:58:22 INFO  [orchestrate] ============================================================
+14:58:22 INFO  [orchestrate] STAGE 1: Creative Director
+14:58:22 INFO  [orchestrate] ============================================================
+14:58:22 INFO  [creative_director] Stage 1: Creative Director
+14:58:22 INFO  [creative_director] Brief: In March 2021, a single container ship called the Ever Given ran aground and wedged itself across the Suez Canal. The ca
+14:58:22 INFO  [creative_director] Calling Gemini (generate)…
+14:58:23 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+14:58:23 DEBUG [httpcore.connection] connect_tcp.started host='generativelanguage.googleapis.com' port=443 local_address=None timeout=None socket_options=None
+14:58:23 DEBUG [httpcore.connection] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D62A7380>
+14:58:23 DEBUG [httpcore.connection] start_tls.started ssl_context=<ssl.SSLContext object at 0x00000244D0D1FC50> server_hostname='generativelanguage.googleapis.com' timeout=None
+14:58:23 DEBUG [httpcore.connection] start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D5F66FD0>
+14:58:23 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+14:58:23 DEBUG [httpcore.http11] send_request_headers.complete
+14:58:23 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+14:58:23 DEBUG [httpcore.http11] send_request_body.complete
+14:58:23 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+14:58:56 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 13:58:56 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=32488'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+14:58:56 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent "HTTP/1.1 200 OK"
+14:58:56 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+14:58:56 DEBUG [httpcore.http11] receive_response_body.complete
+14:58:56 DEBUG [httpcore.http11] response_closed.started
+14:58:56 DEBUG [httpcore.http11] response_closed.complete
+14:58:56 INFO  [creative_director] Draft passed first-call validation
+14:58:58 INFO  [creative_director] Calling Gemini (critique)…
+14:58:58 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+14:58:58 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+14:58:58 DEBUG [httpcore.http11] send_request_headers.complete
+14:58:58 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+14:58:58 DEBUG [httpcore.http11] send_request_body.complete
+14:58:58 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+14:59:39 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 13:59:39 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=41172'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+14:59:39 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent "HTTP/1.1 200 OK"
+14:59:39 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+14:59:39 DEBUG [httpcore.http11] receive_response_body.complete
+14:59:39 DEBUG [httpcore.http11] response_closed.started
+14:59:39 DEBUG [httpcore.http11] response_closed.complete
+14:59:39 INFO  [creative_director] Spec \u2192 C:\dev\Content Automation\Enhanced games\specs\ever-given-suez-canal-blockage.json
+14:59:39 INFO  [creative_director] Storyboard \u2192 C:\dev\Content Automation\Enhanced games\specs\ever-given-suez-canal-blockage_storyboard.md
+14:59:39 INFO  [creative_director] 
+\u2500\u2500 STORYBOARD \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+The hook is the viral meme of the tiny excavator, immediately contrasted with the colossal scale of the wedged Ever Given. The story escalates from this humorous absurdity to the staggering economic stakes ($400M/hour). We visualize the global impact with a massive traffic jam of ships, visible from space. The tension builds towards the epic rescue operation, framing it as a battle of machines and nature (tugboats and a supermoon tide). The resolution is the celebratory moment the ship is freed. The closer is a punchy, three-act summary — 'One ship. Six days. Global chaos.' — leaving the viewer with a lasting impression of the event's scale and our system's fragility.
+\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+14:59:39 INFO  [creative_director] ever-given-suez-canal-blockage — 8 screens, 33.5s, scheme=dark_gold, 6 clips (0 ambient)
+14:59:39 INFO  [orchestrate] ============================================================
+14:59:39 INFO  [orchestrate] STAGE 2: Researcher
+14:59:39 INFO  [orchestrate] ============================================================
+14:59:39 INFO  [researcher] Stage 2: Researcher — ever-given-suez-canal-blockage
+14:59:39 INFO  [researcher] 6 screen(s) need footage
+14:59:39 INFO  [researcher] Screen 1: 'Ever Given Suez Canal digger'
+14:59:39 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+14:59:39 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+14:59:39 DEBUG [httpcore.http11] send_request_headers.complete
+14:59:39 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+14:59:39 DEBUG [httpcore.http11] send_request_body.complete
+14:59:39 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+14:59:40 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 13:59:40 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=801'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+14:59:40 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+14:59:40 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+14:59:40 DEBUG [httpcore.http11] receive_response_body.complete
+14:59:40 DEBUG [httpcore.http11] response_closed.started
+14:59:40 DEBUG [httpcore.http11] response_closed.complete
+14:59:40 DEBUG [clip_knowledge] KB: no match found for moment: The small yellow excavator digging sand away from the bow of
+14:59:40 INFO  [researcher] yt-dlp search: Ever Given Suez Canal digger
+14:59:42 INFO  [researcher] Found 5 candidates
+14:59:42 INFO  [researcher] Ranked 5 candidates, trying top 3
+14:59:42 INFO  [researcher] Fetching metadata for NTRtmSQvRMc
+14:59:44 DEBUG [researcher] Screen 1 [NTRtmSQvRMc]: metadata no match (0 chapters, desc=True) \u2192 escalating to Gemini
+14:59:44 INFO  [researcher] Downloading NTRtmSQvRMc
+14:59:49 INFO  [researcher] Downloaded: NTRtmSQvRMc.mp4 (27.7 MB)
+14:59:51 INFO  [researcher] Screen 1: using clip_moment for analysis: 'The small yellow excavator digging sand away from the bow of the massive container ship.'
+14:59:51 INFO  [researcher] Trimming NTRtmSQvRMc.mp4 \u2192 480p/60s
+14:59:52 INFO  [researcher] Trimmed: 1008e794b046bd68_480p_60s.mp4 (3.2 MB)
+14:59:52 INFO  [researcher] Attempt 1: uploading 1008e794b046bd68_480p_60s.mp4 (3.2 MB, 480p/60s)
+14:59:52 DEBUG [httpcore.connection] close.started
+14:59:52 DEBUG [httpcore.connection] close.complete
+14:59:52 DEBUG [httpcore.connection] connect_tcp.started host='generativelanguage.googleapis.com' port=443 local_address=None timeout=None socket_options=None
+14:59:52 DEBUG [httpcore.connection] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D62A9310>
+14:59:52 DEBUG [httpcore.connection] start_tls.started ssl_context=<ssl.SSLContext object at 0x00000244D0D1FC50> server_hostname='generativelanguage.googleapis.com' timeout=None
+14:59:52 DEBUG [httpcore.connection] start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D6285A70>
+14:59:52 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+14:59:52 DEBUG [httpcore.http11] send_request_headers.complete
+14:59:52 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+14:59:52 DEBUG [httpcore.http11] send_request_body.complete
+14:59:52 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+14:59:52 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'text/plain; charset=utf-8'), (b'X-GUploader-UploadID', b'AAVLpEhCSXh9WB9iYy-PvjMu406-xKWrKrMuKSpA0Ulh-1imwrEDnNFH86R3glZ36boXAUdpeEAsUUtFTWvEXiuF_Ctv4q5cmoptv2r8hMkJ-Bo'), (b'X-Goog-Upload-Status', b'active'), (b'X-Goog-Upload-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEhCSXh9WB9iYy-PvjMu406-xKWrKrMuKSpA0Ulh-1imwrEDnNFH86R3glZ36boXAUdpeEAsUUtFTWvEXiuF_Ctv4q5cmoptv2r8hMkJ-Bo&upload_protocol=resumable'), (b'X-Goog-Upload-Control-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEhCSXh9WB9iYy-PvjMu406-xKWrKrMuKSpA0Ulh-1imwrEDnNFH86R3glZ36boXAUdpeEAsUUtFTWvEXiuF_Ctv4q5cmoptv2r8hMkJ-Bo&upload_protocol=resumable'), (b'X-Goog-Upload-Chunk-Granularity', b'8388608'), (b'X-Goog-Upload-Header-x-google-esf-cloud-client-params', b'backend_service_name: "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'), (b'X-Goog-Upload-Header-X-Google-Session-Info', b'GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t'), (b'X-Goog-Upload-Header-X-Google-Backends', b'unix:/tmp/esfbackend.1780578545.508275.1391378'), (b'X-Goog-Upload-Header-Content-Type', b'application/json; charset=UTF-8'), (b'X-Goog-Upload-Header-X-Google-Security-Signals', b'FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api'), (b'X-Goog-Upload-Header-Vary', b'Origin'), (b'X-Goog-Upload-Header-Vary', b'X-Origin'), (b'X-Goog-Upload-Header-Vary', b'Referer'), (b'X-Goog-Upload-Header-X-Google-GFE-Backend-Request-Cost', b'30.9439'), (b'Content-Length', b'0'), (b'Date', b'Thu, 04 Jun 2026 13:59:52 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+14:59:52 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files "HTTP/1.1 200 OK"
+14:59:52 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+14:59:52 DEBUG [httpcore.http11] receive_response_body.complete
+14:59:52 DEBUG [httpcore.http11] response_closed.started
+14:59:52 DEBUG [httpcore.http11] response_closed.complete
+14:59:52 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+14:59:52 DEBUG [httpcore.http11] send_request_headers.complete
+14:59:52 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+14:59:53 DEBUG [httpcore.http11] send_request_body.complete
+14:59:53 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+14:59:55 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'X-GUploader-UploadID', b'AAVLpEhCSXh9WB9iYy-PvjMu406-xKWrKrMuKSpA0Ulh-1imwrEDnNFH86R3glZ36boXAUdpeEAsUUtFTWvEXiuF_Ctv4q5cmoptv2r8hMkJ-Bo'), (b'X-Goog-Upload-Status', b'final'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Length', b'509'), (b'Date', b'Thu, 04 Jun 2026 13:59:55 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+14:59:55 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEhCSXh9WB9iYy-PvjMu406-xKWrKrMuKSpA0Ulh-1imwrEDnNFH86R3glZ36boXAUdpeEAsUUtFTWvEXiuF_Ctv4q5cmoptv2r8hMkJ-Bo&upload_protocol=resumable "HTTP/1.1 200 OK"
+14:59:55 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+14:59:55 DEBUG [httpcore.http11] receive_response_body.complete
+14:59:55 DEBUG [httpcore.http11] response_closed.started
+14:59:55 DEBUG [httpcore.http11] response_closed.complete
+14:59:57 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+14:59:57 DEBUG [httpcore.http11] send_request_headers.complete
+14:59:57 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+14:59:57 DEBUG [httpcore.http11] send_request_body.complete
+14:59:57 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+14:59:57 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 13:59:57 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=136'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+14:59:57 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/zjxpm9lts3bw "HTTP/1.1 200 OK"
+14:59:57 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+14:59:57 DEBUG [httpcore.http11] receive_response_body.complete
+14:59:57 DEBUG [httpcore.http11] response_closed.started
+14:59:57 DEBUG [httpcore.http11] response_closed.complete
+14:59:59 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+14:59:59 DEBUG [httpcore.http11] send_request_headers.complete
+14:59:59 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+14:59:59 DEBUG [httpcore.http11] send_request_body.complete
+14:59:59 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+14:59:59 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 13:59:59 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=133'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+14:59:59 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/zjxpm9lts3bw "HTTP/1.1 200 OK"
+14:59:59 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+14:59:59 DEBUG [httpcore.http11] receive_response_body.complete
+14:59:59 DEBUG [httpcore.http11] response_closed.started
+14:59:59 DEBUG [httpcore.http11] response_closed.complete
+14:59:59 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+14:59:59 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+14:59:59 DEBUG [httpcore.http11] send_request_headers.complete
+14:59:59 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+14:59:59 DEBUG [httpcore.http11] send_request_body.complete
+14:59:59 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:04 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:04 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=5145'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:04 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:00:04 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:04 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:04 DEBUG [httpcore.http11] response_closed.started
+15:00:04 DEBUG [httpcore.http11] response_closed.complete
+15:00:04 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'DELETE']>
+15:00:04 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:04 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'DELETE']>
+15:00:04 DEBUG [httpcore.http11] send_request_body.complete
+15:00:04 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'DELETE']>
+15:00:05 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:05 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=1275'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:05 INFO  [httpx] HTTP Request: DELETE https://generativelanguage.googleapis.com/v1beta/files/zjxpm9lts3bw "HTTP/1.1 200 OK"
+15:00:05 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'DELETE']>
+15:00:05 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:05 DEBUG [httpcore.http11] response_closed.started
+15:00:05 DEBUG [httpcore.http11] response_closed.complete
+15:00:05 WARNING [researcher] Gemini returned fractional timestamps (0.090–0.125) — converting to seconds using 60s duration: 5.4–7.5s
+15:00:05 INFO  [researcher] Screen 1: clip set (5.4–7.5s, high)
+15:00:05 INFO  [clip_knowledge] KB: saved NTRtmSQvRMc@5.4-7.5 — "The segment clearly shows a small yellow excavator digging sand and mu"
+15:00:05 DEBUG [clip_knowledge] KB: thumbnail saved NTRtmSQvRMc_5_4_7_5.jpg
+15:00:05 INFO  [researcher] Screen 2: 'Ever Given stuck Suez Canal aerial view'
+15:00:05 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:00:05 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:05 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:05 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:05 DEBUG [httpcore.http11] send_request_body.complete
+15:00:05 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:06 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:06 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=903'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:06 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:00:06 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:06 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:06 DEBUG [httpcore.http11] response_closed.started
+15:00:06 DEBUG [httpcore.http11] response_closed.complete
+15:00:06 DEBUG [clip_knowledge] KB: no match found for moment: High aerial drone shot revealing the entire 400m ship wedged
+15:00:06 INFO  [researcher] yt-dlp search: Ever Given stuck Suez Canal aerial view
+15:00:08 INFO  [researcher] Found 5 candidates
+15:00:08 INFO  [researcher] Ranked 5 candidates, trying top 3
+15:00:08 INFO  [researcher] Fetching metadata for BP3SXI9L1Iw
+15:00:09 DEBUG [researcher] Screen 2 [BP3SXI9L1Iw]: metadata no match (0 chapters, desc=True) \u2192 escalating to Gemini
+15:00:09 INFO  [researcher] Downloading BP3SXI9L1Iw
+15:00:12 INFO  [researcher] Downloaded: BP3SXI9L1Iw.mp4 (10.6 MB)
+15:00:15 INFO  [researcher] Screen 2: using clip_moment for analysis: 'High aerial drone shot revealing the entire 400m ship wedged completely from bank to bank.'
+15:00:15 INFO  [researcher] Trimming BP3SXI9L1Iw.mp4 \u2192 480p/60s
+15:00:15 INFO  [researcher] Trimmed: 6054439e114d3afb_480p_60s.mp4 (4.9 MB)
+15:00:15 INFO  [researcher] Attempt 1: uploading 6054439e114d3afb_480p_60s.mp4 (4.9 MB, 480p/60s)
+15:00:15 DEBUG [httpcore.connection] close.started
+15:00:15 DEBUG [httpcore.connection] close.complete
+15:00:15 DEBUG [httpcore.connection] connect_tcp.started host='generativelanguage.googleapis.com' port=443 local_address=None timeout=None socket_options=None
+15:00:15 DEBUG [httpcore.connection] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D6286EA0>
+15:00:15 DEBUG [httpcore.connection] start_tls.started ssl_context=<ssl.SSLContext object at 0x00000244D0D1FC50> server_hostname='generativelanguage.googleapis.com' timeout=None
+15:00:15 DEBUG [httpcore.connection] start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D628F0B0>
+15:00:15 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:15 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:15 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:15 DEBUG [httpcore.http11] send_request_body.complete
+15:00:15 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:16 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'text/plain; charset=utf-8'), (b'X-GUploader-UploadID', b'AAVLpEjc1l4xr3DI-949MXYkn8AsGAPbBIJWt7KGiK0cNz8u-EN1lffjCFpMKe5tXeN8-500-TjriJj43Be4T4dXy6tcvq5-xKnp_ULL7iGdfA'), (b'X-Goog-Upload-Status', b'active'), (b'X-Goog-Upload-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEjc1l4xr3DI-949MXYkn8AsGAPbBIJWt7KGiK0cNz8u-EN1lffjCFpMKe5tXeN8-500-TjriJj43Be4T4dXy6tcvq5-xKnp_ULL7iGdfA&upload_protocol=resumable'), (b'X-Goog-Upload-Control-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEjc1l4xr3DI-949MXYkn8AsGAPbBIJWt7KGiK0cNz8u-EN1lffjCFpMKe5tXeN8-500-TjriJj43Be4T4dXy6tcvq5-xKnp_ULL7iGdfA&upload_protocol=resumable'), (b'X-Goog-Upload-Chunk-Granularity', b'8388608'), (b'X-Goog-Upload-Header-x-google-esf-cloud-client-params', b'backend_service_name: "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'), (b'X-Goog-Upload-Header-X-Google-Session-Info', b'GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t'), (b'X-Goog-Upload-Header-X-Google-Backends', b'unix:/tmp/esfbackend.1780484367.858123.3634632'), (b'X-Goog-Upload-Header-Content-Type', b'application/json; charset=UTF-8'), (b'X-Goog-Upload-Header-X-Google-Security-Signals', b'FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api'), (b'X-Goog-Upload-Header-Vary', b'Origin'), (b'X-Goog-Upload-Header-Vary', b'X-Origin'), (b'X-Goog-Upload-Header-Vary', b'Referer'), (b'X-Goog-Upload-Header-X-Google-GFE-Backend-Request-Cost', b'27.5735'), (b'Content-Length', b'0'), (b'Date', b'Thu, 04 Jun 2026 14:00:16 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:00:16 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files "HTTP/1.1 200 OK"
+15:00:16 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:16 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:16 DEBUG [httpcore.http11] response_closed.started
+15:00:16 DEBUG [httpcore.http11] response_closed.complete
+15:00:16 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:16 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:16 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:17 DEBUG [httpcore.http11] send_request_body.complete
+15:00:17 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:19 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'X-GUploader-UploadID', b'AAVLpEjc1l4xr3DI-949MXYkn8AsGAPbBIJWt7KGiK0cNz8u-EN1lffjCFpMKe5tXeN8-500-TjriJj43Be4T4dXy6tcvq5-xKnp_ULL7iGdfA'), (b'X-Goog-Upload-Status', b'final'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Length', b'509'), (b'Date', b'Thu, 04 Jun 2026 14:00:19 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:00:19 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEjc1l4xr3DI-949MXYkn8AsGAPbBIJWt7KGiK0cNz8u-EN1lffjCFpMKe5tXeN8-500-TjriJj43Be4T4dXy6tcvq5-xKnp_ULL7iGdfA&upload_protocol=resumable "HTTP/1.1 200 OK"
+15:00:19 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:19 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:19 DEBUG [httpcore.http11] response_closed.started
+15:00:19 DEBUG [httpcore.http11] response_closed.complete
+15:00:21 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:00:21 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:21 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:00:21 DEBUG [httpcore.http11] send_request_body.complete
+15:00:21 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:00:21 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:21 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=129'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:21 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/kd58dm0ro5hx "HTTP/1.1 200 OK"
+15:00:21 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:00:21 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:21 DEBUG [httpcore.http11] response_closed.started
+15:00:21 DEBUG [httpcore.http11] response_closed.complete
+15:00:23 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:00:23 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:23 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:00:23 DEBUG [httpcore.http11] send_request_body.complete
+15:00:23 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:00:23 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:23 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=108'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:23 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/kd58dm0ro5hx "HTTP/1.1 200 OK"
+15:00:23 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:00:23 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:23 DEBUG [httpcore.http11] response_closed.started
+15:00:23 DEBUG [httpcore.http11] response_closed.complete
+15:00:23 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:00:23 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:23 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:23 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:23 DEBUG [httpcore.http11] send_request_body.complete
+15:00:23 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:29 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:29 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=6333'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:29 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:00:29 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:29 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:29 DEBUG [httpcore.http11] response_closed.started
+15:00:29 DEBUG [httpcore.http11] response_closed.complete
+15:00:29 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'DELETE']>
+15:00:29 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:29 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'DELETE']>
+15:00:29 DEBUG [httpcore.http11] send_request_body.complete
+15:00:29 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'DELETE']>
+15:00:42 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:42 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=12102'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:42 INFO  [httpx] HTTP Request: DELETE https://generativelanguage.googleapis.com/v1beta/files/kd58dm0ro5hx "HTTP/1.1 200 OK"
+15:00:42 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'DELETE']>
+15:00:42 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:42 DEBUG [httpcore.http11] response_closed.started
+15:00:42 DEBUG [httpcore.http11] response_closed.complete
+15:00:42 INFO  [researcher] Screen 2: clip set (18.0–21.0s, high)
+15:00:42 INFO  [clip_knowledge] KB: saved BP3SXI9L1Iw@18.0-21.0 — "The aerial drone shot from 0:18 to 0:21 clearly shows the entire lengt"
+15:00:42 DEBUG [clip_knowledge] KB: thumbnail saved BP3SXI9L1Iw_18_0_21_0.jpg
+15:00:42 INFO  [researcher] Screen 3: 'Ever Given stuck Suez Canal aerial view'
+15:00:42 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:00:42 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:42 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:42 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:42 DEBUG [httpcore.http11] send_request_body.complete
+15:00:42 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:43 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:43 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=1013'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:43 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:00:43 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:43 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:43 DEBUG [httpcore.http11] response_closed.started
+15:00:43 DEBUG [httpcore.http11] response_closed.complete
+15:00:43 DEBUG [clip_knowledge] KB: no match found for moment: A shot looking down the length of the ship, showing thousand
+15:00:43 INFO  [researcher] Search cache hit: 'Ever Given stuck Suez Canal aerial view' (5 results)
+15:00:43 INFO  [researcher] Ranked 5 candidates, trying top 3
+15:00:43 DEBUG [researcher] Screen 3 [BP3SXI9L1Iw]: metadata no match (0 chapters, desc=True) \u2192 escalating to Gemini
+15:00:43 INFO  [researcher] Cache hit: BP3SXI9L1Iw.mp4
+15:00:45 INFO  [researcher] Screen 3 [BP3SXI9L1Iw]: passing 1 exclusion range(s) to Gemini
+15:00:45 INFO  [researcher] Screen 3: using clip_moment for analysis: 'A shot looking down the length of the ship, showing thousands of containers stacked high.'
+15:00:45 DEBUG [researcher] Trim cache hit: 6054439e114d3afb_480p_60s.mp4
+15:00:45 INFO  [researcher] Attempt 1: uploading 6054439e114d3afb_480p_60s.mp4 (4.9 MB, 480p/60s)
+15:00:45 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:45 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:45 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:45 DEBUG [httpcore.http11] send_request_body.complete
+15:00:45 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:46 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'text/plain; charset=utf-8'), (b'X-GUploader-UploadID', b'AAVLpEgeEKyFPQMT5LxO-5iuHalB2uHvGeQeI2U7_w2z9Q9ZpyehfeKatgt1fu0PmRqnFFMiu9SH7RWGaxvMEJQuRzMw4O05yxDQ2v21cPYG4j0'), (b'X-Goog-Upload-Status', b'active'), (b'X-Goog-Upload-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEgeEKyFPQMT5LxO-5iuHalB2uHvGeQeI2U7_w2z9Q9ZpyehfeKatgt1fu0PmRqnFFMiu9SH7RWGaxvMEJQuRzMw4O05yxDQ2v21cPYG4j0&upload_protocol=resumable'), (b'X-Goog-Upload-Control-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEgeEKyFPQMT5LxO-5iuHalB2uHvGeQeI2U7_w2z9Q9ZpyehfeKatgt1fu0PmRqnFFMiu9SH7RWGaxvMEJQuRzMw4O05yxDQ2v21cPYG4j0&upload_protocol=resumable'), (b'X-Goog-Upload-Chunk-Granularity', b'8388608'), (b'X-Goog-Upload-Header-x-google-esf-cloud-client-params', b'backend_service_name: "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'), (b'X-Goog-Upload-Header-X-Google-Session-Info', b'GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t'), (b'X-Goog-Upload-Header-X-Google-Backends', b'unix:/tmp/esfbackend.1780477999.47662.2188706'), (b'X-Goog-Upload-Header-Content-Type', b'application/json; charset=UTF-8'), (b'X-Goog-Upload-Header-X-Google-Security-Signals', b'FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api'), (b'X-Goog-Upload-Header-Vary', b'Origin'), (b'X-Goog-Upload-Header-Vary', b'X-Origin'), (b'X-Goog-Upload-Header-Vary', b'Referer'), (b'X-Goog-Upload-Header-X-Google-GFE-Backend-Request-Cost', b'31.4336'), (b'Content-Length', b'0'), (b'Date', b'Thu, 04 Jun 2026 14:00:46 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:00:46 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files "HTTP/1.1 200 OK"
+15:00:46 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:46 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:46 DEBUG [httpcore.http11] response_closed.started
+15:00:46 DEBUG [httpcore.http11] response_closed.complete
+15:00:46 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:46 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:46 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:47 DEBUG [httpcore.http11] send_request_body.complete
+15:00:47 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:48 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'X-GUploader-UploadID', b'AAVLpEgeEKyFPQMT5LxO-5iuHalB2uHvGeQeI2U7_w2z9Q9ZpyehfeKatgt1fu0PmRqnFFMiu9SH7RWGaxvMEJQuRzMw4O05yxDQ2v21cPYG4j0'), (b'X-Goog-Upload-Status', b'final'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Length', b'509'), (b'Date', b'Thu, 04 Jun 2026 14:00:48 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:00:48 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEgeEKyFPQMT5LxO-5iuHalB2uHvGeQeI2U7_w2z9Q9ZpyehfeKatgt1fu0PmRqnFFMiu9SH7RWGaxvMEJQuRzMw4O05yxDQ2v21cPYG4j0&upload_protocol=resumable "HTTP/1.1 200 OK"
+15:00:48 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:48 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:48 DEBUG [httpcore.http11] response_closed.started
+15:00:48 DEBUG [httpcore.http11] response_closed.complete
+15:00:50 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:00:50 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:50 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:00:50 DEBUG [httpcore.http11] send_request_body.complete
+15:00:50 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:00:51 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:51 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=133'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:51 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/1crhqm8fyv9x "HTTP/1.1 200 OK"
+15:00:51 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:00:51 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:51 DEBUG [httpcore.http11] response_closed.started
+15:00:51 DEBUG [httpcore.http11] response_closed.complete
+15:00:51 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:00:51 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:00:51 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:51 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:00:51 DEBUG [httpcore.http11] send_request_body.complete
+15:00:51 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:00:55 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:00:55 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=4444'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:00:55 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:00:55 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:00:55 DEBUG [httpcore.http11] receive_response_body.complete
+15:00:55 DEBUG [httpcore.http11] response_closed.started
+15:00:55 DEBUG [httpcore.http11] response_closed.complete
+15:00:55 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'DELETE']>
+15:00:55 DEBUG [httpcore.http11] send_request_headers.complete
+15:00:55 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'DELETE']>
+15:00:55 DEBUG [httpcore.http11] send_request_body.complete
+15:00:55 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'DELETE']>
+15:01:00 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:00 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=5292'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:00 INFO  [httpx] HTTP Request: DELETE https://generativelanguage.googleapis.com/v1beta/files/1crhqm8fyv9x "HTTP/1.1 200 OK"
+15:01:00 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'DELETE']>
+15:01:00 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:00 DEBUG [httpcore.http11] response_closed.started
+15:01:00 DEBUG [httpcore.http11] response_closed.complete
+15:01:00 INFO  [researcher] Screen 3: clip set (40.0–44.0s, high)
+15:01:00 INFO  [clip_knowledge] KB: saved BP3SXI9L1Iw@40.0-44.0 — "The segment shows an aerial view looking down the length of the Ever G"
+15:01:00 DEBUG [clip_knowledge] KB: thumbnail saved BP3SXI9L1Iw_40_0_44_0.jpg
+15:01:00 INFO  [researcher] Screen 5: 'Suez Canal ship traffic jam'
+15:01:00 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:01:00 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:01:00 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:00 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:01:00 DEBUG [httpcore.http11] send_request_body.complete
+15:01:00 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:01:01 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:01 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=839'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:01 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:01:01 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:01:01 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:01 DEBUG [httpcore.http11] response_closed.started
+15:01:01 DEBUG [httpcore.http11] response_closed.complete
+15:01:01 DEBUG [clip_knowledge] KB: no match found for moment: Satellite view showing a massive queue of ships in the Red S
+15:01:01 INFO  [researcher] yt-dlp search: Suez Canal ship traffic jam
+15:01:03 INFO  [researcher] Found 5 candidates
+15:01:03 INFO  [researcher] Ranked 5 candidates, trying top 3
+15:01:03 INFO  [researcher] Fetching metadata for I1l917sI6Eg
+15:01:05 DEBUG [researcher] Screen 5 [I1l917sI6Eg]: metadata no match (0 chapters, desc=True) \u2192 escalating to Gemini
+15:01:05 INFO  [researcher] Downloading I1l917sI6Eg
+15:01:08 INFO  [researcher] Downloaded: I1l917sI6Eg.mp4 (8.8 MB)
+15:01:11 INFO  [researcher] Screen 5: using clip_moment for analysis: 'Satellite view showing a massive queue of ships in the Red Sea and Mediterranean.'
+15:01:11 INFO  [researcher] Trimming I1l917sI6Eg.mp4 \u2192 480p/60s
+15:01:11 INFO  [researcher] Trimmed: cc1ea6eefc4b4aa9_480p_60s.mp4 (3.2 MB)
+15:01:11 INFO  [researcher] Attempt 1: uploading cc1ea6eefc4b4aa9_480p_60s.mp4 (3.2 MB, 480p/60s)
+15:01:11 DEBUG [httpcore.connection] close.started
+15:01:11 DEBUG [httpcore.connection] close.complete
+15:01:11 DEBUG [httpcore.connection] connect_tcp.started host='generativelanguage.googleapis.com' port=443 local_address=None timeout=None socket_options=None
+15:01:11 DEBUG [httpcore.connection] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D6056BE0>
+15:01:11 DEBUG [httpcore.connection] start_tls.started ssl_context=<ssl.SSLContext object at 0x00000244D0D1FC50> server_hostname='generativelanguage.googleapis.com' timeout=None
+15:01:11 DEBUG [httpcore.connection] start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D6057790>
+15:01:11 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:01:11 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:11 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:01:11 DEBUG [httpcore.http11] send_request_body.complete
+15:01:11 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:01:12 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'text/plain; charset=utf-8'), (b'X-GUploader-UploadID', b'AAVLpEiLDC-6iLC0JbgkYURkNlkH6v_jhiTmfdIZ0Fw83LjOfRsPNp4gmX3s59RLrD6ogOKcztIAj0A4Kl_gzctsXBG0_yGpTkV2V7RSMfWWbQ'), (b'X-Goog-Upload-Status', b'active'), (b'X-Goog-Upload-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEiLDC-6iLC0JbgkYURkNlkH6v_jhiTmfdIZ0Fw83LjOfRsPNp4gmX3s59RLrD6ogOKcztIAj0A4Kl_gzctsXBG0_yGpTkV2V7RSMfWWbQ&upload_protocol=resumable'), (b'X-Goog-Upload-Control-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEiLDC-6iLC0JbgkYURkNlkH6v_jhiTmfdIZ0Fw83LjOfRsPNp4gmX3s59RLrD6ogOKcztIAj0A4Kl_gzctsXBG0_yGpTkV2V7RSMfWWbQ&upload_protocol=resumable'), (b'X-Goog-Upload-Chunk-Granularity', b'8388608'), (b'X-Goog-Upload-Header-x-google-esf-cloud-client-params', b'backend_service_name: "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'), (b'X-Goog-Upload-Header-X-Google-Session-Info', b'GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t'), (b'X-Goog-Upload-Header-X-Google-Backends', b'unix:/tmp/esfbackend.1780578518.420703.1377526'), (b'X-Goog-Upload-Header-Content-Type', b'application/json; charset=UTF-8'), (b'X-Goog-Upload-Header-X-Google-Security-Signals', b'FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api'), (b'X-Goog-Upload-Header-Vary', b'Origin'), (b'X-Goog-Upload-Header-Vary', b'X-Origin'), (b'X-Goog-Upload-Header-Vary', b'Referer'), (b'X-Goog-Upload-Header-X-Google-GFE-Backend-Request-Cost', b'19.6224'), (b'Content-Length', b'0'), (b'Date', b'Thu, 04 Jun 2026 14:01:12 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:01:12 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files "HTTP/1.1 200 OK"
+15:01:12 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:01:12 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:12 DEBUG [httpcore.http11] response_closed.started
+15:01:12 DEBUG [httpcore.http11] response_closed.complete
+15:01:12 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:01:12 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:12 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:01:12 DEBUG [httpcore.http11] send_request_body.complete
+15:01:12 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:01:14 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'X-GUploader-UploadID', b'AAVLpEiLDC-6iLC0JbgkYURkNlkH6v_jhiTmfdIZ0Fw83LjOfRsPNp4gmX3s59RLrD6ogOKcztIAj0A4Kl_gzctsXBG0_yGpTkV2V7RSMfWWbQ'), (b'X-Goog-Upload-Status', b'final'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Length', b'509'), (b'Date', b'Thu, 04 Jun 2026 14:01:14 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:01:14 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEiLDC-6iLC0JbgkYURkNlkH6v_jhiTmfdIZ0Fw83LjOfRsPNp4gmX3s59RLrD6ogOKcztIAj0A4Kl_gzctsXBG0_yGpTkV2V7RSMfWWbQ&upload_protocol=resumable "HTTP/1.1 200 OK"
+15:01:14 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:01:14 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:14 DEBUG [httpcore.http11] response_closed.started
+15:01:14 DEBUG [httpcore.http11] response_closed.complete
+15:01:16 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:01:16 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:16 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:01:16 DEBUG [httpcore.http11] send_request_body.complete
+15:01:16 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:01:16 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:16 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=148'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:16 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/hc5ada6i60gz "HTTP/1.1 200 OK"
+15:01:16 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:01:16 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:16 DEBUG [httpcore.http11] response_closed.started
+15:01:16 DEBUG [httpcore.http11] response_closed.complete
+15:01:18 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:01:18 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:18 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:01:18 DEBUG [httpcore.http11] send_request_body.complete
+15:01:18 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:01:18 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:18 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=146'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:18 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/hc5ada6i60gz "HTTP/1.1 200 OK"
+15:01:18 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:01:18 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:18 DEBUG [httpcore.http11] response_closed.started
+15:01:18 DEBUG [httpcore.http11] response_closed.complete
+15:01:18 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:01:18 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:01:18 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:18 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:01:18 DEBUG [httpcore.http11] send_request_body.complete
+15:01:18 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:01:23 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:23 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=4530'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:23 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:01:23 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:01:23 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:23 DEBUG [httpcore.http11] response_closed.started
+15:01:23 DEBUG [httpcore.http11] response_closed.complete
+15:01:23 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'DELETE']>
+15:01:23 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:23 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'DELETE']>
+15:01:23 DEBUG [httpcore.http11] send_request_body.complete
+15:01:23 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'DELETE']>
+15:01:33 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:33 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=10288'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:33 INFO  [httpx] HTTP Request: DELETE https://generativelanguage.googleapis.com/v1beta/files/hc5ada6i60gz "HTTP/1.1 200 OK"
+15:01:33 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'DELETE']>
+15:01:33 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:33 DEBUG [httpcore.http11] response_closed.started
+15:01:33 DEBUG [httpcore.http11] response_closed.complete
+15:01:33 WARNING [researcher] Gemini returned fractional timestamps (0.000–0.000) — converting to seconds using 60s duration: 0.0–0.0s
+15:01:33 INFO  [researcher] Fetching metadata for YLOFKJ9MXIc
+15:01:35 DEBUG [researcher] Screen 5 [YLOFKJ9MXIc]: metadata no match (0 chapters, desc=True) \u2192 escalating to Gemini
+15:01:35 INFO  [researcher] Downloading YLOFKJ9MXIc
+15:01:38 INFO  [researcher] Downloaded: YLOFKJ9MXIc.mp4 (4.5 MB)
+15:01:41 INFO  [researcher] Screen 5: using clip_moment for analysis: 'Satellite view showing a massive queue of ships in the Red Sea and Mediterranean.'
+15:01:41 INFO  [researcher] Trimming YLOFKJ9MXIc.mp4 \u2192 480p/60s
+15:01:41 INFO  [researcher] Trimmed: ec19d8470a55a5e5_480p_60s.mp4 (3.5 MB)
+15:01:41 INFO  [researcher] Attempt 1: uploading ec19d8470a55a5e5_480p_60s.mp4 (3.5 MB, 480p/60s)
+15:01:41 DEBUG [httpcore.connection] close.started
+15:01:41 DEBUG [httpcore.connection] close.complete
+15:01:41 DEBUG [httpcore.connection] connect_tcp.started host='generativelanguage.googleapis.com' port=443 local_address=None timeout=None socket_options=None
+15:01:41 DEBUG [httpcore.connection] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D6273B50>
+15:01:41 DEBUG [httpcore.connection] start_tls.started ssl_context=<ssl.SSLContext object at 0x00000244D0D1FC50> server_hostname='generativelanguage.googleapis.com' timeout=None
+15:01:41 DEBUG [httpcore.connection] start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D6273A50>
+15:01:41 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:01:41 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:41 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:01:41 DEBUG [httpcore.http11] send_request_body.complete
+15:01:41 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:01:42 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'text/plain; charset=utf-8'), (b'X-GUploader-UploadID', b'AAVLpEiG1K3jKrPpzOQVB_DyGOAal3T3Q-DGU1rkp5QvqvcVHcro_RL90dK5HDlQjIp1cinOLntBTKzrhy7ysKN2G2QxLWTIma0XUyLOiXSLlA'), (b'X-Goog-Upload-Status', b'active'), (b'X-Goog-Upload-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEiG1K3jKrPpzOQVB_DyGOAal3T3Q-DGU1rkp5QvqvcVHcro_RL90dK5HDlQjIp1cinOLntBTKzrhy7ysKN2G2QxLWTIma0XUyLOiXSLlA&upload_protocol=resumable'), (b'X-Goog-Upload-Control-URL', b'https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEiG1K3jKrPpzOQVB_DyGOAal3T3Q-DGU1rkp5QvqvcVHcro_RL90dK5HDlQjIp1cinOLntBTKzrhy7ysKN2G2QxLWTIma0XUyLOiXSLlA&upload_protocol=resumable'), (b'X-Goog-Upload-Chunk-Granularity', b'8388608'), (b'X-Goog-Upload-Header-x-google-esf-cloud-client-params', b'backend_service_name: "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'), (b'X-Goog-Upload-Header-X-Google-Session-Info', b'GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t'), (b'X-Goog-Upload-Header-X-Google-Backends', b'unix:/tmp/esfbackend.1780478007.394172.658778'), (b'X-Goog-Upload-Header-Content-Type', b'application/json; charset=UTF-8'), (b'X-Goog-Upload-Header-X-Google-Security-Signals', b'FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api'), (b'X-Goog-Upload-Header-Vary', b'Origin'), (b'X-Goog-Upload-Header-Vary', b'X-Origin'), (b'X-Goog-Upload-Header-Vary', b'Referer'), (b'X-Goog-Upload-Header-X-Google-GFE-Backend-Request-Cost', b'31.3187'), (b'Content-Length', b'0'), (b'Date', b'Thu, 04 Jun 2026 14:01:42 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:01:42 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files "HTTP/1.1 200 OK"
+15:01:42 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:01:42 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:42 DEBUG [httpcore.http11] response_closed.started
+15:01:42 DEBUG [httpcore.http11] response_closed.complete
+15:01:42 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:01:42 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:42 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:01:43 DEBUG [httpcore.http11] send_request_body.complete
+15:01:43 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:01:44 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'X-GUploader-UploadID', b'AAVLpEiG1K3jKrPpzOQVB_DyGOAal3T3Q-DGU1rkp5QvqvcVHcro_RL90dK5HDlQjIp1cinOLntBTKzrhy7ysKN2G2QxLWTIma0XUyLOiXSLlA'), (b'X-Goog-Upload-Status', b'final'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Length', b'509'), (b'Date', b'Thu, 04 Jun 2026 14:01:44 GMT'), (b'Server', b'UploadServer'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+15:01:44 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AAVLpEiG1K3jKrPpzOQVB_DyGOAal3T3Q-DGU1rkp5QvqvcVHcro_RL90dK5HDlQjIp1cinOLntBTKzrhy7ysKN2G2QxLWTIma0XUyLOiXSLlA&upload_protocol=resumable "HTTP/1.1 200 OK"
+15:01:44 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:01:44 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:44 DEBUG [httpcore.http11] response_closed.started
+15:01:44 DEBUG [httpcore.http11] response_closed.complete
+15:01:46 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:01:46 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:46 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:01:46 DEBUG [httpcore.http11] send_request_body.complete
+15:01:46 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:01:46 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:46 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=136'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:46 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/6qdmickhzlaj "HTTP/1.1 200 OK"
+15:01:46 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:01:46 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:46 DEBUG [httpcore.http11] response_closed.started
+15:01:46 DEBUG [httpcore.http11] response_closed.complete
+15:01:48 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:01:48 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:48 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:01:48 DEBUG [httpcore.http11] send_request_body.complete
+15:01:48 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:01:48 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:48 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=143'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:48 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/6qdmickhzlaj "HTTP/1.1 200 OK"
+15:01:48 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:01:48 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:48 DEBUG [httpcore.http11] response_closed.started
+15:01:48 DEBUG [httpcore.http11] response_closed.complete
+15:01:50 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'GET']>
+15:01:50 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:50 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'GET']>
+15:01:50 DEBUG [httpcore.http11] send_request_body.complete
+15:01:50 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'GET']>
+15:01:50 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:50 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=143'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:50 INFO  [httpx] HTTP Request: GET https://generativelanguage.googleapis.com/v1beta/files/6qdmickhzlaj "HTTP/1.1 200 OK"
+15:01:50 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'GET']>
+15:01:50 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:50 DEBUG [httpcore.http11] response_closed.started
+15:01:50 DEBUG [httpcore.http11] response_closed.complete
+15:01:50 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:01:50 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:01:50 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:50 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:01:50 DEBUG [httpcore.http11] send_request_body.complete
+15:01:50 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:01:56 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:01:56 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=5090'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:01:56 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:01:56 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:01:56 DEBUG [httpcore.http11] receive_response_body.complete
+15:01:56 DEBUG [httpcore.http11] response_closed.started
+15:01:56 DEBUG [httpcore.http11] response_closed.complete
+15:01:56 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'DELETE']>
+15:01:56 DEBUG [httpcore.http11] send_request_headers.complete
+15:01:56 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'DELETE']>
+15:01:56 DEBUG [httpcore.http11] send_request_body.complete
+15:01:56 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'DELETE']>
+15:02:33 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:02:33 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=37854'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:02:33 INFO  [httpx] HTTP Request: DELETE https://generativelanguage.googleapis.com/v1beta/files/6qdmickhzlaj "HTTP/1.1 200 OK"
+15:02:33 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'DELETE']>
+15:02:33 DEBUG [httpcore.http11] receive_response_body.complete
+15:02:33 DEBUG [httpcore.http11] response_closed.started
+15:02:33 DEBUG [httpcore.http11] response_closed.complete
+15:02:33 WARNING [researcher] Gemini returned fractional timestamps (0.000–0.000) — converting to seconds using 60s duration: 0.0–0.0s
+15:02:33 INFO  [researcher] Fetching metadata for 268okM--Cv8
+15:02:35 INFO  [researcher] Metadata hit (chapter): 'goes through the 193km Suez Canal daily.' \u2192 62.0–67.0s
+15:02:35 INFO  [researcher] Screen 5: clip from metadata (62.0–67.0s)
+15:02:35 INFO  [clip_knowledge] KB: saved 268okM--Cv8@62.0-67.0 — "Matched chapter: goes through the 193km Suez Canal daily."
+15:02:35 INFO  [researcher] Screen 6: 'Ever Given freed by tugboats'
+15:02:35 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:02:35 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:02:35 DEBUG [httpcore.http11] send_request_headers.complete
+15:02:35 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:02:35 DEBUG [httpcore.http11] send_request_body.complete
+15:02:35 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:02:37 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:02:37 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=1285'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:02:37 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:02:37 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:02:37 DEBUG [httpcore.http11] receive_response_body.complete
+15:02:37 DEBUG [httpcore.http11] response_closed.started
+15:02:37 DEBUG [httpcore.http11] response_closed.complete
+15:02:37 INFO  [clip_knowledge] KB: matched BP3SXI9L1Iw@18.0-21.0 — The clip shows an aerial drone shot of the Ever Given wedged in the Suez Canal with tugboats attempting to free it, which implies they are pushing and pulling against the hull.
+15:02:37 INFO  [researcher] Screen 6: knowledge base hit \u2192 BP3SXI9L1Iw@18.0-21.0 (18.0–21.0s)
+15:02:37 INFO  [researcher] Screen 7: 'Ever Given freed by tugboats'
+15:02:37 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:02:37 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:02:37 DEBUG [httpcore.http11] send_request_headers.complete
+15:02:37 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:02:37 DEBUG [httpcore.http11] send_request_body.complete
+15:02:37 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:02:39 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:02:39 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=1934'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:02:39 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:02:39 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:02:39 DEBUG [httpcore.http11] receive_response_body.complete
+15:02:39 DEBUG [httpcore.http11] response_closed.started
+15:02:39 DEBUG [httpcore.http11] response_closed.complete
+15:02:39 DEBUG [clip_knowledge] KB: no match found for moment: The moment the ship begins to visibly move and straighten in
+15:02:39 INFO  [researcher] yt-dlp search: Ever Given freed by tugboats
+15:02:40 INFO  [researcher] Found 5 candidates
+15:02:40 INFO  [researcher] Ranked 5 candidates, trying top 3
+15:02:40 INFO  [researcher] Fetching metadata for dVNHaUMK4eA
+15:02:42 INFO  [researcher] Metadata hit (chapter): 'The Ever Given' \u2192 18.0–24.0s
+15:02:42 INFO  [researcher] Screen 7: clip from metadata (18.0–24.0s)
+15:02:42 INFO  [clip_knowledge] KB: saved dVNHaUMK4eA@18.0-24.0 — "Matched chapter: The Ever Given"
+15:02:42 INFO  [researcher] Research done: 6/6 clips found
+15:02:42 INFO  [orchestrate] 
+========================================================================
+  ever-given-suez-canal-blockage  |  dark_gold  |  33.5s  |  6 clips  |  0 ambient
+========================================================================
+   #   DUR  MODE              SOURCE                        TEXT
+------------------------------------------------------------------------
+   1   3.5  CLIP              NTRtmSQvRMc@5.4s–7.5s         "This tiny excavator..."
+   2   3.5  CLIP              BP3SXI9L1Iw@18.0s–21.0s       "...was the first attempt to "
+   3   4.0  CLIP              BP3SXI9L1Iw@40.0s–44.0s       "A 400-meter ship blocking 12"
+   4   4.5  GRADIENT                                        "The cost: $400 Million PER H" / "Halting $10 billion "
+   5   4.5  CLIP              268okM--Cv8@62.0s–67.0s       "Creating a 400-ship traffic "
+   6   4.0  CLIP              BP3SXI9L1Iw@18.0s–21.0s       "It took a fleet of 14 tugboa"
+   7   5.0  CLIP              dVNHaUMK4eA@18.0s–24.0s       "...and the pull of a Supermo"
+   8   4.5  GRADIENT                                        "One ship. Six days. Global c"
+========================================================================
+15:02:42 INFO  [orchestrate] ============================================================
+15:02:42 INFO  [orchestrate] STAGE 3: Video Pipeline
+15:02:42 INFO  [orchestrate] ============================================================
+15:02:42 INFO  [vidpipe.spec] Loading spec: C:\dev\Content Automation\Enhanced games\specs\ever-given-suez-canal-blockage.json
+15:02:42 INFO  [vidpipe.spec] Loaded: ever-given-suez-canal-blockage — 8 screens, 33.5s total, 6 clips
+15:02:42 INFO  [vidpipe] Screen 1/8 ...
+15:02:42 INFO  [vidpipe.clips] Clip cache hit: NTRtmSQvRMc.mp4
+15:02:42 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -ss 5.4 -t 3.5 -i .clip_cache\NTRtmSQvRMc.mp4 -i .vidpipe_ever-given-suez-canal-blockage\seg_000.overlay.png -filter_complex [0:v]setpts=PTS-STARTPTS,split=2[bg][fg];[bg]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=40:1,eq=brightness=-0.25:saturation=0.65[bgb];[fg]scale=1080:1920:force_original_aspect_ratio=decrease,eq=brightness=-0.04:saturation=0.9[fgs];[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1[base];[base][1:v]overlay=0:0[out] -map [out] -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_000.mp4
+15:02:44 INFO  [vidpipe] Screen 2/8 ...
+15:02:44 INFO  [vidpipe.clips] Clip cache hit: BP3SXI9L1Iw.mp4
+15:02:44 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -ss 18.0 -t 3.5 -i .clip_cache\BP3SXI9L1Iw.mp4 -i .vidpipe_ever-given-suez-canal-blockage\seg_001.overlay.png -filter_complex [0:v]setpts=PTS-STARTPTS,split=2[bg][fg];[bg]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=40:1,eq=brightness=-0.25:saturation=0.65[bgb];[fg]scale=1080:1920:force_original_aspect_ratio=decrease,eq=brightness=-0.04:saturation=0.9[fgs];[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1[base];[base][1:v]overlay=0:0[out] -map [out] -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_001.mp4
+15:02:45 INFO  [vidpipe] Screen 3/8 ...
+15:02:45 INFO  [vidpipe.clips] Clip cache hit: BP3SXI9L1Iw.mp4
+15:02:45 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -ss 40.0 -t 4.0 -i .clip_cache\BP3SXI9L1Iw.mp4 -i .vidpipe_ever-given-suez-canal-blockage\seg_002.overlay.png -filter_complex [0:v]setpts=PTS-STARTPTS,split=2[bg][fg];[bg]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=40:1,eq=brightness=-0.25:saturation=0.65[bgb];[fg]scale=1080:1920:force_original_aspect_ratio=decrease,eq=brightness=-0.04:saturation=0.9[fgs];[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1[base];[base][1:v]overlay=0:0[out] -map [out] -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_002.mp4
+15:02:47 INFO  [vidpipe] Screen 4/8 ...
+15:02:47 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -loop 1 -framerate 30 -i .vidpipe_ever-given-suez-canal-blockage\seg_003.composite.png -t 4.5 -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_003.mp4
+15:02:48 INFO  [vidpipe] Screen 5/8 ...
+15:02:48 INFO  [vidpipe.clips] Downloading clip 268okM--Cv8 ...
+15:02:52 INFO  [vidpipe.clips] Downloaded: 268okM--Cv8.mp4 (15.3 MB)
+15:02:52 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -ss 62.0 -t 4.5 -i .clip_cache\268okM--Cv8.mp4 -i .vidpipe_ever-given-suez-canal-blockage\seg_004.overlay.png -filter_complex [0:v]setpts=PTS-STARTPTS,split=2[bg][fg];[bg]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=40:1,eq=brightness=-0.25:saturation=0.65[bgb];[fg]scale=1080:1920:force_original_aspect_ratio=decrease,eq=brightness=-0.04:saturation=0.9[fgs];[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1[base];[base][1:v]overlay=0:0[out] -map [out] -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_004.mp4
+15:02:53 INFO  [vidpipe] Screen 6/8 ...
+15:02:53 INFO  [vidpipe.clips] Clip cache hit: BP3SXI9L1Iw.mp4
+15:02:53 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -ss 18.0 -t 4.0 -i .clip_cache\BP3SXI9L1Iw.mp4 -i .vidpipe_ever-given-suez-canal-blockage\seg_005.overlay.png -filter_complex [0:v]setpts=PTS-STARTPTS,split=2[bg][fg];[bg]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=40:1,eq=brightness=-0.25:saturation=0.65[bgb];[fg]scale=1080:1920:force_original_aspect_ratio=decrease,eq=brightness=-0.04:saturation=0.9[fgs];[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1[base];[base][1:v]overlay=0:0[out] -map [out] -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_005.mp4
+15:02:55 INFO  [vidpipe] Screen 7/8 ...
+15:02:55 INFO  [vidpipe.clips] Downloading clip dVNHaUMK4eA ...
+15:03:04 INFO  [vidpipe.clips] Downloaded: dVNHaUMK4eA.mp4 (93.2 MB)
+15:03:04 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -ss 18.0 -t 5.0 -i .clip_cache\dVNHaUMK4eA.mp4 -i .vidpipe_ever-given-suez-canal-blockage\seg_006.overlay.png -filter_complex [0:v]setpts=PTS-STARTPTS,split=2[bg][fg];[bg]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=40:1,eq=brightness=-0.25:saturation=0.65[bgb];[fg]scale=1080:1920:force_original_aspect_ratio=decrease,eq=brightness=-0.04:saturation=0.9[fgs];[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1[base];[base][1:v]overlay=0:0[out] -map [out] -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_006.mp4
+15:03:06 INFO  [vidpipe] Screen 8/8 ...
+15:03:06 DEBUG [vidpipe.renderer] cmd: ffmpeg -y -hide_banner -loglevel warning -loop 1 -framerate 30 -i .vidpipe_ever-given-suez-canal-blockage\seg_007.composite.png -t 4.5 -c:v libx264 -pix_fmt yuv420p -an -preset medium -crf 18 -r 30 -g 30 .vidpipe_ever-given-suez-canal-blockage\seg_007.mp4
+15:03:07 INFO  [vidpipe.assembler] Concatenating 8 segments (0.30s crossfade) ...
+15:03:14 INFO  [vidpipe.assembler] Concat done: concat.mp4 (10.0 MB)
+15:03:14 INFO  [vidpipe.voiceover] Generating voiceover (voice=en-US-GuyNeural) ...
+15:03:14 DEBUG [asyncio] Using proactor: IocpProactor
+15:03:16 INFO  [vidpipe.voiceover] Voiceover: voiceover.mp3 (241 KB)
+15:03:16 INFO  [vidpipe.voiceover] Mixing voiceover into video ...
+15:03:17 INFO  [vidpipe.voiceover] Final: ever-given-suez-canal-blockage.mp4 (10.7 MB)
+15:03:17 INFO  [vidpipe] Done: C:\dev\Content Automation\Enhanced games\output\ever-given-suez-canal-blockage.mp4 (34.8s)
+15:03:17 INFO  [orchestrate] ============================================================
+15:03:17 INFO  [orchestrate] STAGE 4: Quality Gate
+15:03:17 INFO  [orchestrate] ============================================================
+15:03:17 INFO  [quality_gate] Stage 4: Quality Gate — ever-given-suez-canal-blockage.mp4
+15:03:18 INFO  [quality_gate]   [PASS] resolution: 1080x1920 (expected 1080x1920)
+15:03:18 INFO  [quality_gate]   [PASS] duration: 31.40s vs 31.40s (diff 0.00s)
+15:03:18 INFO  [quality_gate]   [PASS] fps: 30.0 (expected 30)
+15:03:18 INFO  [quality_gate]   [PASS] file_size: 10.18 MB (limit 50.0)
+15:03:18 INFO  [quality_gate]   [PASS] audio: present
+15:03:18 INFO  [quality_gate]   [PASS] black_frames: none
+15:03:18 INFO  [quality_gate]   [PASS] codec: h264
+15:03:18 INFO  [quality_gate] Quality gate: PASSED
+15:03:18 INFO  [orchestrate] ============================================================
+15:03:18 INFO  [orchestrate] STAGE 5: Content Reviewer
+15:03:18 INFO  [orchestrate] ============================================================
+15:03:18 INFO  [content_reviewer] Stage 5: Content Reviewer
+15:03:21 INFO  [content_reviewer] Calling Gemini (review)…
+15:03:21 INFO  [google_genai.models] AFC is enabled with max remote calls: 10.
+15:03:21 DEBUG [httpcore.connection] close.started
+15:03:21 DEBUG [httpcore.connection] close.complete
+15:03:21 DEBUG [httpcore.connection] connect_tcp.started host='generativelanguage.googleapis.com' port=443 local_address=None timeout=None socket_options=None
+15:03:21 DEBUG [httpcore.connection] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D70923F0>
+15:03:21 DEBUG [httpcore.connection] start_tls.started ssl_context=<ssl.SSLContext object at 0x00000244D0D1FC50> server_hostname='generativelanguage.googleapis.com' timeout=None
+15:03:21 DEBUG [httpcore.connection] start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000244D70924E0>
+15:03:21 DEBUG [httpcore.http11] send_request_headers.started request=<Request [b'POST']>
+15:03:21 DEBUG [httpcore.http11] send_request_headers.complete
+15:03:21 DEBUG [httpcore.http11] send_request_body.started request=<Request [b'POST']>
+15:03:21 DEBUG [httpcore.http11] send_request_body.complete
+15:03:21 DEBUG [httpcore.http11] receive_response_headers.started request=<Request [b'POST']>
+15:03:31 DEBUG [httpcore.http11] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'X-Gemini-Service-Tier', b'standard'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Encoding', b'gzip'), (b'Date', b'Thu, 04 Jun 2026 14:03:31 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=10084'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+15:03:31 INFO  [httpx] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+15:03:31 DEBUG [httpcore.http11] receive_response_body.started request=<Request [b'POST']>
+15:03:31 DEBUG [httpcore.http11] receive_response_body.complete
+15:03:31 DEBUG [httpcore.http11] response_closed.started
+15:03:31 DEBUG [httpcore.http11] response_closed.complete
+15:03:31 INFO  [content_reviewer] Verdict: PUBLISH (9.1/10)
+15:03:31 INFO  [content_reviewer]   factual_accuracy: 9 — All claims, numbers, and dates are highly accurate and verifiable, with only a minor rounding in the hourly cost that remains consistent with the daily figure.
+15:03:31 INFO  [content_reviewer]   hook_strength: 9 — The juxtaposition of the tiny excavator and the massive ship creates immediate, compelling visual tension that demands attention.
+15:03:31 INFO  [content_reviewer]   narrative_coherence: 9 — The narrative builds effectively from the initial absurd image to the global impact and eventual resolution, with each screen advancing the story.
+15:03:31 INFO  [content_reviewer]   watchability: 9 — The concise text, varied pacing, and complementary voiceover ensure high retention and a compelling viewing experience to the end.
+15:03:31 INFO  [content_reviewer]   engagement_potential: 9 — The video is packed with shareable, shocking facts and a dramatic narrative that will provoke discussion and saves.
+15:03:31 INFO  [content_reviewer]   tone_brand_fit: 10 — The authoritative voice, dramatic scheme, and factual, provocative content align perfectly with the brand's documentary authority.
+15:03:31 INFO  [orchestrate] ============================================================
+15:03:31 INFO  [orchestrate] DONE — 309.2s
+15:03:31 INFO  [orchestrate]   creative_director: OK — ever-given-suez-canal-blockage
+15:03:31 INFO  [orchestrate]   researcher: OK — 6 clips
+15:03:31 INFO  [orchestrate]   render: OK — ever-given-suez-canal-blockage.mp4
+15:03:31 INFO  [orchestrate]   quality_gate: PASSED — 7/7
+15:03:31 INFO  [orchestrate]   content_reviewer: PUBLISH — 9.1/10
+15:03:31 INFO  [orchestrate] ============================================================
+15:03:31 INFO  [cost_tracker] Cost estimate: $0.0161 (9 text + 5 video calls, 2 cache hits)
+15:03:31 INFO  [orchestrate] Cleanup: removed .clip_cache, .trim_cache, searches, metadata, render workdirs (timestamps + clip_knowledge + briefs preserved)
+
+==================================================
+COST ESTIMATE
+==================================================
+  Gemini text calls:   9
+  Gemini video calls:  5
+  Cached (skipped):    0
+  Est. input tokens:   99,862
+  Est. output tokens:  1,911
+  Est. thinking tokens:0
+  Video uploaded:      300s
+  Downloads:           5 (1 cached)
+  Cache hits/misses:   2/14
+  Estimated cost:      $0.0161
+==================================================
+15:03:31 DEBUG [httpcore.connection] close.started
+15:03:31 DEBUG [httpcore.connection] close.complete

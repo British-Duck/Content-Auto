@@ -1,0 +1,21 @@
+{
+  "id": "stress_bad_clip",
+  "label": "BAD CLIP",
+  "scheme": "dark_red",
+  "screens": [
+    {
+      "text": "Bad clip test\nshould fall back\nto gradient",
+      "duration": 3.0,
+      "panel": true,
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+        "start": 0,
+        "end": 3
+      }
+    },
+    {
+      "text": "Second screen\nno clip — gradient",
+      "duration": 2.0
+    }
+  ]
+}
