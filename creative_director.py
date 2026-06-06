@@ -18,62 +18,7 @@ from cost_tracker import get_tracker
 
 log = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = (config.PROMPTS_DIR / "creative_director.txt").read_text(encoding="utf-8")
-
-CRITIQUE_PROMPT = """\
-You are a creative quality reviewer for short-form viral video specs.
-
-Review the spec below. Make it MORE entertaining, captivating, and viral.
-
-CRITICAL — CHECK IN THIS ORDER:
-
-1. STORYBOARD: Does the storyboard faithfully describe what the screens show?
-   Does the spec encode the storyboard accurately? Fix any drift.
-
-2. clip_description AUDIT — most common failure, check carefully:
-
-   a) FORBIDDEN WORDS: Does any clip_description contain these production-speak words?
-        slow motion / slow-motion / slo-mo / replay / closeup / close-up
-        controversy (appended as a descriptor) / scene / angle / highlights
-      If yes → strip them. Rewrite as just "[Event name] [year if helpful]".
-
-   b) SAME-SOURCE RULE: Find all clip_descriptions that reference the same event
-      (they will share the first 3 words). They MUST be word-for-word identical.
-      Take the shortest version and apply it to ALL screens from that event.
-      Example — these three must become identical:
-        "Enhanced Games 50m freestyle race"                     ← keep this
-        "Enhanced Games 50m freestyle finish controversy"       ← WRONG — fix it
-        "Enhanced Games 50m freestyle race full"                ← WRONG — fix it
-      Fix: all three become "Enhanced Games 50m freestyle race"
-
-   c) clip_moment quality: For every evidence screen or key story beat, is
-      clip_moment set and specific? "swimmer's hand touching the wall" is good.
-      "race footage" is not. If clip_moment is missing on a key beat, add it.
-
-   d) REALITY CHECK: Paste each clip_description into YouTube search mentally.
-      Would the first result be the actual event footage? If not → null.
-
-3. clip_mode: Is "ambient" used correctly?
-   Only valid when the source event is ≤ 60s AND continuous play is stronger.
-   If the source is a long broadcast, use null (timestamped) instead.
-
-4. CONSECUTIVE GRADIENTS: Never two gradient screens in a row. Fix any found.
-
-5. CLIP SPREAD: Clips should be distributed across the video, not front-loaded.
-
-6. OTHER:
-   - Weak hook (screen 1 should stop the scroll)
-   - Voice script that reads screen text (should ADD new information)
-   - Factual errors
-   - panel: true when clip_description is set, false otherwise
-   - No empty strings (use null for subtitle and clip_description)
-   - scheme: dark_gold | dark_red | dark_blue | dark_green | dark_purple
-   - voice: en-GB-RyanNeural | en-US-GuyNeural | en-US-ChristopherNeural | en-GB-SoniaNeural
-
-Return ONLY the corrected JSON (including the storyboard field).
-
-SPEC:
-{spec_json}"""
+SYSTEM_PROMPT = (config.PROMPTS_DIR / "creative_director_v2.md").read_text(encoding="utf-8")
 
 REVISION_PROMPT = """\
 You are the creative director. This short-form video spec FAILED content review.
@@ -105,10 +50,6 @@ CURRENT SPEC:
 {spec_json}"""
 
 VALID_SCHEMES = {"dark_gold", "dark_red", "dark_blue", "dark_green", "dark_purple"}
-VALID_VOICES = {
-    "en-GB-RyanNeural", "en-US-GuyNeural",
-    "en-US-ChristopherNeural", "en-GB-SoniaNeural",
-}
 
 
 def _validate(data: dict) -> list[str]:
@@ -118,13 +59,11 @@ def _validate(data: dict) -> list[str]:
         return ["missing or invalid 'screens' array"]
 
     n = len(screens)
-    if n < 5 or n > 12:
-        errors.append(f"screen count {n} outside 5–12")
+    if n < 4 or n > 12:
+        errors.append(f"screen count {n} outside 4–12")
 
     if data.get("scheme") not in VALID_SCHEMES:
         errors.append(f"invalid scheme: {data.get('scheme')}")
-    if data.get("voice") not in VALID_VOICES:
-        errors.append(f"invalid voice: {data.get('voice')}")
     for key in ("id", "label", "voice_script"):
         if not data.get(key):
             errors.append(f"missing: {key}")
@@ -192,8 +131,7 @@ def _normalize_clip_descriptions(screens: list) -> None:
 def _fixup(spec: dict) -> dict:
     if spec.get("scheme") not in VALID_SCHEMES:
         spec["scheme"] = "dark_gold"
-    if spec.get("voice") not in VALID_VOICES:
-        spec["voice"] = "en-GB-RyanNeural"
+    # v2: the CD no longer emits a `voice` field; the narrator is fixed in config.
     screens = spec.get("screens", [])
     for s in screens:
         desc = s.get("clip_description")
@@ -283,40 +221,28 @@ def generate_spec(brief: str, dry_run: bool = False, force: bool = False) -> Opt
 
     draft_errors = _validate(draft)
     if draft_errors:
-        log.info("Draft has %d issue(s) → critique pass", len(draft_errors))
+        log.info("Draft has %d issue(s) (fixup + Step-1 gate handle these): %s",
+                 len(draft_errors), draft_errors)
     else:
         log.info("Draft passed first-call validation")
 
-    # Call 2: Self-critique
-    time.sleep(config.GEMINI_RPM_SLEEP)
-    critique_text = CRITIQUE_PROMPT.format(spec_json=json.dumps(draft, indent=2))
-    log.info("Calling Gemini (critique)…")
-    get_tracker().record_text_call(
-        "creative_director_critique",
-        prompt_words=len(critique_text.split()),
-        response_words=400,
-        thinking_tokens=config.THINKING_BUDGET_CRITIQUE,
-    )
-    spec = draft
-    try:
-        raw2 = llm.generate(critique_text, thinking_budget=config.THINKING_BUDGET_CRITIQUE,
-                            model=config.CREATIVE_MODEL)
-        spec = gemini.parse_json(raw2)
-    except Exception:
-        log.warning("Critique failed — using draft")
-
-    spec = _fixup(spec)
+    # v2: single-pass generation. The old v1 self-critique pass is retired — it
+    # encoded the v1 schema (a `voice` field, old enums) and would corrupt a v2 spec.
+    # Mechanical repairs are now the Step-1 validator's job; editorial review is the
+    # Step-5 critic's. The v2 system prompt carries its own FINAL CHECK.
+    spec = _fixup(draft)
     _force_scheme(spec, brief)
 
     final_errors = _validate(spec)
     if final_errors:
         log.warning("Final spec has %d issue(s): %s", len(final_errors), final_errors)
 
-    # Extract storyboard before saving — it's saved separately, not passed downstream
-    storyboard = spec.pop("storyboard", "") or ""
+    # v2: KEEP storyboard on the spec (do NOT pop). The Step-1 gate requires it and
+    # the run record captures it. Still mirror it to a sidecar .md for easy reading.
+    storyboard = spec.get("storyboard", "") or ""
 
     if not dry_run:
-        # Brief cache stores full spec (without storyboard already popped)
+        # Brief cache stores the full spec, storyboard included.
         brief_cache = config.BRIEF_CACHE_DIR / f"{_brief_hash(brief)}.json"
         brief_cache.write_text(json.dumps(spec, indent=2, ensure_ascii=False), encoding="utf-8")
 
@@ -383,8 +309,7 @@ def revise_spec(brief: str, spec: dict, review: dict) -> Optional[dict]:
         log.error("Revision call failed: %s", e)
         return None
 
-    revised.pop("storyboard", None)  # not carried downstream
-    revised = _fixup(revised)
+    revised = _fixup(revised)        # v2: keep storyboard on the revised spec too
     _force_scheme(revised, brief)
 
     errs = _validate(revised)

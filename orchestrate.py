@@ -276,7 +276,7 @@ def dry_run(input_arg: str, skip_research: bool = False):
             cd_calls = 0
         else:
             print("  No cached spec -- Creative Director will generate")
-            cd_calls = 2
+            cd_calls = 1   # v2 is single-pass (the v1 self-critique call is retired)
 
     print()
     print("-" * 55)
@@ -593,8 +593,11 @@ def run(input_arg: str, *, preview=False, no_voice=False,
             summary["stages"]["content_reviewer"] = f"FAILED: {e}"
 
         elapsed = time.time() - t0
-        quality_ok = summary.get("quality", {}).get("passed", False)
-        review_ok = summary.get("review", {}).get("decision") == "PUBLISH"
+        # None-safe: a stage that failed leaves its summary value as None (key present),
+        # so `.get(key, {})` returns None — guard with `or {}`. (Stage 5 currently fails
+        # until its Step-5 reviewer prompt exists.)
+        quality_ok = (summary.get("quality") or {}).get("passed", False)
+        review_ok = (summary.get("review") or {}).get("decision") == "PUBLISH"
         summary["success"] = quality_ok and review_ok
         summary["elapsed"] = round(elapsed, 1)
         record.set_final_status("publish" if summary["success"] else "needs_human_review")

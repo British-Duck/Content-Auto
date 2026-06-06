@@ -98,7 +98,9 @@ def main(argv: list = None) -> int:
         log.error("Concat failed")
         return 1
 
-    if not args.no_voice and spec.voice and spec.voice_script:
+    # v2: the narrator is fixed in config (spec no longer carries a voice).
+    narrator = getattr(config, "NARRATOR_VOICE", None) or spec.voice
+    if not args.no_voice and narrator and spec.voice_script:
         voice_file = work / "voiceover.mp3"
         music_file = find_music(spec.scheme)
         if music_file:
@@ -106,7 +108,7 @@ def main(argv: list = None) -> int:
         else:
             log.info("No music bed found for scheme=%s — voiceover only "
                      "(drop a track in %s to enable)", spec.scheme, config.MUSIC_DIR)
-        if generate_voiceover(spec.voice_script, spec.voice, voice_file):
+        if generate_voiceover(spec.voice_script, narrator, voice_file):
             if not mix_voiceover(concat_out, voice_file, output, music=music_file):
                 log.warning("Voice mix failed — using video only")
                 shutil.copy2(concat_out, output)

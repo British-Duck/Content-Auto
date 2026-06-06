@@ -105,6 +105,11 @@ VOICES = {
 }
 DEFAULT_VOICE = VOICES["authoritative"]
 
+# Single FIXED narrator for the whole channel (the News Dispatch register is the
+# brand). In v2 the Creative Director no longer chooses a voice — the TTS stage
+# reads this one value. The Step-1 validator strips any stray `voice` the model emits.
+NARRATOR_VOICE = VOICES["authoritative"]   # en-GB-RyanNeural
+
 # ── Researcher ────────────────────────────────────────────────────────────────
 
 RESEARCHER_MAX_SEARCH_RESULTS = 5
