@@ -34,7 +34,9 @@ GEMINI_MODEL = "gemini-2.5-flash"
 #     REVIEWER_MODEL = "claude-opus-4-8"
 #   and add ANTHROPIC_API_KEY to .env. Falls back to GEMINI_MODEL if absent.
 CREATIVE_MODEL = "gemini-2.5-pro"      # creative director (storyboard + spec)
-REVIEWER_MODEL = "gemini-2.5-pro"      # content reviewer (quality scoring)
+REVIEWER_MODEL = "gemini-2.5-pro"      # legacy single content reviewer (retired in Step 5)
+EDITORIAL_CRITIC_MODEL = "gemini-2.5-pro"  # Stage 1.5 pre-render editorial critic
+OUTPUT_QA_MODEL = "gemini-2.5-pro"     # post-render Output-QA (must be vision-capable)
 GEMINI_TEMPERATURE = 1.0   # creative director benefits from higher temp
 GEMINI_RPM_SLEEP = 2.5     # seconds to sleep between API calls (free tier)
 
@@ -122,14 +124,14 @@ RESEARCHER_TRIM_DIR = ROOT / ".trim_cache"
 RESEARCHER_TRIM_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Spec review loop (Stage 1.5) ──────────────────────────────────────────────
-# After the creative director writes a spec, the content reviewer scores it. If
-# it flags a FACTUAL ERROR (factual_accuracy below the threshold), the reviewer's
-# feedback is passed back to the creative director to fix — at most this many
-# times. Non-factual issues (weak hook, pacing) are logged but NOT retried.
+# After the creative director writes a spec, the EDITORIAL CRITIC judges its plan
+# (Step 5). On decision == REVISE its fixes are passed back to the creative director
+# to regenerate — at most this many times. A REJECT (or a still-REVISE spec after the
+# cap) is flagged for a human and NOT rendered. Facts are never a reject: they flow to
+# facts_to_check for a human. (The old factual_accuracy hard-reject was removed in Step 5.)
 SPEC_REVIEW_MAX_RETRIES = 2          # hard cap: at most 2 regenerations (3 CD calls total).
                                      # After the cap, a still-failing spec is flagged for a
                                      # human and NOT rendered (never looped, never shipped).
-SPEC_REVIEW_FACTUAL_THRESHOLD = 8    # retry only if factual_accuracy < this
 
 # ── Quality gate ──────────────────────────────────────────────────────────────
 

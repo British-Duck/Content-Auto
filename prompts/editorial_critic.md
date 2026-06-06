@@ -41,6 +41,13 @@ JUDGE ONLY THESE (everything here is visible in the spec)
    segment whose reason is empty, generic, or unconvincing is a segment that shouldn't
    exist. Flag it.
 
+7. SCRIPT FIT — Does the voice_script actually fit the runtime? Estimate spoken length as
+   (voice_script word count ÷ 3.3) seconds and compare it to the sum of segment durations.
+   If the script materially overruns the total runtime (more than ~15%, i.e. the narration
+   would be cut off mid-sentence by the render), that is a REVISE. Name the gap in the fix:
+   the spoken estimate, the total runtime, and whether to tighten the script or lengthen
+   segments. (A script comfortably shorter than the runtime is fine — do not flag that.)
+
 ═══════════════════════════════════════════════════════════════════════════════
 DECISION
 ═══════════════════════════════════════════════════════════════════════════════

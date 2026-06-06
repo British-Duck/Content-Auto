@@ -1,10 +1,11 @@
 """
-Tests for Phase A, Step 3 — the bounded Stage 1.5 regeneration loop.
+Tests for the bounded Stage 1.5 regeneration loop (Step 3 cap + Step 5 trigger).
 
-The CD can't run live (missing-prompt issue), so the CD and reviewer are stubbed
-to return a spec that keeps failing the (unchanged) factual check, letting us count
-regenerations without a live model. Tests run the loop directly AND through the real
-orchestrate.run() lifecycle so the record + abort-before-render behaviour is exercised.
+The CD and the editorial critic are stubbed to return a spec that keeps drawing a
+REVISE, letting us count regenerations without a live model. Tests run the loop
+directly AND through the real orchestrate.run() lifecycle so the record +
+abort-before-render behaviour is exercised. Step 5 broadened the trigger from the
+old factual_accuracy check to the editorial critic's decision == REVISE.
 
 Run: pytest tests/test_regen_cap.py -v
 """
@@ -52,14 +53,25 @@ def _v2_spec() -> dict:
 
 
 _FAILING_REVIEW = {
-    "decision": "REVISE", "overall_score": 5.0,
-    "scores": {"factual_accuracy": {"score": 4, "reason": "a number looks wrong"}},
-    "fixes": ["check the number"], "summary": "factual issue",
+    "decision": "REVISE",
+    "biggest_weakness": "the hook is generic and buries the surprising number",
+    "scores": {"hook": {"score": 4, "reason": "generic opener"}},
+    "fixes": ["lead with the record number, not the name"],
+    "facts_to_check": [],
 }
 _PASSING_REVIEW = {
-    "decision": "PUBLISH", "overall_score": 9.0,
-    "scores": {"factual_accuracy": {"score": 9, "reason": "checks out"}},
-    "fixes": [], "summary": "good",
+    "decision": "PUBLISH",
+    "biggest_weakness": "minor: the close could provoke a touch harder",
+    "scores": {"hook": {"score": 9, "reason": "strong dissonance up front"}},
+    "fixes": [],
+    "facts_to_check": [],
+}
+_REJECT_REVIEW = {
+    "decision": "REJECT",
+    "biggest_weakness": "the angle itself is flat — there is no story here",
+    "scores": {"arc": {"score": 2, "reason": "nothing develops"}},
+    "fixes": [],
+    "facts_to_check": [],
 }
 
 
@@ -67,9 +79,9 @@ _PASSING_REVIEW = {
 
 def test_loop_caps_at_two_regenerations(monkeypatch):
     import orchestrate
-    fake_cr = types.ModuleType("content_reviewer")
-    fake_cr.review_spec = lambda spec: dict(_FAILING_REVIEW)
-    monkeypatch.setitem(sys.modules, "content_reviewer", fake_cr)
+    fake_ec = types.ModuleType("editorial_critic")
+    fake_ec.review_spec = lambda spec: dict(_FAILING_REVIEW)
+    monkeypatch.setitem(sys.modules, "editorial_critic", fake_ec)
 
     revise_calls = {"n": 0}
     fake_cd = types.ModuleType("creative_director")
@@ -87,7 +99,7 @@ def test_loop_caps_at_two_regenerations(monkeypatch):
     assert revise_calls["n"] == 2       # no third regeneration
     assert len(attempts) == 3           # 3 reviews (initial + 2 regen)
     assert blocking is not None
-    assert blocking["factual_accuracy"] == 4
+    assert blocking["decision"] == "REVISE"
 
 
 def test_loop_stops_early_when_spec_passes(monkeypatch):
@@ -97,9 +109,9 @@ def test_loop_stops_early_when_spec_passes(monkeypatch):
     def review(spec):
         state["n"] += 1
         return dict(_FAILING_REVIEW) if state["n"] == 1 else dict(_PASSING_REVIEW)
-    fake_cr = types.ModuleType("content_reviewer")
-    fake_cr.review_spec = review
-    monkeypatch.setitem(sys.modules, "content_reviewer", fake_cr)
+    fake_ec = types.ModuleType("editorial_critic")
+    fake_ec.review_spec = review
+    monkeypatch.setitem(sys.modules, "editorial_critic", fake_ec)
 
     revise_calls = {"n": 0}
     fake_cd = types.ModuleType("creative_director")
@@ -114,6 +126,28 @@ def test_loop_stops_early_when_spec_passes(monkeypatch):
     assert regens == 1            # passed on the second try
     assert blocking is None
     assert revise_calls["n"] == 1
+
+
+def test_loop_rejects_without_regenerating(monkeypatch):
+    import orchestrate
+    fake_ec = types.ModuleType("editorial_critic")
+    fake_ec.review_spec = lambda spec: dict(_REJECT_REVIEW)
+    monkeypatch.setitem(sys.modules, "editorial_critic", fake_ec)
+
+    revise_calls = {"n": 0}
+    fake_cd = types.ModuleType("creative_director")
+
+    def fake_revise(brief, spec, review):
+        revise_calls["n"] += 1
+        return dict(spec)
+    fake_cd.revise_spec = fake_revise
+    monkeypatch.setitem(sys.modules, "creative_director", fake_cd)
+
+    *_, regens, blocking = orchestrate._spec_review_loop({"id": "x", "screens": []}, "b")
+    assert regens == 0                     # a REJECT never regenerates
+    assert revise_calls["n"] == 0
+    assert blocking is not None
+    assert blocking["decision"] == "REJECT"
 
 
 # ── Integration: run() flags after the cap and does not render ───────────────
@@ -141,9 +175,17 @@ def _wire_brief_run(monkeypatch, review_fn, tmp_path):
     fake_cd.revise_spec = fake_revise
     monkeypatch.setitem(sys.modules, "creative_director", fake_cd)
 
-    fake_cr = types.ModuleType("content_reviewer")
-    fake_cr.review_spec = review_fn
-    monkeypatch.setitem(sys.modules, "content_reviewer", fake_cr)
+    fake_ec = types.ModuleType("editorial_critic")
+    fake_ec.review_spec = review_fn
+    monkeypatch.setitem(sys.modules, "editorial_critic", fake_ec)
+
+    # Post-render Output-QA always PASSes here — this test exercises the pre-render loop.
+    fake_qa = types.ModuleType("output_qa")
+    fake_qa.qa_output = lambda spec, probe, frames: {
+        "decision": "PASS", "blocking_issues": [], "warnings": [],
+        "per_segment": [], "summary": "ok",
+    }
+    monkeypatch.setitem(sys.modules, "output_qa", fake_qa)
 
     monkeypatch.setattr(researcher, "research_spec", lambda spec, selective=True: spec)
 

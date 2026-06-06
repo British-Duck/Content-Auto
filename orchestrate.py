@@ -1,6 +1,7 @@
 """
 Orchestrator — wires the full pipeline:
-  Creative Director → Researcher → Render → Quality Gate → Content Reviewer.
+  Creative Director → Editorial Critic (Stage 1.5) → Researcher → Render
+  → Quality Gate → Output-QA.
 
   python orchestrate.py "brief text"         # from scratch
   python orchestrate.py spec.json            # from existing spec
@@ -160,90 +161,91 @@ def _validate_spec(spec: dict) -> list[str]:
     return errors
 
 
-def _factual_score(review: dict):
-    """The reviewer's factual_accuracy score, or None if unavailable."""
-    try:
-        s = review["scores"]["factual_accuracy"]["score"]
-        return s if isinstance(s, (int, float)) else None
-    except (KeyError, TypeError):
-        return None
+def _spec_review_loop(spec: dict, brief: str, max_retries: int = None):
+    """Editorial review of the spec before the expensive research/render stages.
 
+    The editorial critic (Step 5) judges the PLAN — hook, arc, rhythm, text, voice,
+    segment reasons. On decision == REVISE its fixes are fed back to the creative
+    director to regenerate, capped at `max_retries` regenerations (default 2, i.e.
+    3 CD calls total). PUBLISH proceeds; REVISE regenerates; REJECT stops and flags.
 
-def _spec_review_loop(spec: dict, brief: str, max_retries: int = None,
-                      factual_threshold: int = None):
-    """Review the spec before the expensive research/render stages. If the
-    reviewer flags a FACTUAL ERROR (factual_accuracy below threshold), feed its
-    feedback back to the creative director to fix — capped at `max_retries`
-    regenerations (the default cap is 2, i.e. 3 CD calls total).
-
-    Only factual errors trigger a pass-back; other non-PUBLISH issues (weak hook,
-    pacing) are logged and accepted. The trigger is intentionally unchanged — Step 5
-    is what broadens it to an editorial REVISE.
+    Facts are NOT a reject — the critic reports them in facts_to_check, which we
+    aggregate per attempt and surface to a human (logged, never blocking). The old
+    factual_accuracy hard-reject was removed in Step 5.
 
     Returns (best_spec, best_review, attempts, regenerations, blocking) where
     `regenerations` is the number of regenerations performed and `blocking` is None
     when it is safe to proceed, or a dict describing why the run must stop and be
     flagged (a still-failing spec must never be rendered or looped indefinitely).
+    Each attempt dict carries its decision, biggest_weakness and facts_to_check.
     """
-    from content_reviewer import review_spec
+    from editorial_critic import review_spec
     from creative_director import revise_spec
+    from run_record import get_cost_meter
 
     if max_retries is None:
         max_retries = config.SPEC_REVIEW_MAX_RETRIES
-    if factual_threshold is None:
-        factual_threshold = config.SPEC_REVIEW_FACTUAL_THRESHOLD
 
-    best_spec, best_review, best_score = spec, None, -1.0
+    meter = get_cost_meter()
+    best_spec, best_review = spec, None
     cur = spec
     attempts = []
     regenerations = 0
     blocking = None
     for attempt in range(max_retries + 1):
-        review = review_spec(cur)
+        with meter.stage("editorial_critic"):
+            review = review_spec(cur)
         if not review:
-            log.warning("Spec review returned nothing (pass %d) — proceeding with best", attempt + 1)
+            log.warning("Editorial critic returned nothing (pass %d) — proceeding with best",
+                        attempt + 1)
             break
         decision = review.get("decision", "UNKNOWN")
-        score = review.get("overall_score", 0) or 0
-        fac = _factual_score(review)
+        weakness = review.get("biggest_weakness", "")
+        facts = review.get("facts_to_check") or []
         attempts.append({"pass": attempt + 1, "decision": decision,
-                         "score": score, "factual_accuracy": fac})
-        log.info("Spec review pass %d/%d: %s (%.1f/10, factual_accuracy=%s)",
-                 attempt + 1, max_retries + 1, decision, score, fac)
-        if score > best_score:
-            best_spec, best_review, best_score = cur, review, score
+                         "biggest_weakness": weakness, "facts_to_check": facts})
+        log.info("Editorial pass %d/%d: %s — %s",
+                 attempt + 1, max_retries + 1, decision, weakness)
+        # Keep the latest non-rejected spec as the best; fall back to the first seen.
+        if best_review is None or decision in ("PUBLISH", "REVISE"):
+            best_spec, best_review = cur, review
 
-        has_factual_error = fac is not None and fac < factual_threshold
-        if not has_factual_error:
-            if decision != "PUBLISH":
-                log.info("Verdict %s but no factual error (factual_accuracy=%s) — "
-                         "accepting spec without revision", decision, fac)
-            break
-        if attempt == max_retries:
-            # Regeneration cap reached and the spec STILL fails — flag, do not render.
-            log.warning("Factual error persists (factual_accuracy=%s) after %d regeneration(s) — "
-                        "regen cap reached; FLAGGING FOR HUMAN, not rendering", fac, regenerations)
+        if decision == "REJECT":
+            log.warning("Editorial critic REJECT — the angle/story does not work; "
+                        "FLAGGING FOR HUMAN, not rendering")
             blocking = {
-                "reason": f"factual_accuracy {fac} below threshold {factual_threshold} "
-                          f"after {regenerations} regeneration(s) (cap)",
-                "factual_accuracy": fac,
+                "reason": f"editorial REJECT: {weakness}",
                 "decision": decision,
-                "overall_score": score,
                 "regenerations": regenerations,
             }
             break
-        log.info("Factual error (factual_accuracy=%s < %d) → regeneration %d/%d via "
-                 "Creative Director", fac, factual_threshold, regenerations + 1, max_retries)
-        revised = revise_spec(brief, cur, review)
+
+        if decision != "REVISE":
+            # PUBLISH (or an unknown non-REVISE verdict) — accept and proceed.
+            break
+
+        # decision == REVISE
+        if attempt == max_retries:
+            # Regeneration cap reached and the spec STILL wants a revise — flag, do not render.
+            log.warning("Editorial REVISE persists after %d regeneration(s) — regen cap reached; "
+                        "FLAGGING FOR HUMAN, not rendering", regenerations)
+            blocking = {
+                "reason": f"editorial REVISE after {regenerations} regeneration(s) (cap): {weakness}",
+                "decision": decision,
+                "regenerations": regenerations,
+            }
+            break
+        log.info("Editorial REVISE → regeneration %d/%d via Creative Director",
+                 regenerations + 1, max_retries)
+        with meter.stage("creative_director"):
+            revised = revise_spec(brief, cur, review)
         if not revised:
-            # Could not regenerate, but the spec still has a factual error — do not ship it.
-            log.warning("Regeneration call failed while a factual error stands — "
+            # Could not regenerate while a REVISE stands — do not ship the draft.
+            log.warning("Regeneration call failed while an editorial REVISE stands — "
                         "FLAGGING FOR HUMAN, not rendering")
             blocking = {
-                "reason": "regeneration call failed while a factual error stands",
-                "factual_accuracy": fac,
+                "reason": "regeneration call failed while an editorial REVISE stands",
                 "decision": decision,
-                "overall_score": score,
                 "regenerations": regenerations,
             }
             break
@@ -301,17 +303,19 @@ def dry_run(input_arg: str, skip_research: bool = False):
         print("  Researcher:         unknown (spec not generated yet)")
         print("    Typical:           2-6 video calls")
         researcher_max = 6
+    print("  Editorial Critic:   1 text call (pre-render; +1 per regeneration)")
     print("  Render:             local only (ffmpeg)")
     print("  Quality Gate:       local only (ffprobe)")
-    print("  Content Reviewer:   1 text call")
+    print("  Output-QA:          1 vision call (post-render, frames)")
 
-    total_text = cd_calls + 1
+    total_text = cd_calls + 2   # editorial critic + output-QA (both paid Gemini calls)
     total_video_min = researcher_min
     total_video_max = researcher_max
 
     text_cost = total_text * (5000 * 0.15 + 500 * 0.60) / 1_000_000
     cd_thinking = cd_calls * (_est_thinking_tokens(config.THINKING_BUDGET_CREATIVE) * 3.50) / 1_000_000
-    review_thinking = (_est_thinking_tokens(config.THINKING_BUDGET_REVIEWER) * 3.50) / 1_000_000
+    # Two reviewers now: editorial critic (pre-render) + Output-QA (post-render).
+    review_thinking = 2 * (_est_thinking_tokens(config.THINKING_BUDGET_REVIEWER) * 3.50) / 1_000_000
     thinking_cost = cd_thinking + review_thinking
     uncapped = config.THINKING_BUDGET_CREATIVE is None or config.THINKING_BUDGET_REVIEWER is None
 
@@ -345,7 +349,7 @@ def run(input_arg: str, *, preview=False, no_voice=False,
 
     tracker = reset_tracker()
     meter = reset_cost_meter()
-    summary = {"stages": {}, "output": None, "quality": None, "review": None, "success": False}
+    summary = {"stages": {}, "output": None, "quality": None, "output_qa": None, "success": False}
     t0 = time.time()
 
     input_path = Path(input_arg)
@@ -452,36 +456,63 @@ def run(input_arg: str, *, preview=False, no_voice=False,
             try:
                 spec, _loop_review, _attempts, _regens, _blocking = _spec_review_loop(spec, brief)
                 record.data["regenerations"] = _regens
+
+                # Aggregate facts_to_check across all passes — surfaced to a human,
+                # never blocking (facts are the human's job, per the critic's brief).
+                _facts = []
+                for a in _attempts:
+                    for f in a.get("facts_to_check") or []:
+                        if f not in _facts:
+                            _facts.append(f)
+
                 summary["spec_review"] = {
                     "passes": _attempts,
                     "regenerations": _regens,
                     "final_decision": (_loop_review or {}).get("decision"),
-                    "final_score": (_loop_review or {}).get("overall_score"),
+                    "biggest_weakness": (_loop_review or {}).get("biggest_weakness"),
+                    "facts_to_check": _facts,
                 }
-                if _loop_review:
+
+                # Populate the editorial_critic run-record block (a Step-2 slot).
+                if _loop_review is not None:
+                    record.stage(
+                        "editorial_critic", _loop_review.get("decision", "UNKNOWN"),
+                        biggest_weakness=_loop_review.get("biggest_weakness"),
+                        scores=_loop_review.get("scores"),
+                        fixes=_loop_review.get("fixes"),
+                        facts_to_check=_facts,
+                        passes=_attempts,
+                        regenerations=_regens,
+                    )
                     summary["stages"]["spec_review_loop"] = (
-                        f"{_loop_review.get('decision')} — "
-                        f"{_loop_review.get('overall_score', 0):.1f}/10 "
-                        f"after {len(_attempts)} pass(es), {_regens} regen(s)"
+                        f"{_loop_review.get('decision')} after {len(_attempts)} pass(es), "
+                        f"{_regens} regen(s)"
                     )
                 else:
+                    record.stage("editorial_critic", "no_verdict",
+                                 passes=_attempts, regenerations=_regens)
                     summary["stages"]["spec_review_loop"] = "no verdict"
 
-                # Regen cap (or a failed regeneration) with the spec still failing:
-                # flag for a human and abort BEFORE render — never ship the draft.
+                # Facts to verify are logged for a human but never block publishing.
+                if _facts:
+                    record.add_flag("facts to verify (non-blocking): " + " | ".join(_facts))
+
+                # REJECT, regen cap, or a failed regeneration with the spec still
+                # wanting a REVISE: flag for a human and abort BEFORE render.
                 if _blocking is not None:
                     log.error("Stage 1.5 BLOCKED after %d regeneration(s): %s",
                               _regens, _blocking["reason"])
                     record.add_flag(
-                        f"regeneration cap: {_blocking['reason']} — "
+                        f"editorial gate: {_blocking['reason']} — "
                         f"flagged for human, not rendered "
-                        f"(scores: decision={_blocking['decision']}, "
-                        f"overall={_blocking['overall_score']}, "
-                        f"factual_accuracy={_blocking['factual_accuracy']})"
+                        f"(decision={_blocking['decision']}, regenerations={_regens})"
                     )
-                    record.set_final_status("flagged_regen_cap")
+                    _status = ("flagged_editorial_reject"
+                               if _blocking["decision"] == "REJECT"
+                               else "flagged_regen_cap")
+                    record.set_final_status(_status)
                     summary["stages"]["spec_review_loop"] = (
-                        f"FLAGGED — regen cap after {_regens} regen(s), not rendered"
+                        f"FLAGGED ({_blocking['decision']}) after {_regens} regen(s), not rendered"
                     )
                     return summary
             except Exception as e:
@@ -573,36 +604,55 @@ def run(input_arg: str, *, preview=False, no_voice=False,
             log.error("Stage 4 failed: %s", e)
             summary["stages"]["quality_gate"] = f"FAILED: {e}"
 
-        # Stage 5: Content Reviewer
+        # Stage 5: Output-QA (post-render, vision). Confirms the FINISHED video
+        # matches its plan from the per-segment frames the gate just extracted.
+        # Flag-and-stop: a FAIL stops the publish and surfaces blocking_issues; it
+        # never re-renders or auto-fixes.
         log.info("=" * 60)
-        log.info("STAGE 5: Content Reviewer")
+        log.info("STAGE 5: Output-QA")
         log.info("=" * 60)
         try:
-            from content_reviewer import review_spec
-            with meter.stage("content_reviewer"):
-                review = review_spec(spec)
-            summary["review"] = review
-            if review:
-                decision = review.get("decision", "UNKNOWN")
-                score = review.get("overall_score", 0)
-                summary["stages"]["content_reviewer"] = f"{decision} — {score:.1f}/10"
+            from output_qa import qa_output
+            frames_dir = (summary.get("quality") or {}).get("frames_dir")
+            probe_report = summary.get("quality") or {}
+            with meter.stage("output_qa"):
+                qa = qa_output(spec, probe_report, frames_dir)
+            summary["output_qa"] = qa
+            if qa:
+                qa_decision = qa.get("decision", "UNKNOWN")
+                blocking_issues = qa.get("blocking_issues") or []
+                summary["stages"]["output_qa"] = (
+                    f"{qa_decision} — {len(blocking_issues)} blocking issue(s)"
+                )
+                record.stage("output_qa", qa_decision,
+                             blocking_issues=blocking_issues,
+                             warnings=qa.get("warnings"),
+                             per_segment=qa.get("per_segment"),
+                             summary=qa.get("summary"))
+                if qa_decision == "FAIL":
+                    for issue in blocking_issues:
+                        record.add_flag(f"output-QA blocking: {issue}")
             else:
-                summary["stages"]["content_reviewer"] = "FAILED: no response"
+                summary["stages"]["output_qa"] = "FAILED: no response"
+                record.stage("output_qa", "FAILED", error="no response / no frames")
         except Exception as e:
             log.error("Stage 5 failed: %s", e)
-            summary["stages"]["content_reviewer"] = f"FAILED: {e}"
+            summary["stages"]["output_qa"] = f"FAILED: {e}"
+            record.stage("output_qa", "FAILED", error=str(e))
 
         elapsed = time.time() - t0
         # None-safe: a stage that failed leaves its summary value as None (key present),
-        # so `.get(key, {})` returns None — guard with `or {}`. (Stage 5 currently fails
-        # until its Step-5 reviewer prompt exists.)
+        # so `.get(key, {})` returns None — guard with `or {}`.
         quality_ok = (summary.get("quality") or {}).get("passed", False)
-        review_ok = (summary.get("review") or {}).get("decision") == "PUBLISH"
-        summary["success"] = quality_ok and review_ok
+        qa_ok = (summary.get("output_qa") or {}).get("decision") == "PASS"
+        summary["success"] = quality_ok and qa_ok
         summary["elapsed"] = round(elapsed, 1)
         record.set_final_status("publish" if summary["success"] else "needs_human_review")
         if not summary["success"]:
-            record.add_flag("did not clear quality gate + reviewer PUBLISH — needs human review")
+            if not qa_ok:
+                record.add_flag("Output-QA did not PASS — needs human review, not published")
+            elif not quality_ok:
+                record.add_flag("did not clear technical quality gate — needs human review")
 
         log.info("=" * 60)
         log.info("DONE — %.1fs", elapsed)

@@ -19,13 +19,18 @@ Entry point: `orchestrate.py` → `run()`. Five stages:
    `voiceover.py` adds VO; `clips.py`/`schemes.py` support.
 4. **Quality Gate** (`quality_gate.py`) — ffprobe technicals + extracts one midpoint
    frame per screen to `output/<id>_frames/`.
-5. **Content Reviewer** (`content_reviewer.py`) — Gemini scores the spec JSON, returns
-   PUBLISH/REVISE/REJECT.
+5. **Output-QA** (`output_qa.py`) — post-render vision QA. Feeds the spec + the ffprobe
+   report + the per-segment frames to a vision-capable Gemini call and returns PASS/FAIL.
+   A FAIL surfaces `blocking_issues` and sets the non-publish exit code; flag-and-stop,
+   never re-renders. (Replaced the old `content_reviewer.py` in Step 5.)
 
-**Stage 1.5** (`orchestrate._spec_review_loop`) sits between CD and Researcher: reviews
-the spec pre-render and, **only on a factual_accuracy error**, passes feedback back to
-the CD for at most `SPEC_REVIEW_MAX_RETRIES` (1) revision. (Migration Step 3 caps this
-at two; Step 5 broadens the trigger to editorial REVISE.)
+**Stage 1.5** (`orchestrate._spec_review_loop`) sits between CD and Researcher: the
+**Editorial Critic** (`editorial_critic.py`, prompt `editorial_critic.md`) judges the
+spec's plan pre-render and, **on decision == REVISE**, passes its fixes back to the CD for
+at most `SPEC_REVIEW_MAX_RETRIES` (2) regenerations. A REJECT (or a still-REVISE spec after
+the cap) is flagged for a human and NOT rendered. Facts are never a reject — they flow to
+`facts_to_check` (logged for a human). (Step 5 broadened the trigger from the old
+factual_accuracy hard-reject, which was removed.)
 
 ### Key files
 - `config.py` — all tuneables: per-stage models, dirs, render constants, thinking
@@ -75,11 +80,21 @@ python orchestrate.py "Brief..." --force-regen                    # ignore brief
 `.env` holds `GEMINI_API_KEY` (no `ANTHROPIC_API_KEY` yet → Claude models fall back to
 Gemini). Further detail: `PROJECT_HANDOFF.md`/`docs/HANDOFF.md`, `docs/pipeline_map.txt`.
 
-## Current state (2026-06-04)
+## Current state (2026-06-06)
 
-⚠️ **The pipeline does not run as-is.** The old prompt files `prompts/creative_director.txt`
-and `prompts/content_reviewer.txt` have been removed, but `creative_director.py:21` and
-`content_reviewer.py:19` still load them at import time — so even `--dry-run` crashes with
-`FileNotFoundError`. Only the three v2 `.md` prompts remain. This is expected mid-migration
-and is resolved by Step 4 (point Stage 1 at `creative_director_v2.md`) + Step 5 (wire the
-new reviewer prompts). Until then, runs are blocked.
+**Phase B is complete (Steps 4 + 5).** The pipeline runs end to end. Stage 1 uses
+`creative_director_v2.md`; Stage 1.5 is the Editorial Critic (`editorial_critic.py`,
+trigger = REVISE, 2-pass cap, facts → `facts_to_check`); the post-render stage is
+Output-QA (`output_qa.py`, vision, FAIL → non-publish + `blocking_issues`, never
+re-renders). The old `content_reviewer.py` and its removed `.txt` prompt are gone.
+The run record's `editorial_critic` / `output_qa` blocks are populated and Output-QA
+cost is attributed to an `output_qa` stage.
+
+Offline-faithful tests: `tests/test_spec_validator.py`, `test_run_record.py`,
+`test_regen_cap.py`, `test_step5_reviewers.py` — 20 passing.
+
+**Next: Phase C, Step 6** (eval harness + human-anchored judge) — but first the plan
+calls for making 5–10 real videos and watching them. Known watch-item: the v2 CD can
+still write a `voice_script` that overruns a short runtime (the Bolt sample: 80 words /
+~24s over a 16.7s spec); the Editorial Critic's script-fit check now flags this as a
+REVISE, but a CD-prompt nudge toward longer specs may also help.

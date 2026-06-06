@@ -21,22 +21,23 @@ log = logging.getLogger(__name__)
 SYSTEM_PROMPT = (config.PROMPTS_DIR / "creative_director_v2.md").read_text(encoding="utf-8")
 
 REVISION_PROMPT = """\
-You are the creative director. This short-form video spec FAILED content review.
-Revise it to address EVERY point below, then return an improved spec.
+You are the creative director. The EDITORIAL CRITIC asked for a REVISE on this
+short-form video spec. Revise it to address EVERY point below, then return an
+improved spec.
 
 ORIGINAL BRIEF:
 {brief}
 
-REVIEWER VERDICT: {decision} ({score}/10)
+EDITORIAL VERDICT: {decision}
+
+BIGGEST WEAKNESS (fix this above all):
+{biggest_weakness}
 
 LOW-SCORING DIMENSIONS (raise these):
 {weak_dims}
 
 REQUIRED FIXES (address each one):
 {fixes}
-
-REVIEWER SUMMARY:
-{summary}
 
 RULES:
 - Keep the same JSON structure and the same "id".
@@ -267,10 +268,10 @@ def generate_spec(brief: str, dry_run: bool = False, force: bool = False) -> Opt
 
 
 def revise_spec(brief: str, spec: dict, review: dict) -> Optional[dict]:
-    """Regenerate a spec using the content reviewer's feedback.
+    """Regenerate a spec using the editorial critic's feedback.
 
-    Used by the spec-stage review loop: when the reviewer returns REVISE/REJECT,
-    its low-scoring dimensions + fixes + summary are fed back to the creative
+    Used by the spec-stage review loop: when the critic returns REVISE, its
+    biggest_weakness + low-scoring dimensions + fixes are fed back to the creative
     director so it can try again with that extra information. Returns the revised
     spec (validated, scheme-honoured), or None on failure so the caller can fall
     back to the best spec so far.
@@ -285,10 +286,9 @@ def revise_spec(brief: str, spec: dict, review: dict) -> Optional[dict]:
     prompt = REVISION_PROMPT.format(
         brief=brief,
         decision=review.get("decision", "REVISE"),
-        score=review.get("overall_score", 0),
-        weak_dims="\n".join(weak) or "(none flagged individually — see summary)",
-        fixes="\n".join(f"- {f}" for f in fixes) or "(see summary)",
-        summary=review.get("summary", ""),
+        biggest_weakness=review.get("biggest_weakness", "") or "(see fixes)",
+        weak_dims="\n".join(weak) or "(none flagged individually — see biggest weakness)",
+        fixes="\n".join(f"- {f}" for f in fixes) or "(see biggest weakness)",
         scheme=spec.get("scheme"),
         spec_json=json.dumps(spec, indent=2, ensure_ascii=False),
     )

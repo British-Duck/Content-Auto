@@ -168,9 +168,13 @@ def _wire_stubs(monkeypatch, render_calls, tmp_path):
                                                      "checks": {"resolution": {"passed": True, "detail": "ok"}},
                                                      "frames_dir": None})
 
-    fake_cr = types.ModuleType("content_reviewer")
-    fake_cr.review_spec = lambda s: {"decision": "PUBLISH", "overall_score": 9.0, "scores": {}}
-    monkeypatch.setitem(sys.modules, "content_reviewer", fake_cr)
+    # Post-render Output-QA (Step 5) — PASS so a provided-spec run reaches "publish".
+    fake_qa = types.ModuleType("output_qa")
+    fake_qa.qa_output = lambda spec, probe, frames: {
+        "decision": "PASS", "blocking_issues": [], "warnings": [],
+        "per_segment": [], "summary": "ok",
+    }
+    monkeypatch.setitem(sys.modules, "output_qa", fake_qa)
 
     monkeypatch.setattr(orchestrate, "_cleanup_intermediates", lambda spec_id="": None)
 

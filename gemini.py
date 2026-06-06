@@ -2,6 +2,7 @@
 import json
 import os
 import logging
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -39,6 +40,38 @@ def generate(contents: str, *, temperature: float = config.GEMINI_TEMPERATURE,
     response = get_client().models.generate_content(
         model=used_model,
         contents=contents,
+        config=gen_config,
+    )
+    _emit_usage(response, used_model)
+    return response.text
+
+
+def generate_vision(prompt: str, image_paths: list, *, temperature: float = 0.2,
+                    json_mode: bool = True, thinking_budget: int = None,
+                    model: str = None) -> str:
+    """Multimodal generate: a text prompt plus one or more local images.
+
+    Used by Output-QA to judge the rendered video from its per-segment frames.
+    Images are sent inline as JPEG bytes, in the order given. Usage is emitted to
+    the run cost meter exactly like generate(), so wrap the call in the caller's
+    meter.stage(...) to attribute the cost."""
+    from google.genai import types
+
+    parts = [prompt]
+    for p in image_paths:
+        data = Path(p).read_bytes()
+        parts.append(types.Part.from_bytes(data=data, mime_type="image/jpeg"))
+
+    gen_config = types.GenerateContentConfig(
+        temperature=temperature,
+        response_mime_type="application/json" if json_mode else "text/plain",
+    )
+    if thinking_budget is not None:
+        gen_config.thinking_config = types.ThinkingConfig(thinking_budget=thinking_budget)
+    used_model = model or config.GEMINI_MODEL
+    response = get_client().models.generate_content(
+        model=used_model,
+        contents=parts,
         config=gen_config,
     )
     _emit_usage(response, used_model)
