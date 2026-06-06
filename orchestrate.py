@@ -173,10 +173,17 @@ def _spec_review_loop(spec: dict, brief: str, max_retries: int = None,
                       factual_threshold: int = None):
     """Review the spec before the expensive research/render stages. If the
     reviewer flags a FACTUAL ERROR (factual_accuracy below threshold), feed its
-    feedback back to the creative director to fix — at most `max_retries` times.
+    feedback back to the creative director to fix — capped at `max_retries`
+    regenerations (the default cap is 2, i.e. 3 CD calls total).
 
     Only factual errors trigger a pass-back; other non-PUBLISH issues (weak hook,
-    pacing) are logged and accepted. Returns (best_spec, best_review, attempts).
+    pacing) are logged and accepted. The trigger is intentionally unchanged — Step 5
+    is what broadens it to an editorial REVISE.
+
+    Returns (best_spec, best_review, attempts, regenerations, blocking) where
+    `regenerations` is the number of regenerations performed and `blocking` is None
+    when it is safe to proceed, or a dict describing why the run must stop and be
+    flagged (a still-failing spec must never be rendered or looped indefinitely).
     """
     from content_reviewer import review_spec
     from creative_director import revise_spec
@@ -189,6 +196,8 @@ def _spec_review_loop(spec: dict, brief: str, max_retries: int = None,
     best_spec, best_review, best_score = spec, None, -1.0
     cur = spec
     attempts = []
+    regenerations = 0
+    blocking = None
     for attempt in range(max_retries + 1):
         review = review_spec(cur)
         if not review:
@@ -211,17 +220,36 @@ def _spec_review_loop(spec: dict, brief: str, max_retries: int = None,
                          "accepting spec without revision", decision, fac)
             break
         if attempt == max_retries:
-            log.warning("Factual error persists (factual_accuracy=%s) after %d revision(s) — "
-                        "proceeding with best spec; FLAG FOR HUMAN REVIEW", fac, max_retries)
+            # Regeneration cap reached and the spec STILL fails — flag, do not render.
+            log.warning("Factual error persists (factual_accuracy=%s) after %d regeneration(s) — "
+                        "regen cap reached; FLAGGING FOR HUMAN, not rendering", fac, regenerations)
+            blocking = {
+                "reason": f"factual_accuracy {fac} below threshold {factual_threshold} "
+                          f"after {regenerations} regeneration(s) (cap)",
+                "factual_accuracy": fac,
+                "decision": decision,
+                "overall_score": score,
+                "regenerations": regenerations,
+            }
             break
-        log.info("Factual error (factual_accuracy=%s < %d) → sending feedback to "
-                 "Creative Director for one revision", fac, factual_threshold)
+        log.info("Factual error (factual_accuracy=%s < %d) → regeneration %d/%d via "
+                 "Creative Director", fac, factual_threshold, regenerations + 1, max_retries)
         revised = revise_spec(brief, cur, review)
         if not revised:
-            log.warning("Revision failed — proceeding with best spec so far")
+            # Could not regenerate, but the spec still has a factual error — do not ship it.
+            log.warning("Regeneration call failed while a factual error stands — "
+                        "FLAGGING FOR HUMAN, not rendering")
+            blocking = {
+                "reason": "regeneration call failed while a factual error stands",
+                "factual_accuracy": fac,
+                "decision": decision,
+                "overall_score": score,
+                "regenerations": regenerations,
+            }
             break
         cur = revised
-    return best_spec, best_review, attempts
+        regenerations += 1
+    return best_spec, best_review, attempts, regenerations, blocking
 
 
 def dry_run(input_arg: str, skip_research: bool = False):
@@ -313,171 +341,285 @@ def dry_run(input_arg: str, skip_research: bool = False):
 
 def run(input_arg: str, *, preview=False, no_voice=False,
         skip_research=False, force_regen=False) -> dict:
+    from run_record import RunRecord, reset_cost_meter, set_active_record
+
     tracker = reset_tracker()
+    meter = reset_cost_meter()
     summary = {"stages": {}, "output": None, "quality": None, "review": None, "success": False}
     t0 = time.time()
 
     input_path = Path(input_arg)
+    # brief is set when generating from a text brief (enables the v2 gate + review loop).
+    brief = None if (input_path.suffix == ".json" and input_path.exists()) else input_arg
 
-    # Stage 1: Creative Director
-    brief = None  # set when generating from a text brief — enables the review loop
-    if input_path.suffix == ".json" and input_path.exists():
-        log.info("Loading spec: %s", input_path)
-        spec = json.loads(input_path.read_text(encoding="utf-8"))
-        summary["stages"]["creative_director"] = "skipped (spec provided)"
-    else:
-        brief = input_arg
-        log.info("=" * 60)
-        log.info("STAGE 1: Creative Director")
-        log.info("=" * 60)
-        try:
-            from creative_director import generate_spec
-            spec = generate_spec(input_arg, force=force_regen)
-        except Exception as e:
-            log.error("Stage 1 failed: %s", e)
-            summary["stages"]["creative_director"] = f"FAILED: {e}"
-            return summary
-        if not spec:
-            summary["stages"]["creative_director"] = "FAILED: no spec"
-            return summary
-        summary["stages"]["creative_director"] = f"OK — {spec['id']}"
+    # The run record is created up front and ALWAYS written (completion or abort)
+    # via the finally below. Thin hooks in each stage write into it.
+    record = RunRecord(brief=brief, input_arg=input_arg, meter=meter)
+    set_active_record(record)
 
-    # Fail-fast: validate spec before expensive operations
-    spec_errors = _validate_spec(spec)
-    if spec_errors:
-        log.error("Spec validation failed before pipeline:")
-        for err in spec_errors:
-            log.error("  → %s", err)
-        summary["stages"]["validation"] = f"FAILED: {'; '.join(spec_errors)}"
-        return summary
-
-    # Stage 1.5: Spec review + revision loop (text-only, before expensive render).
-    # Only when generated from a brief — a provided .json spec is taken as final.
-    if brief is not None:
-        log.info("=" * 60)
-        log.info("STAGE 1.5: Spec Review & Revision Loop")
-        log.info("=" * 60)
-        try:
-            spec, _loop_review, _attempts = _spec_review_loop(spec, brief)
-            summary["spec_review"] = {
-                "passes": _attempts,
-                "final_decision": (_loop_review or {}).get("decision"),
-                "final_score": (_loop_review or {}).get("overall_score"),
-            }
-            if _loop_review:
-                summary["stages"]["spec_review_loop"] = (
-                    f"{_loop_review.get('decision')} — "
-                    f"{_loop_review.get('overall_score', 0):.1f}/10 "
-                    f"after {len(_attempts)} pass(es)"
-                )
-            else:
-                summary["stages"]["spec_review_loop"] = "no verdict"
-        except Exception as e:
-            log.error("Stage 1.5 failed: %s (continuing with current spec)", e)
-            summary["stages"]["spec_review_loop"] = f"FAILED: {e}"
-
-    # Stage 2: Researcher
-    if skip_research:
-        summary["stages"]["researcher"] = "skipped"
-    else:
-        log.info("=" * 60)
-        log.info("STAGE 2: Researcher")
-        log.info("=" * 60)
-        try:
-            from researcher import research_spec
-            spec = research_spec(spec, selective=True)
-            clips = sum(1 for s in spec.get("screens", []) if s.get("clip"))
-            summary["stages"]["researcher"] = f"OK — {clips} clips"
-        except Exception as e:
-            log.error("Stage 2 failed: %s (continuing)", e)
-            summary["stages"]["researcher"] = f"FAILED: {e}"
-
-    # Save spec and print/save timeline
-    spec_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}.json"
-    spec_path.write_text(json.dumps(spec, indent=2, ensure_ascii=False), encoding="utf-8")
-
-    timeline = _generate_timeline(spec)
-    log.info("\n%s", timeline)
-    timeline_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}_timeline.txt"
-    timeline_path.write_text(timeline, encoding="utf-8")
-
-    # Stage 3: Render
-    log.info("=" * 60)
-    log.info("STAGE 3: Video Pipeline")
-    log.info("=" * 60)
-    output_path = config.OUTPUT_DIR / f"{spec.get('id', 'output')}.mp4"
-    cli_args = [str(spec_path), "-o", str(output_path)]
-    if preview:
-        cli_args.append("--preview")
-    if no_voice:
-        cli_args.append("--no-voice")
+    def _ceiling_abort(stage_label: str) -> bool:
+        """After a paid stage: abort if cumulative cost crossed the ceiling."""
+        if record.enforce_ceiling():
+            log.error("COST CEILING EXCEEDED after %s: $%.4f > $%.4f — aborting before render",
+                      stage_label, record.data["total_cost"], record.data["cost_ceiling"])
+            summary["stages"]["cost_ceiling"] = (
+                f"ABORTED after {stage_label}: ${record.data['total_cost']:.4f} "
+                f"> ${record.data['cost_ceiling']:.4f}"
+            )
+            record.set_final_status("aborted_cost_ceiling")
+            return True
+        return False
 
     try:
-        from vidpipe.cli import main as vidpipe_main
-        rc = vidpipe_main(cli_args)
-        if rc != 0:
-            summary["stages"]["render"] = f"FAILED: exit {rc}"
-            return summary
-        summary["stages"]["render"] = f"OK — {output_path.name}"
-        summary["output"] = str(output_path)
-    except Exception as e:
-        log.error("Stage 3 failed: %s", e)
-        summary["stages"]["render"] = f"FAILED: {e}"
-        return summary
-
-    # Stage 4: Quality Gate
-    log.info("=" * 60)
-    log.info("STAGE 4: Quality Gate")
-    log.info("=" * 60)
-    try:
-        from quality_gate import check_video
-        qr = check_video(output_path, spec, preview=preview)
-        summary["quality"] = qr
-        passed = sum(1 for c in qr["checks"].values() if c["passed"])
-        summary["stages"]["quality_gate"] = (
-            f"{'PASSED' if qr['passed'] else 'FAILED'} — {passed}/{len(qr['checks'])}"
-        )
-    except Exception as e:
-        log.error("Stage 4 failed: %s", e)
-        summary["stages"]["quality_gate"] = f"FAILED: {e}"
-
-    # Stage 5: Content Reviewer
-    log.info("=" * 60)
-    log.info("STAGE 5: Content Reviewer")
-    log.info("=" * 60)
-    try:
-        from content_reviewer import review_spec
-        review = review_spec(spec)
-        summary["review"] = review
-        if review:
-            decision = review.get("decision", "UNKNOWN")
-            score = review.get("overall_score", 0)
-            summary["stages"]["content_reviewer"] = f"{decision} — {score:.1f}/10"
+        # Stage 1: Creative Director
+        if brief is None:
+            log.info("Loading spec: %s", input_path)
+            spec = json.loads(input_path.read_text(encoding="utf-8"))
+            summary["stages"]["creative_director"] = "skipped (spec provided)"
+            record.stage("creative_director", "skipped", note="spec provided")
         else:
-            summary["stages"]["content_reviewer"] = "FAILED: no response"
-    except Exception as e:
-        log.error("Stage 5 failed: %s", e)
-        summary["stages"]["content_reviewer"] = f"FAILED: {e}"
+            log.info("=" * 60)
+            log.info("STAGE 1: Creative Director")
+            log.info("=" * 60)
+            try:
+                from creative_director import generate_spec
+                with meter.stage("creative_director"):
+                    spec = generate_spec(input_arg, force=force_regen)
+            except Exception as e:
+                log.error("Stage 1 failed: %s", e)
+                summary["stages"]["creative_director"] = f"FAILED: {e}"
+                record.stage("creative_director", "FAILED", error=str(e))
+                record.set_final_status("aborted_creative_director")
+                return summary
+            if not spec:
+                summary["stages"]["creative_director"] = "FAILED: no spec"
+                record.stage("creative_director", "FAILED", error="no spec")
+                record.set_final_status("aborted_creative_director")
+                return summary
+            summary["stages"]["creative_director"] = f"OK — {spec['id']}"
+            record.stage("creative_director", "OK", spec_id=spec.get("id"))
 
-    elapsed = time.time() - t0
-    quality_ok = summary.get("quality", {}).get("passed", False)
-    review_ok = summary.get("review", {}).get("decision") == "PUBLISH"
-    summary["success"] = quality_ok and review_ok
-    summary["elapsed"] = round(elapsed, 1)
+        record.bind_spec(spec)
 
-    log.info("=" * 60)
-    log.info("DONE — %.1fs", elapsed)
-    for stage, result in summary["stages"].items():
-        log.info("  %s: %s", stage, result)
-    log.info("=" * 60)
+        # Fail-fast: legacy basic validation (runs for both paths)
+        spec_errors = _validate_spec(spec)
+        if spec_errors:
+            log.error("Spec validation failed before pipeline:")
+            for err in spec_errors:
+                log.error("  -> %s", err)
+            summary["stages"]["validation"] = f"FAILED: {'; '.join(spec_errors)}"
+            record.stage("validation", "FAILED", basic_errors=spec_errors)
+            record.set_final_status("aborted_validation")
+            return summary
 
-    tracker.save()
-    tracker.print_summary()
-    summary["cost"] = tracker.summary()
+        # Stage 1 gate (v2 contract): hard-reject out-of-contract specs and auto-repair
+        # the safe-to-fix ones before any expensive stage. Runs only on CD-generated
+        # specs — a provided .json spec is taken as final (same convention as Stage 1.5).
+        if brief is not None:
+            from spec_validator import validate_spec, SpecValidationError
+            log.info("=" * 60)
+            log.info("STAGE 1 GATE: Spec Validation (v2 contract)")
+            log.info("=" * 60)
+            try:
+                spec, _repairs = validate_spec(spec)
+                summary["spec_validation"] = {"repairs": _repairs}
+                summary["stages"]["spec_validation"] = (
+                    "OK" if not _repairs else f"OK — {len(_repairs)} auto-repair(s)"
+                )
+                record.stage("validation", "OK", repairs=_repairs, violations=[])
+            except SpecValidationError as e:
+                log.error("Spec validation REJECTED — spec will NOT reach research/render:")
+                for v in e.violations:
+                    log.error("  [X] %s", v)
+                summary["spec_validation"] = {"rejected": e.violations}
+                summary["stages"]["spec_validation"] = f"REJECTED: {len(e.violations)} violation(s)"
+                record.stage("validation", "REJECTED", violations=e.violations, repairs=[])
+                record.add_flag(f"spec validation rejected: {len(e.violations)} hard violation(s)")
+                record.set_final_status("rejected_validation")
+                return summary
+        else:
+            record.stage("validation", "OK", note="provided spec — basic checks only")
 
-    _cleanup_intermediates(spec_id=spec.get("id", ""))
+        if _ceiling_abort("creative_director"):
+            return summary
 
-    return summary
+        # Stage 1.5: Spec review + revision loop (text-only, before expensive render).
+        # Only when generated from a brief — a provided .json spec is taken as final.
+        if brief is not None:
+            log.info("=" * 60)
+            log.info("STAGE 1.5: Spec Review & Revision Loop")
+            log.info("=" * 60)
+            try:
+                spec, _loop_review, _attempts, _regens, _blocking = _spec_review_loop(spec, brief)
+                record.data["regenerations"] = _regens
+                summary["spec_review"] = {
+                    "passes": _attempts,
+                    "regenerations": _regens,
+                    "final_decision": (_loop_review or {}).get("decision"),
+                    "final_score": (_loop_review or {}).get("overall_score"),
+                }
+                if _loop_review:
+                    summary["stages"]["spec_review_loop"] = (
+                        f"{_loop_review.get('decision')} — "
+                        f"{_loop_review.get('overall_score', 0):.1f}/10 "
+                        f"after {len(_attempts)} pass(es), {_regens} regen(s)"
+                    )
+                else:
+                    summary["stages"]["spec_review_loop"] = "no verdict"
+
+                # Regen cap (or a failed regeneration) with the spec still failing:
+                # flag for a human and abort BEFORE render — never ship the draft.
+                if _blocking is not None:
+                    log.error("Stage 1.5 BLOCKED after %d regeneration(s): %s",
+                              _regens, _blocking["reason"])
+                    record.add_flag(
+                        f"regeneration cap: {_blocking['reason']} — "
+                        f"flagged for human, not rendered "
+                        f"(scores: decision={_blocking['decision']}, "
+                        f"overall={_blocking['overall_score']}, "
+                        f"factual_accuracy={_blocking['factual_accuracy']})"
+                    )
+                    record.set_final_status("flagged_regen_cap")
+                    summary["stages"]["spec_review_loop"] = (
+                        f"FLAGGED — regen cap after {_regens} regen(s), not rendered"
+                    )
+                    return summary
+            except Exception as e:
+                log.error("Stage 1.5 failed: %s (continuing with current spec)", e)
+                summary["stages"]["spec_review_loop"] = f"FAILED: {e}"
+
+            # Stage 1.5 is a paid stage — compose with the cost ceiling.
+            if _ceiling_abort("spec_review_loop"):
+                return summary
+
+        # Stage 2: Researcher
+        if skip_research:
+            summary["stages"]["researcher"] = "skipped"
+            record.stage("research", "skipped")
+        else:
+            log.info("=" * 60)
+            log.info("STAGE 2: Researcher")
+            log.info("=" * 60)
+            try:
+                from researcher import research_spec
+                with meter.stage("research"):
+                    spec = research_spec(spec, selective=True)
+                clips = sum(1 for s in spec.get("screens", []) if s.get("clip"))
+                clip_screens = sum(1 for s in spec.get("screens", []) if s.get("clip_description"))
+                summary["stages"]["researcher"] = f"OK — {clips} clips"
+                record.stage("research", "OK", clips_found=clips, clip_screens=clip_screens,
+                             fallbacks=len(record.data["fallback_reasons"]))
+            except Exception as e:
+                log.error("Stage 2 failed: %s (continuing)", e)
+                summary["stages"]["researcher"] = f"FAILED: {e}"
+                record.stage("research", "FAILED", error=str(e))
+
+        if _ceiling_abort("research"):
+            return summary
+
+        # Save spec and print/save timeline
+        spec_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}.json"
+        spec_path.write_text(json.dumps(spec, indent=2, ensure_ascii=False), encoding="utf-8")
+
+        timeline = _generate_timeline(spec)
+        log.info("\n%s", timeline)
+        timeline_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}_timeline.txt"
+        timeline_path.write_text(timeline, encoding="utf-8")
+
+        # Stage 3: Render
+        log.info("=" * 60)
+        log.info("STAGE 3: Video Pipeline")
+        log.info("=" * 60)
+        output_path = config.OUTPUT_DIR / f"{spec.get('id', 'output')}.mp4"
+        cli_args = [str(spec_path), "-o", str(output_path)]
+        if preview:
+            cli_args.append("--preview")
+        if no_voice:
+            cli_args.append("--no-voice")
+
+        try:
+            from vidpipe.cli import main as vidpipe_main
+            rc = vidpipe_main(cli_args)
+            if rc != 0:
+                summary["stages"]["render"] = f"FAILED: exit {rc}"
+                record.stage("render", "FAILED", exit_code=rc)
+                record.set_final_status("aborted_render")
+                return summary
+            summary["stages"]["render"] = f"OK — {output_path.name}"
+            summary["output"] = str(output_path)
+            record.stage("render", "OK", output=str(output_path))
+        except Exception as e:
+            log.error("Stage 3 failed: %s", e)
+            summary["stages"]["render"] = f"FAILED: {e}"
+            record.stage("render", "FAILED", error=str(e))
+            record.set_final_status("aborted_render")
+            return summary
+
+        # Stage 4: Quality Gate
+        log.info("=" * 60)
+        log.info("STAGE 4: Quality Gate")
+        log.info("=" * 60)
+        try:
+            from quality_gate import check_video
+            qr = check_video(output_path, spec, preview=preview)
+            summary["quality"] = qr
+            passed = sum(1 for c in qr["checks"].values() if c["passed"])
+            summary["stages"]["quality_gate"] = (
+                f"{'PASSED' if qr['passed'] else 'FAILED'} — {passed}/{len(qr['checks'])}"
+            )
+            record.stage("render", "OK", quality_passed=qr["passed"],
+                         quality_checks=f"{passed}/{len(qr['checks'])}")
+        except Exception as e:
+            log.error("Stage 4 failed: %s", e)
+            summary["stages"]["quality_gate"] = f"FAILED: {e}"
+
+        # Stage 5: Content Reviewer
+        log.info("=" * 60)
+        log.info("STAGE 5: Content Reviewer")
+        log.info("=" * 60)
+        try:
+            from content_reviewer import review_spec
+            with meter.stage("content_reviewer"):
+                review = review_spec(spec)
+            summary["review"] = review
+            if review:
+                decision = review.get("decision", "UNKNOWN")
+                score = review.get("overall_score", 0)
+                summary["stages"]["content_reviewer"] = f"{decision} — {score:.1f}/10"
+            else:
+                summary["stages"]["content_reviewer"] = "FAILED: no response"
+        except Exception as e:
+            log.error("Stage 5 failed: %s", e)
+            summary["stages"]["content_reviewer"] = f"FAILED: {e}"
+
+        elapsed = time.time() - t0
+        quality_ok = summary.get("quality", {}).get("passed", False)
+        review_ok = summary.get("review", {}).get("decision") == "PUBLISH"
+        summary["success"] = quality_ok and review_ok
+        summary["elapsed"] = round(elapsed, 1)
+        record.set_final_status("publish" if summary["success"] else "needs_human_review")
+        if not summary["success"]:
+            record.add_flag("did not clear quality gate + reviewer PUBLISH — needs human review")
+
+        log.info("=" * 60)
+        log.info("DONE — %.1fs", elapsed)
+        for stage, result in summary["stages"].items():
+            log.info("  %s: %s", stage, result)
+        log.info("=" * 60)
+
+        tracker.save()
+        tracker.print_summary()
+        summary["cost"] = tracker.summary()
+
+        _cleanup_intermediates(spec_id=spec.get("id", ""))
+
+        return summary
+    finally:
+        try:
+            path = record.write()
+            summary["run_record"] = str(path)
+        finally:
+            set_active_record(None)
 
 
 def main():

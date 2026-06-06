@@ -38,6 +38,22 @@ REVIEWER_MODEL = "gemini-2.5-pro"      # content reviewer (quality scoring)
 GEMINI_TEMPERATURE = 1.0   # creative director benefits from higher temp
 GEMINI_RPM_SLEEP = 2.5     # seconds to sleep between API calls (free tier)
 
+# ── Cost: model → price table (USD per 1M tokens, pay-as-you-go) ──────────────
+# The ONE place prices live. Update here when Google changes pricing — never
+# hardcode a rate inline. Verify against https://ai.google.dev/pricing.
+# `thinking` is the price applied to thought tokens (usage.thoughts_token_count).
+GEMINI_PRICING = {
+    "gemini-2.5-flash": {"input": 0.15, "output": 0.60, "thinking": 3.50},
+    "gemini-2.5-pro":   {"input": 1.25, "output": 10.00, "thinking": 10.00},
+}
+# Fallback when a model id is not in the table (logged once when used).
+GEMINI_PRICING_DEFAULT = {"input": 0.15, "output": 0.60, "thinking": 3.50}
+
+# Per-run cost ceiling (USD, same unit as the price table). After each PAID stage
+# the run aborts if cumulative Gemini cost crosses this. Set with comfortable
+# headroom over the per-video target (~$0.10–0.20 with the Pro brain).
+COST_CEILING_USD = 0.75
+
 # ── Pipeline defaults ─────────────────────────────────────────────────────────
 
 PROD_WIDTH = 1080
@@ -105,7 +121,9 @@ RESEARCHER_TRIM_DIR.mkdir(parents=True, exist_ok=True)
 # it flags a FACTUAL ERROR (factual_accuracy below the threshold), the reviewer's
 # feedback is passed back to the creative director to fix — at most this many
 # times. Non-factual issues (weak hook, pacing) are logged but NOT retried.
-SPEC_REVIEW_MAX_RETRIES = 1          # pass a spec back to the CD at most once
+SPEC_REVIEW_MAX_RETRIES = 2          # hard cap: at most 2 regenerations (3 CD calls total).
+                                     # After the cap, a still-failing spec is flagged for a
+                                     # human and NOT rendered (never looped, never shipped).
 SPEC_REVIEW_FACTUAL_THRESHOLD = 8    # retry only if factual_accuracy < this
 
 # ── Quality gate ──────────────────────────────────────────────────────────────

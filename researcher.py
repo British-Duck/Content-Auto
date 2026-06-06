@@ -30,6 +30,20 @@ from cost_tracker import get_tracker
 
 log = logging.getLogger(__name__)
 
+
+def _record_fallback(screen_index: int, reason: str) -> None:
+    """Record a gradient / no-footage fallback on the active run record, with the
+    screen index and the reason. No-op when no run record is active (e.g. the
+    researcher run standalone). Makes the silent failure loud in the record."""
+    try:
+        from run_record import get_active_record
+        rec = get_active_record()
+        if rec is not None:
+            rec.add_fallback(screen_index, reason)
+    except Exception as e:
+        log.debug("fallback record skipped: %s", e)
+
+
 TIMESTAMP_PROMPT = """\
 Find the segment in this video that best matches: {description}
 {exclusion_note}
@@ -374,6 +388,7 @@ def _upload_and_analyse(client, video_path: Path, prompt: str, timeout: int) -> 
             future = pool.submit(_call)
             response = future.result(timeout=timeout)
 
+        gemini._emit_usage(response, config.GEMINI_MODEL)  # researcher's direct video call
         return gemini.parse_json(response.text)
 
     except FuturesTimeout:
@@ -568,6 +583,7 @@ def research_spec(spec: dict, selective: bool = True) -> dict:
             candidates = _search_youtube(desc, config.RESEARCHER_MAX_SEARCH_RESULTS)
             if not candidates:
                 log.warning("\n[researcher] Screen %d → GRADIENT. Reason: ambient — no YouTube results\n  clip_description: %r", si + 1, desc)
+                _record_fallback(si, f"ambient clip search returned no YouTube results for {desc!r}")
                 screen["clip"] = None
             else:
                 best = _rank_candidates(candidates, desc)[0]
@@ -610,6 +626,7 @@ def research_spec(spec: dict, selective: bool = True) -> dict:
 
         if not candidates:
             _log_gradient(si + 1, diag)
+            _record_fallback(si, f"no YouTube results for query {desc!r}")
             screen["clip"] = None
             continue
 
@@ -762,6 +779,14 @@ def research_spec(spec: dict, selective: bool = True) -> dict:
 
         if not found:
             _log_gradient(si + 1, diag)
+            tried = diag.get("candidates_tried", [])
+            skip_reasons = [c["skip_reason"] for c in tried if c.get("skip_reason")]
+            why = " | ".join(skip_reasons) if skip_reasons else "all candidates exhausted without a usable match"
+            _record_fallback(
+                si,
+                f"no usable footage for {desc!r} ({diag['candidates_found']} found, "
+                f"{len(tried)} tried): {why}",
+            )
             screen["clip"] = None
 
     clips = sum(1 for s in screens if s.get("clip"))

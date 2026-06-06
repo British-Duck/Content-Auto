@@ -35,12 +35,24 @@ def generate(contents: str, *, temperature: float = config.GEMINI_TEMPERATURE,
     )
     if thinking_budget is not None:
         gen_config.thinking_config = types.ThinkingConfig(thinking_budget=thinking_budget)
+    used_model = model or config.GEMINI_MODEL
     response = get_client().models.generate_content(
-        model=model or config.GEMINI_MODEL,
+        model=used_model,
         contents=contents,
         config=gen_config,
     )
+    _emit_usage(response, used_model)
     return response.text
+
+
+def _emit_usage(response, model: str) -> None:
+    """Forward real token usage to the run cost meter, attributed to the active
+    stage. Best-effort: never let cost accounting break a generation."""
+    try:
+        from run_record import get_cost_meter
+        get_cost_meter().record_gemini_usage(getattr(response, "usage_metadata", None), model)
+    except Exception as e:
+        log.debug("usage capture skipped: %s", e)
 
 
 def parse_json(raw: str) -> dict:
