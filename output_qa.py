@@ -39,7 +39,7 @@ SYSTEM_PROMPT = (config.PROMPTS_DIR / "output_qa.md").read_text(encoding="utf-8"
 def qa_output(spec: dict, probe_report: dict, frames_dir: Optional[Path]) -> Optional[dict]:
     """Judge the rendered video against its plan from the per-segment frames + probe.
     Returns the verdict dict, or None if QA could not run (no frames / call failure)."""
-    log.info("Output-QA: judging the rendered video against its plan…")
+    log.info("Output-QA: judging the rendered video against its plan...")
 
     if not frames_dir:
         log.warning("Output-QA: no frames directory — cannot judge the render")
@@ -78,7 +78,7 @@ def qa_output(spec: dict, probe_report: dict, frames_dir: Optional[Path]) -> Opt
     )
 
     time.sleep(config.GEMINI_RPM_SLEEP)
-    log.info("Calling Gemini (Output-QA, %d frame(s))…", len(frames))
+    log.info("Calling Gemini (Output-QA, %d frame(s))...", len(frames))
     get_tracker().record_text_call(
         "output_qa",
         prompt_words=len(prompt.split()),

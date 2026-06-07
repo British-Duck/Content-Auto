@@ -63,6 +63,31 @@ def _check(name: str, passed: bool, detail: str) -> dict:
     return {"passed": passed, "detail": detail}
 
 
+def _frame_timestamps(screens: list, xfade: float, actual: float = None) -> list[float]:
+    """One representative extraction timestamp per screen, in the rendered
+    (crossfade-compressed) timeline.
+
+    The assembler overlaps each seam with the previous segment by `xfade`
+    seconds, so a segment's true start drifts EARLIER than its cumulative spec
+    offset by i*xfade. Sampling at the naive `cumulative + d/2` therefore lands
+    later and later (up to (n-1)*xfade by the final segment), often on a
+    transition boundary where two segments are blended — which makes Output-QA
+    judge a mislabelled, overlaid frame. Mirror the same compression model the
+    duration check uses so each frame sits at its segment's true midpoint."""
+    ts_list = []
+    cumulative = 0.0
+    for i, screen in enumerate(screens):
+        d = screen.get("duration", 0)
+        ts = cumulative - i * xfade + d / 2
+        if actual:
+            ts = max(0.0, min(ts, actual - 0.05))
+        else:
+            ts = max(0.0, ts)
+        ts_list.append(ts)
+        cumulative += d
+    return ts_list
+
+
 def check_video(video: Path, spec: dict, preview: bool = False) -> dict:
     log.info("Stage 4: Quality Gate — %s", video.name)
     checks = {}
@@ -123,15 +148,13 @@ def check_video(video: Path, spec: dict, preview: bool = False) -> dict:
         codec = vs.get("codec_name", "unknown")
         checks["codec"] = _check("codec", codec in ("h264", "avc1"), codec)
 
-    # Extract midpoint frames
+    # Extract one representative frame per screen, at its true midpoint in the
+    # crossfade-compressed render (see _frame_timestamps). Output-QA judges these.
     spec_id = spec.get("id", "unknown")
     frames_dir = config.OUTPUT_DIR / f"{spec_id}_frames"
     frames_dir.mkdir(parents=True, exist_ok=True)
-    cumulative = 0.0
-    for i, screen in enumerate(screens):
-        d = screen.get("duration", 0)
-        _extract_frame(video, cumulative + d / 2, frames_dir / f"screen_{i:02d}.jpg")
-        cumulative += d
+    for i, ts in enumerate(_frame_timestamps(screens, config.CROSSFADE_DURATION, actual)):
+        _extract_frame(video, ts, frames_dir / f"screen_{i:02d}.jpg")
 
     all_passed = all(c["passed"] for c in checks.values())
     for name, c in checks.items():

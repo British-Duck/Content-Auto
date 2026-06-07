@@ -32,12 +32,12 @@ SYSTEM_PROMPT = (config.PROMPTS_DIR / "editorial_critic.md").read_text(encoding=
 def review_spec(spec: dict) -> Optional[dict]:
     """Run the editorial critic over a spec. Returns its verdict dict, or None on
     a call/parse failure (the caller then proceeds with the best spec so far)."""
-    log.info("Editorial critic: reviewing spec plan…")
+    log.info("Editorial critic: reviewing spec plan...")
 
     prompt = f"{SYSTEM_PROMPT}\n\n---\n\nVIDEO SPEC:\n{json.dumps(spec, indent=2, ensure_ascii=False)}"
 
     time.sleep(config.GEMINI_RPM_SLEEP)
-    log.info("Calling Gemini (editorial critic)…")
+    log.info("Calling Gemini (editorial critic)...")
     get_tracker().record_text_call(
         "editorial_critic",
         prompt_words=len(prompt.split()),
