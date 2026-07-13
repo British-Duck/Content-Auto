@@ -80,21 +80,30 @@ python orchestrate.py "Brief..." --force-regen                    # ignore brief
 `.env` holds `GEMINI_API_KEY` (no `ANTHROPIC_API_KEY` yet → Claude models fall back to
 Gemini). Further detail: `PROJECT_HANDOFF.md`/`docs/HANDOFF.md`, `docs/pipeline_map.txt`.
 
-## Current state (2026-06-06)
+## Current state (2026-07-14)
 
-**Phase B is complete (Steps 4 + 5).** The pipeline runs end to end. Stage 1 uses
-`creative_director_v2.md`; Stage 1.5 is the Editorial Critic (`editorial_critic.py`,
-trigger = REVISE, 2-pass cap, facts → `facts_to_check`); the post-render stage is
-Output-QA (`output_qa.py`, vision, FAIL → non-publish + `blocking_issues`, never
-re-renders). The old `content_reviewer.py` and its removed `.txt` prompt are gone.
-The run record's `editorial_critic` / `output_qa` blocks are populated and Output-QA
-cost is attributed to an `output_qa` stage.
+**Phase B complete (Steps 4 + 5 + 6a/6b) plus trust fixes.** The pipeline runs end
+to end. Stage 1 uses `creative_director_v2.md` (hero-clip spine rules + `single_clip`
+format, Rule 2.5); Stage 1.5 is the Editorial Critic (trigger = REVISE, 2-pass cap,
+facts → `facts_to_check`, fed deterministic COMPUTED METRICS — script-fit numbers,
+spine counts, near-duplicate clip_descriptions — via `editorial_critic.compute_metrics`);
+the researcher has a footage fallback ladder (alt queries → Ken Burns still → gradient,
+audited per beat in the run record's `footage_ladder`) and resolves `single_clip`
+hero windows; the post-render stage is Output-QA (`output_qa.py`, vision, format-aware:
+single_clip verdicts judge continuity/on-story, not per-segment clip matches).
 
-Offline-faithful tests: `tests/test_spec_validator.py`, `test_run_record.py`,
-`test_regen_cap.py`, `test_step5_reviewers.py` — 20 passing.
+Recent trust fixes (2026-07-14): format-aware duration ceiling (single_clip beats to
+15s); single_clip truncation guard (`fit_start_to_source`, refuses uncoverable
+sources); `vidpipe/clips.py` shares the researcher's cache dir + YouTube-ID key and
+deletes/validates partial downloads.
 
-**Next: Phase C, Step 6** (eval harness + human-anchored judge) — but first the plan
-calls for making 5–10 real videos and watching them. Known watch-item: the v2 CD can
-still write a `voice_script` that overruns a short runtime (the Bolt sample: 80 words /
-~24s over a 16.7s spec); the Editorial Critic's script-fit check now flags this as a
-REVISE, but a CD-prompt nudge toward longer specs may also help.
+Offline-faithful tests (the migration gate — legacy `test_stress.py` /
+`test_output_quality.py` render suites have pre-existing failures, not the gate):
+`test_spec_validator.py`, `test_run_record.py`, `test_regen_cap.py`,
+`test_step5_reviewers.py`, `test_fallback_ladder.py`, `test_hero_spine.py`,
+`test_single_clip.py`, `test_editorial_metrics.py` — 66 passing.
+
+**Next:** (1) lift the Gemini spend cap (https://ai.studio/spend) and re-run
+`batch_phase_b.py` — the montage-set validation from `eval/6b_validation.md` is still
+open; re-watch the single-clip set with the now-honest QA. (2) Fill the CD prompt's
+empty EXEMPLARS slot (3–4 hand-authored specs). (3) Phase C Step 7: eval harness.
