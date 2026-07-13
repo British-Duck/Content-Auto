@@ -16,7 +16,9 @@ Facts are a human's job: this stage never rejects on factual grounds.
 """
 import json
 import logging
+import re
 import time
+from collections import Counter
 from typing import Optional
 
 import config
@@ -28,13 +30,60 @@ log = logging.getLogger(__name__)
 
 SYSTEM_PROMPT = (config.PROMPTS_DIR / "editorial_critic.md").read_text(encoding="utf-8")
 
+# Matches the reading-speed estimate stated in the critic prompt (~3-4 words/sec).
+WORDS_PER_SECOND = 3.3
+
+
+def compute_metrics(spec: dict) -> dict:
+    """Deterministic numbers for the critic's script-fit and spine checks.
+
+    LLMs are unreliable at arithmetic, and script-fit is the loop's most
+    load-bearing trigger — so the pipeline measures, the model judges. Also
+    surfaces near-duplicate clip_descriptions (differing only in case or
+    punctuation), which silently break the hero-clip spine: the researcher
+    groups spine segments by EXACT string match. Pure function."""
+    screens = [s for s in (spec.get("screens") or []) if isinstance(s, dict)]
+    durations = [s["duration"] for s in screens
+                 if isinstance(s.get("duration"), (int, float))]
+    runtime = round(sum(durations), 1)
+    words = len((spec.get("voice_script") or "").split())
+    est_read = round(words / WORDS_PER_SECOND, 1)
+
+    counts = Counter(s["clip_description"] for s in screens
+                     if isinstance(s.get("clip_description"), str))
+    norm_groups: dict[str, list] = {}
+    for desc in counts:
+        norm = re.sub(r"[^a-z0-9 ]", "", desc.lower()).strip()
+        norm_groups.setdefault(norm, []).append(desc)
+    near_dupes = [sorted(group) for group in norm_groups.values() if len(group) > 1]
+
+    return {
+        "runtime_s": runtime,
+        "voice_script_words": words,
+        "estimated_read_s": est_read,
+        "read_overrun_pct": (round((est_read - runtime) / runtime * 100.0, 1)
+                             if runtime else None),
+        "n_screens": len(screens),
+        "n_gradient_screens": sum(1 for s in screens if not s.get("clip_description")),
+        "clip_description_counts": dict(counts),
+        "near_duplicate_clip_descriptions": near_dupes,
+    }
+
 
 def review_spec(spec: dict) -> Optional[dict]:
     """Run the editorial critic over a spec. Returns its verdict dict, or None on
     a call/parse failure (the caller then proceeds with the best spec so far)."""
     log.info("Editorial critic: reviewing spec plan...")
 
-    prompt = f"{SYSTEM_PROMPT}\n\n---\n\nVIDEO SPEC:\n{json.dumps(spec, indent=2, ensure_ascii=False)}"
+    metrics = compute_metrics(spec)
+    log.info("  measured: runtime %.1fs, script %d words (~%.1fs read)",
+             metrics["runtime_s"], metrics["voice_script_words"], metrics["estimated_read_s"])
+    prompt = (
+        f"{SYSTEM_PROMPT}\n\n---\n\n"
+        f"COMPUTED METRICS (measured by the pipeline — trust these numbers, do NOT "
+        f"recompute them):\n{json.dumps(metrics, indent=2, ensure_ascii=False)}\n\n"
+        f"VIDEO SPEC:\n{json.dumps(spec, indent=2, ensure_ascii=False)}"
+    )
 
     time.sleep(config.GEMINI_RPM_SLEEP)
     log.info("Calling Gemini (editorial critic)...")
