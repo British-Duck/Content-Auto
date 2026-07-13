@@ -69,8 +69,17 @@ def qa_output(spec: dict, probe_report: dict, frames_dir: Optional[Path]) -> Opt
         "frame_segment_indices": indices,
         "frames_missing_for_segments": missing,
     }
+    fmt = spec.get("format") or "montage"
+    fmt_note = (
+        "FORMAT: single_clip — one continuous source window, text beats overlaid. "
+        "Apply the single_clip replacements for hard checks 1-2 (see FORMAT AWARENESS); "
+        "per-screen clip_description/clip_moment are NOT render instructions here."
+        if fmt == "single_clip"
+        else "FORMAT: montage — per-segment clips; apply the checks as written."
+    )
     prompt = (
         f"{SYSTEM_PROMPT}\n\n---\n\n"
+        f"{fmt_note}\n\n"
         f"The {len(frames)} images that follow are one extracted frame per segment, "
         f"in segment order. Their segment indices are: {indices}. Match each image to "
         f"its segment by this order.\n\n"

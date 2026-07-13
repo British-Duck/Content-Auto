@@ -237,6 +237,49 @@ def test_overlay_chain_one_window_per_beat():
     assert "gte(t,4.000)" in chain     # last beat runs to the end
 
 
+# ── Output-QA format awareness ───────────────────────────────────────────────
+
+def _run_qa(monkeypatch, tmp_path, spec):
+    """Drive output_qa.qa_output offline, capturing the prompt it builds."""
+    import output_qa
+
+    frames = tmp_path / "frames"
+    frames.mkdir(exist_ok=True)
+    for i in range(len(spec["screens"])):
+        (frames / f"screen_{i:02d}.jpg").write_bytes(b"fake-jpeg")
+
+    captured = {}
+
+    def fake_vision(prompt, images, **kw):
+        captured["prompt"] = prompt
+        return json.dumps({"decision": "PASS", "blocking_issues": [], "warnings": [],
+                           "per_segment": [], "summary": "ok"})
+
+    monkeypatch.setattr(output_qa.gemini, "generate_vision", fake_vision)
+    monkeypatch.setattr(output_qa.time, "sleep", lambda s: None)
+    result = output_qa.qa_output(spec, {"passed": True}, frames)
+    return result, captured["prompt"]
+
+
+def test_output_qa_prompt_flags_single_clip_mode(monkeypatch, tmp_path):
+    spec = _base_spec(format="single_clip", clip_description="full race upload",
+                      key_moment="the finish",
+                      screens=[_screen(clip_desc="full race upload") for _ in range(4)])
+    result, prompt = _run_qa(monkeypatch, tmp_path, spec)
+    assert result["decision"] == "PASS"
+    assert "FORMAT: single_clip" in prompt
+    assert "NOT render instructions" in prompt
+    # The system prompt's replacement checks must be present for the model to use.
+    assert "CONTINUOUS FOOTAGE" in prompt
+
+
+def test_output_qa_prompt_flags_montage_mode(monkeypatch, tmp_path):
+    result, prompt = _run_qa(monkeypatch, tmp_path, _base_spec())
+    assert result["decision"] == "PASS"
+    assert "FORMAT: montage" in prompt
+    assert "FORMAT: single_clip" not in prompt
+
+
 # ── Researcher resolve / fallback control flow ───────────────────────────────
 
 class _FakeRecord:
