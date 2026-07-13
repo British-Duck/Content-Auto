@@ -82,6 +82,21 @@ def aligned_start(window_start: float, window_end: float, key_moment_ts: Optiona
     return min(max(desired, lo), hi)
 
 
+def fit_start_to_source(start: float, runtime: float, src_dur: float) -> Optional[float]:
+    """Final guard against the fetched source being shorter than expected (a stale
+    or truncated cache file, or a different variant than the researcher probed).
+
+    Returns the start time slid back so start+runtime fits inside src_dur, or None
+    when the source cannot cover the runtime at all — in which case the render must
+    FAIL loudly rather than let ffmpeg run out of frames and ship a cut-off video
+    (the Hindenburg bug: 25.1s rendered of a 31.5s plan). Pure function."""
+    if not src_dur or src_dur <= 0:
+        return start  # unknown duration: nothing to clamp against
+    if src_dur + 0.05 < runtime:
+        return None
+    return min(start, max(0.0, src_dur - runtime))
+
+
 def _aligned_start(hero, runtime: float, src_dur: float) -> float:
     window_end = hero.window_end if hero.window_end > hero.window_start else \
         (src_dur or hero.window_start + runtime)
@@ -230,7 +245,30 @@ def render_single_clip(
         return False
     src_w, src_h, src_dur = dims
 
+    # The researcher recorded the duration of the file it analysed; a material
+    # mismatch means we are looking at a DIFFERENT file (stale/truncated cache) —
+    # say so loudly, because the window/key timestamps were chosen on the other one.
+    if hero.source_duration and src_dur and abs(src_dur - hero.source_duration) > 2.0:
+        log.warning(
+            "single_clip: fetched source %s is %.1fs but research recorded %.1fs — "
+            "cached file is stale or truncated (delete %s to force a clean re-download); "
+            "window/key timestamps may not line up",
+            source.name, src_dur, hero.source_duration, source,
+        )
+
     start = _aligned_start(hero, runtime, src_dur)
+    fitted = fit_start_to_source(start, runtime, src_dur)
+    if fitted is None:
+        log.error(
+            "single_clip: source %s is only %.1fs — cannot cover the %.1fs runtime; "
+            "refusing to render a truncated video",
+            source.name, src_dur, runtime,
+        )
+        return False
+    if fitted < start - 0.01:
+        log.warning("single_clip: sliding start %.1fs -> %.1fs so the full runtime "
+                    "fits inside the %.1fs source", start, fitted, src_dur)
+    start = fitted
 
     # Build the per-beat overlay PNGs.
     scheme = get_scheme(spec.scheme)

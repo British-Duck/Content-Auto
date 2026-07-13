@@ -187,6 +187,48 @@ def test_aligned_start_no_key_uses_window_start():
     assert single_clip.aligned_start(5.0, 60.0, None, 35.0, 90.0, 0.6) == 5.0
 
 
+def test_fit_start_slides_back_when_source_short():
+    # Window said start at 10s but the fetched file is only 30s: a 25s runtime
+    # overruns (10+25 > 30) and must slide back to 5.0 so the full runtime fits.
+    assert single_clip.fit_start_to_source(10.0, 25.0, 30.0) == pytest.approx(5.0)
+
+
+def test_fit_start_refuses_uncoverable_source():
+    # Source shorter than the runtime itself: no start can work, must be None
+    # (the renderer then FAILS loudly instead of shipping a cut-off video).
+    assert single_clip.fit_start_to_source(0.0, 31.5, 25.1) is None
+
+
+def test_fit_start_noop_when_source_covers():
+    assert single_clip.fit_start_to_source(9.0, 35.0, 90.0) == pytest.approx(9.0)
+
+
+def test_fit_start_unknown_duration_passes_through():
+    assert single_clip.fit_start_to_source(9.0, 35.0, 0.0) == pytest.approx(9.0)
+
+
+def test_render_refuses_source_shorter_than_runtime(monkeypatch, tmp_path):
+    # Full control-flow check: a fetched hero source shorter than the runtime must
+    # abort the render (return False) BEFORE any ffmpeg/overlay work happens.
+    spec = _base_spec(
+        format="single_clip", clip_description="full disaster footage",
+        hero_clip={"url": "https://youtu.be/abc12345678", "window_start": 3.0,
+                   "window_end": 43.0, "key_moment_ts": 34.0, "subject_x": 0.5,
+                   "source_duration": 327.0},
+        screens=[_screen(clip_desc="full disaster footage", dur=8.0) for _ in range(4)],
+    )
+    vs = load_spec(_write(tmp_path, spec))
+    monkeypatch.setattr(single_clip, "ensure_clip", lambda url: tmp_path / "fake.mp4")
+    monkeypatch.setattr(single_clip, "_probe_dims", lambda p: (1280, 720, 25.1))
+
+    def _no_ffmpeg(*a, **k):
+        raise AssertionError("ffmpeg must not run for an uncoverable source")
+    monkeypatch.setattr(single_clip, "_run_ffmpeg", _no_ffmpeg)
+
+    ok = single_clip.render_single_clip(vs, tmp_path, tmp_path / "out.mp4")
+    assert ok is False
+
+
 def test_overlay_chain_one_window_per_beat():
     tl = single_clip.beat_timeline([{"duration": 2.0}, {"duration": 2.0}, {"duration": 2.0}])
     chain = single_clip.overlay_chain(tl)
