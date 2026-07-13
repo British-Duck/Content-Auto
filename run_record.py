@@ -154,6 +154,7 @@ class RunRecord:
             "cost_ceiling": cost_ceiling if cost_ceiling is not None else getattr(config, "COST_CEILING_USD", None),
             "cost_exceeded": False,
             "fallback_reasons": [],
+            "footage_ladder": [],   # per-beat: which fallback tier each clip beat landed on
             "flags_for_human": [],
             "final_status": "in_progress",
         }
@@ -185,6 +186,17 @@ class RunRecord:
         entry = {"screen_index": screen_index, "reason": reason}
         self.data["fallback_reasons"].append(entry)
         log.warning("[run-record] FALLBACK screen %s: %s", screen_index, reason)
+
+    def add_footage_tier(self, screen_index: int, tier: str, **detail):
+        """Record which rung of the footage fallback ladder a clip beat landed on:
+        clip | alt_query_clip | kenburns_still | intentional_gradient | gradient_forced.
+        Makes the silent visual failure loud and auditable per beat."""
+        entry = {"screen_index": screen_index, "tier": tier}
+        if detail:
+            entry.update(detail)
+        self.data["footage_ladder"].append(entry)
+        log.info("[run-record] footage tier screen %s: %s%s",
+                 screen_index, tier, f" ({detail})" if detail else "")
 
     def add_flag(self, message: str):
         self.data["flags_for_human"].append(message)

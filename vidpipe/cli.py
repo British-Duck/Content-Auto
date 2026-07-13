@@ -77,26 +77,38 @@ def main(argv: list = None) -> int:
     work = Path(f".vidpipe_{spec.id}")
     work.mkdir(exist_ok=True)
 
-    segments = []
-    for i, screen in enumerate(spec.screens):
-        seg = work / f"seg_{i:03d}.mp4"
-        log.info("Screen %d/%d ...", i + 1, len(spec.screens))
-        if not render_screen(screen, i, spec, seg, w, h, fps, crf, preset):
-            log.error("Screen %d failed", i + 1)
-            return 1
-        segments.append(seg)
-
     concat_out = work / "concat.mp4"
-    screen_durations = [s.duration for s in spec.screens]
-    crossfade = 0.0 if args.no_transitions or args.preview else 0.3
-    if not concat_segments(
-        segments, concat_out,
-        screen_durations=screen_durations,
-        crf=crf, preset=preset, fps=fps,
-        crossfade=crossfade,
-    ):
-        log.error("Concat failed")
-        return 1
+
+    if getattr(spec, "format", "montage") == "single_clip" and spec.hero_clip:
+        # Single-clip event format: the whole video rides one continuous window of
+        # one source, with the text beats overlaid as a timeline. The montage path
+        # below is left untouched. A single_clip spec without a resolved hero_clip
+        # (researcher fell back to montage) renders as montage.
+        from .single_clip import render_single_clip
+        log.info("Format: single_clip — one source for the full runtime")
+        if not render_single_clip(spec, work, concat_out, w, h, fps, crf, preset):
+            log.error("single_clip render failed")
+            return 1
+    else:
+        segments = []
+        for i, screen in enumerate(spec.screens):
+            seg = work / f"seg_{i:03d}.mp4"
+            log.info("Screen %d/%d ...", i + 1, len(spec.screens))
+            if not render_screen(screen, i, spec, seg, w, h, fps, crf, preset):
+                log.error("Screen %d failed", i + 1)
+                return 1
+            segments.append(seg)
+
+        screen_durations = [s.duration for s in spec.screens]
+        crossfade = 0.0 if args.no_transitions or args.preview else 0.3
+        if not concat_segments(
+            segments, concat_out,
+            screen_durations=screen_durations,
+            crf=crf, preset=preset, fps=fps,
+            crossfade=crossfade,
+        ):
+            log.error("Concat failed")
+            return 1
 
     # v2: the narrator is fixed in config (spec no longer carries a voice).
     narrator = getattr(config, "NARRATOR_VOICE", None) or spec.voice

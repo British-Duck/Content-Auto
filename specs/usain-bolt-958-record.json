@@ -1,0 +1,103 @@
+{
+  "storyboard": "Angle: The most incredible part of the fastest 100m ever is that the runner was slowing down to celebrate. Shape: 6 segments. Reveal structure. Hook with the contradiction (slowing down), show the evidence (chest tap), reveal the number (9.58), show the dominance (the gap), contextualize the record (untouchable), and kick out on the implication (he could have been even faster). Rhythm is fast-fast-hold-fast-fast-hold. Three-channel plan: Seg 2, voice adds detail (celebrating) over footage of the chest tap. Seg 4, text/voice/footage all agree to emphasize the 2-metre gap. Seg 6, text/voice create tension against the celebratory footage by asking what the true limit was.",
+  "id": "usain-bolt-958-record",
+  "label": "WORLD RECORD",
+  "structure": "reveal: withhold the record time until segment 3, then build on its significance.",
+  "scheme": "dark_gold",
+  "voice_script": "In the final of the 2009 World Championships, the fastest man in history was already celebrating before he even crossed the line. The clock stopped at 9.58 seconds. He beat the field by two full metres—an unheard-of margin in elite sprinting. In all the years since, no other athlete has come within a tenth of a second of the time. So the untouchable world record was set by a man who wasn't even running flat out. Which leaves one question.",
+  "screens": [
+    {
+      "text": "The fastest run in history.",
+      "reason": "Hook part 1: Establish the stakes. A clean, bold text card to set the stage.",
+      "duration": 1.6,
+      "transition": "cut",
+      "text_size": 88,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null,
+      "audio_mode": "vo"
+    },
+    {
+      "text": "Wasn't at full speed.",
+      "reason": "Hook part 2: Introduce the contradiction that creates tension and drives the story.",
+      "duration": 2.8,
+      "transition": "cut",
+      "text_size": 90,
+      "panel": true,
+      "subtitle": "Berlin, 2009",
+      "clip_mode": null,
+      "clip_description": "Usain Bolt 9.58 world record Berlin 2009",
+      "clip_moment": "Bolt looks to his right and taps his chest once, just before the finish line.",
+      "audio_mode": "vo",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=LoQq1-_3F-A",
+        "start": 28.5,
+        "end": 30.5
+      }
+    },
+    {
+      "text": "9.58",
+      "reason": "The reveal. Hold on the number itself for impact. A gradient card gives it weight.",
+      "duration": 2.0,
+      "transition": "cut",
+      "text_size": 100,
+      "panel": false,
+      "subtitle": "seconds",
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null,
+      "audio_mode": "vo"
+    },
+    {
+      "text": "The gap: two full metres.",
+      "reason": "Show, don't just tell, the dominance. The footage provides the visual evidence for the claim.",
+      "duration": 3.0,
+      "transition": "crossfade",
+      "text_size": 84,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Usain Bolt 9.58 world record Berlin 2009",
+      "clip_moment": "wide angle from the side showing Bolt crossing the line with a visible two-metre gap to Tyson Gay.",
+      "audio_mode": "vo",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=3nbjhpcZ9_g",
+        "start": 11.0,
+        "end": 13.0
+      }
+    },
+    {
+      "text": "No sprinter has come within a tenth of a second since.",
+      "reason": "The 'part you didn't know' beat. This data point establishes the record's legendary status and longevity.",
+      "duration": 3.8,
+      "transition": "cut",
+      "text_size": 78,
+      "panel": false,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": null,
+      "clip_moment": null,
+      "audio_mode": "vo"
+    },
+    {
+      "text": "The human limit?",
+      "reason": "The kicker. An open question that reframes the entire story from a celebration to a question of ultimate potential.",
+      "duration": 3.5,
+      "transition": "zoom",
+      "text_size": 92,
+      "panel": true,
+      "subtitle": null,
+      "clip_mode": null,
+      "clip_description": "Usain Bolt 9.58 world record Berlin 2009",
+      "clip_moment": "slow motion of Bolt celebrating after the finish line, pointing at the clock.",
+      "audio_mode": "vo",
+      "clip": {
+        "url": "https://www.youtube.com/watch?v=3nbjhpcZ9_g",
+        "start": 41.0,
+        "end": 45.0
+      }
+    }
+  ]
+}

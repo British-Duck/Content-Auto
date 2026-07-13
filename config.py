@@ -17,9 +17,13 @@ PROMPTS_DIR = ROOT / "prompts"
 SEARCH_CACHE_DIR = ROOT / "cache" / "searches"
 METADATA_CACHE_DIR = ROOT / "cache" / "metadata"
 BRIEF_CACHE_DIR = ROOT / "cache" / "briefs"
+# Footage-fallback stills (Ken Burns). A representative frame extracted from a
+# candidate video (or its thumbnail) when no usable clip is found — shown with a
+# slow zoom instead of a blank gradient. Preserved across runs (not a wipe target).
+STILLS_DIR = ROOT / "cache" / "stills"
 
 for _d in (SPECS_DIR, OUTPUT_DIR, CACHE_DIR, TIMESTAMP_CACHE_DIR, LOGS_DIR,
-           SEARCH_CACHE_DIR, METADATA_CACHE_DIR, BRIEF_CACHE_DIR):
+           SEARCH_CACHE_DIR, METADATA_CACHE_DIR, BRIEF_CACHE_DIR, STILLS_DIR):
     _d.mkdir(parents=True, exist_ok=True)
 
 # ── Gemini ────────────────────────────────────────────────────────────────────
@@ -151,3 +155,35 @@ THINKING_BUDGET_REVIEWER = None    # uncapped — must be genuinely critical
 # ── Researcher optimization ──────────────────────────────────────────────────
 
 RESEARCHER_MAX_DOWNLOAD_CANDIDATES = 3  # download top-ranked candidates
+
+# Footage fallback ladder: when the first query misses, try this many ALTERNATE
+# query phrasings before falling back to a Ken Burns still (0 disables retries).
+RESEARCHER_ALT_QUERIES = 3
+
+# ── Single-clip event format ──────────────────────────────────────────────────
+# A spec with top-level "format": "single_clip" is carried entirely on ONE source
+# video — one continuous window played for the full runtime, with the text beats
+# overlaid as a timeline (see vidpipe/single_clip.py). Used for single-continuous-
+# moment stories (a race, a crash, a filmed dramatic moment) where assembling many
+# short clips would leave gaps the montage path fills with gradients. Explainer /
+# multi-event stories stay on "montage" (the default, untouched).
+SINGLE_CLIP_TARGET_MIN = 30.0   # seconds — never ship a single-clip video shorter
+SINGLE_CLIP_TARGET_MAX = 45.0   # seconds — window upper target
+# How much of a source upload to hand Gemini when hunting the best window. The
+# event in a real upload almost always sits near the start; keep this bounded so
+# the trimmed upload stays under RESEARCHER_UPLOAD_MAX_MB at low res.
+SINGLE_CLIP_PROBE_SECONDS = 180
+SINGLE_CLIP_PROBE_SCALE = 480       # px wide for the window-finding upload
+# Candidate sources to try (download + analyse) before giving up and falling back
+# to montage. Each is a full download, so keep it small.
+SINGLE_CLIP_MAX_CANDIDATES = 3
+# Vertical-crop policy. A focus-aware crop FILLS the 9:16 frame, anchored on the
+# subject (subject_x). But cropping a very wide source to vertical discards most of
+# the width and risks cutting the subject — above this discarded-width fraction we
+# fall back to the blurred-background FIT (whole frame visible, subject never lost).
+SINGLE_CLIP_CROP_MAX_DISCARD = 0.45
+# Where the KEY MOMENT should land in the runtime: the renderer slides the played
+# window so the source's key-moment timestamp falls at this fraction of the video,
+# putting the payoff under the payoff beats (instead of always playing from the
+# window start). Bounded by the relevant window, so a short-lead source can't slide.
+SINGLE_CLIP_KEY_FRACTION = 0.6

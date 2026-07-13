@@ -1,0 +1,48 @@
+{
+  "_about": "Frozen v1/pre-6b baseline for the 5-video montage 'watch' set (batch_phase_b.py briefs). Cheap regression instrument until Step 7's eval harness exists. Scores are 1-5 eyeball (5=ship, target 4). REGRESSION = a 6b montage video scoring below its baseline here.",
+  "_score_provenance": "PLACEHOLDER. The prior per-brief eyeball scores were NEVER recorded individually. The only prior record is the rev2 system doc's AGGREGATE judgement: the first 5-video validation batch scored '~2/5' overall (composition good, execution weak: gradients, off-voice clips, repetition). The older memory robustness file (2026-05-30) is a DIFFERENT brief set (Bolt/Boeing/Shaq/GameStop/Tiger) and is not comparable. ACTION REQUIRED: Jack to fill prior_score per row from memory of the first batch, or accept the aggregate 2 as the per-row baseline.",
+  "scale": "1-5 eyeball; 5=ship-ready, 4=target bar, 2=first-batch level",
+  "aggregate_prior_score": 2,
+  "videos": [
+    {
+      "brief_id": "black-hole-m87-reveal",
+      "scheme": "dark_blue",
+      "angle": "reveal",
+      "brief_snippet": "Event Horizon Telescope first image of a black hole (M87), 5PB flown on hard drives",
+      "prior_score": null,
+      "note": "TODO: fill from first-batch memory; aggregate baseline = 2"
+    },
+    {
+      "brief_id": "volkswagen-dieselgate-scandal",
+      "scheme": "dark_red",
+      "angle": "scandal",
+      "brief_snippet": "VW admitted 11M diesel cars cheated emissions tests, 40x NOx, >$30B, CEO resigned",
+      "prior_score": null,
+      "note": "TODO: fill from first-batch memory; aggregate baseline = 2"
+    },
+    {
+      "brief_id": "ftx-collapse-sbf",
+      "scheme": "dark_green",
+      "angle": "collapse",
+      "brief_snippet": "FTX collapsed in days; SBF used ~$8B customer deposits to prop up Alameda; convicted",
+      "prior_score": null,
+      "note": "TODO: fill from first-batch memory; aggregate baseline = 2"
+    },
+    {
+      "brief_id": "wow-signal-mystery",
+      "scheme": "dark_purple",
+      "angle": "mystery",
+      "brief_snippet": "1977 Ohio radio telescope, 72s narrowband signal from Sagittarius, 'Wow!', never explained",
+      "prior_score": null,
+      "note": "TODO: fill from first-batch memory; aggregate baseline = 2"
+    },
+    {
+      "brief_id": "apollo-11-fuel-margin",
+      "scheme": "dark_gold",
+      "angle": "achievement",
+      "brief_snippet": "Apollo 11 landed with <30s fuel after Armstrong steered past boulders; 650M watched",
+      "prior_score": null,
+      "note": "TODO: fill from first-batch memory; aggregate baseline = 2"
+    }
+  ]
+}

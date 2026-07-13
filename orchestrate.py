@@ -44,6 +44,31 @@ def _generate_timeline(spec: dict) -> str:
     """Build a human-readable timeline of the video spec."""
     screens = spec.get("screens", [])
     total = sum(s.get("duration", 0) for s in screens)
+
+    # single_clip rides one continuous source — show the window + per-beat overlay
+    # times rather than per-screen clip sources (there are none).
+    hero = spec.get("hero_clip")
+    if spec.get("format") == "single_clip" and isinstance(hero, dict) and hero.get("url"):
+        w = 72
+        vid = hero["url"].split("v=")[-1][:11]
+        lines = [
+            "=" * w,
+            f"  {spec.get('id', '?')}  |  {spec.get('scheme', '?')}  |  {total:.1f}s  |  SINGLE CLIP",
+            f"  source {vid}  window {hero.get('window_start', 0):.1f}-{hero.get('window_end', 0):.1f}s"
+            f"  key@{hero.get('key_moment_ts')}  subject_x={hero.get('subject_x')}",
+            "=" * w,
+            f"  {'#':>2}  {'IN':>5}  {'OUT':>5}  TEXT",
+            "-" * w,
+        ]
+        t = 0.0
+        for i, s in enumerate(screens):
+            d = s.get("duration", 0)
+            text = (s.get("text") or "")[:40]
+            lines.append(f"  {i+1:>2}  {t:>5.1f}  {t+d:>5.1f}  \"{text}\"")
+            t += d
+        lines.append("=" * w)
+        return "\n".join(lines)
+
     ambient_count = sum(1 for s in screens if s.get("clip_mode") == "ambient")
     clip_count = sum(1 for s in screens if s.get("clip") and isinstance(s["clip"], dict) and s["clip"].get("url"))
 
@@ -60,6 +85,7 @@ def _generate_timeline(spec: dict) -> str:
     for i, s in enumerate(screens):
         clip = s.get("clip")
         has_clip = bool(clip and isinstance(clip, dict) and clip.get("url"))
+        has_still = bool(s.get("still"))
         mode_str = s.get("clip_mode") or ""
 
         if has_clip:
@@ -69,6 +95,10 @@ def _generate_timeline(spec: dict) -> str:
             end = clip.get("end")
             ts = f"{vid_id}@{start:.1f}s" + ("–ambient" if end is None else f"–{end:.1f}s")
             mode_label = "AMBIENT" if mode_str == "ambient" else "CLIP"
+            warn = ""
+        elif has_still:
+            ts = "ken-burns-still"
+            mode_label = "STILL"
             warn = ""
         else:
             ts = ""
@@ -80,7 +110,7 @@ def _generate_timeline(spec: dict) -> str:
         display = f'"{text}"' + (f' / "{sub}"' if sub else "")
 
         lines.append(f"  {i+1:>2}  {s.get('duration', 0):>4.1f}  {mode_label:<16}  {ts:<28}  {display}{warn}")
-        prev_gradient = not has_clip
+        prev_gradient = not (has_clip or has_still)
 
     lines.append("=" * w)
     return "\n".join(lines)
@@ -159,6 +189,40 @@ def _validate_spec(spec: dict) -> list[str]:
     if total_dur > 0 and not 3 <= total_dur <= 120:
         errors.append(f"total duration {total_dur:.1f}s seems unreasonable")
     return errors
+
+
+def _hero_clip_description(spec: dict):
+    """The hero clip = the clip_description shared by the most screens (the spine).
+    Returns (description, [screen indices]) or None if the spec has no clips."""
+    from collections import Counter
+    screens = spec.get("screens", [])
+    descs = [s.get("clip_description") for s in screens if s.get("clip_description")]
+    if not descs:
+        return None
+    desc, _ = Counter(descs).most_common(1)[0]
+    indices = [i for i, s in enumerate(screens) if s.get("clip_description") == desc]
+    return desc, indices
+
+
+def _flag_missing_spine(spec: dict, record) -> None:
+    """Hero-clip composition (Step 6b): if the dominant clip_description carries the
+    spine (>=2 segments) but the researcher resolved NO footage for any of them, the
+    video has no visual spine. Make that loud in the run record — it must never pass
+    silently as a wall of gradients."""
+    hero = _hero_clip_description(spec)
+    if not hero:
+        return
+    desc, indices = hero
+    if len(indices) < 2:
+        return  # a single-clip beat is an ordinary fallback, not a missing spine
+    screens = spec.get("screens", [])
+    resolved = [i for i in indices
+                if isinstance(screens[i].get("clip"), dict) and screens[i]["clip"].get("url")]
+    if not resolved:
+        record.add_flag(
+            f"MISSING SPINE: hero clip {desc!r} (the spine for {len(indices)} segment(s) "
+            f"{indices}) found NO footage at research time — video has no visual spine"
+        )
 
 
 def _spec_review_loop(spec: dict, brief: str, max_retries: int = None):
@@ -544,6 +608,12 @@ def run(input_arg: str, *, preview=False, no_voice=False,
                 log.error("Stage 2 failed: %s (continuing)", e)
                 summary["stages"]["researcher"] = f"FAILED: {e}"
                 record.stage("research", "FAILED", error=str(e))
+
+        # Hero-clip composition (Step 6b): loudly flag a spine that found no footage.
+        # single_clip specs resolve their spine as a top-level hero_clip window (not
+        # per-screen clips), so this montage-only check would false-alarm — skip it.
+        if not skip_research and spec.get("format") != "single_clip":
+            _flag_missing_spine(spec, record)
 
         if _ceiling_abort("research"):
             return summary

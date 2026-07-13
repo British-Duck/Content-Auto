@@ -110,7 +110,10 @@ def check_video(video: Path, spec: dict, preview: bool = False) -> dict:
     # Duration
     screens = spec.get("screens", [])
     expected = sum(s.get("duration", 0) for s in screens)
-    xfade_reduction = max(0, len(screens) - 1) * config.CROSSFADE_DURATION
+    # single_clip renders one continuous source for the full runtime — no segment
+    # concat, so no crossfade compression. Montage overlaps each of the N-1 seams.
+    xfade = 0.0 if spec.get("format") == "single_clip" else config.CROSSFADE_DURATION
+    xfade_reduction = max(0, len(screens) - 1) * xfade
     expected_final = expected - xfade_reduction
     actual = float(probe.get("format", {}).get("duration", 0))
     diff = abs(actual - expected_final)
@@ -153,7 +156,7 @@ def check_video(video: Path, spec: dict, preview: bool = False) -> dict:
     spec_id = spec.get("id", "unknown")
     frames_dir = config.OUTPUT_DIR / f"{spec_id}_frames"
     frames_dir.mkdir(parents=True, exist_ok=True)
-    for i, ts in enumerate(_frame_timestamps(screens, config.CROSSFADE_DURATION, actual)):
+    for i, ts in enumerate(_frame_timestamps(screens, xfade, actual)):
         _extract_frame(video, ts, frames_dir / f"screen_{i:02d}.jpg")
 
     all_passed = all(c["passed"] for c in checks.values())

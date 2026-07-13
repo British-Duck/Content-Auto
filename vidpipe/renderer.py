@@ -94,6 +94,16 @@ def render_screen(
         if not success:
             log.warning("Clip failed for screen %d — falling back to gradient",
                         screen_index + 1)
+    elif screen.still:
+        # Footage fallback ladder (tier 3): a relevant still with a slow Ken Burns
+        # push, instead of a blank gradient.
+        success = _render_still_screen(
+            screen, overlay_path, output_path,
+            width, height, fps, crf, preset,
+        )
+        if not success:
+            log.warning("Still failed for screen %d — falling back to gradient",
+                        screen_index + 1)
 
     if not success:
         # Gradient fallback — the clip failed to render or none was found. Re-render
@@ -174,6 +184,53 @@ def _render_clip_screen(
 
     mode = "ambient" if screen.clip.ambient else f"{screen.clip.start:.1f}–{screen.clip.end:.1f}s"
     return _run_ffmpeg(args, f"clip @{mode}")
+
+
+def _render_still_screen(
+    screen: Screen,
+    overlay_path: Path,
+    output_path: Path,
+    width: int, height: int, fps: int, crf: int, preset: str,
+) -> bool:
+    """Footage fallback ladder tier 3: render a representative STILL with a slow
+    Ken Burns push (zoompan) and the same blurred-background fill used for clips,
+    so a footage-poor beat reads as composed footage rather than a blank gradient."""
+    still_path = Path(screen.still)
+    if not still_path.exists():
+        return False
+
+    frames = max(2, int(round(screen.duration * fps)))
+    zoom_max = 1.15
+    inc = (zoom_max - 1.0) / frames
+
+    # Single still frame (input 0) is composited onto its own blurred fill, then
+    # zoompan expands that one frame into `frames` frames with a gentle zoom-in.
+    # The text overlay (input 1, looped) is applied AFTER the zoom so it stays fixed.
+    filter_complex = (
+        f"[0:v]split=2[bg][fg];"
+        f"[bg]scale={width}:{height}:force_original_aspect_ratio=increase,"
+        f"crop={width}:{height},boxblur={_BG_BLUR}:1,"
+        f"eq=brightness={_BG_BRIGHTNESS}:saturation={_BG_SATURATION}[bgb];"
+        f"[fg]scale={width}:{height}:force_original_aspect_ratio=decrease,"
+        f"eq=brightness={_FG_BRIGHTNESS}:saturation={_FG_SATURATION}[fgs];"
+        f"[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1[fill];"
+        f"[fill]zoompan=z='min(zoom+{inc:.6f},{zoom_max})':d={frames}:"
+        f"x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s={width}x{height}:fps={fps}[kb];"
+        f"[kb][1:v]overlay=0:0[out]"
+    )
+
+    args = [
+        "-i", str(still_path),
+        "-framerate", str(fps), "-loop", "1", "-i", str(overlay_path),
+        "-filter_complex", filter_complex,
+        "-map", "[out]",
+        "-t", str(screen.duration),
+    ] + _ENCODE_FLAGS + [
+        "-preset", preset, "-crf", str(crf),
+        "-r", str(fps), "-g", str(fps),
+        str(output_path),
+    ]
+    return _run_ffmpeg(args, "ken burns still")
 
 
 def _render_gradient_screen(

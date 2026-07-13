@@ -21,6 +21,7 @@ log = logging.getLogger(__name__)
 
 # ── Contract constants ───────────────────────────────────────────────────────
 SCHEMES = {"dark_red", "dark_gold", "dark_blue", "dark_green", "dark_purple"}
+FORMATS = {"montage", "single_clip"}
 TRANSITIONS = {"cut", "crossfade", "zoom"}
 AUDIO_MODES = {"vo", "native"}
 CLIP_MODES = {None, "ambient"}
@@ -94,6 +95,20 @@ def validate_spec(spec: dict):
 
     if spec.get("scheme") not in SCHEMES:
         reject("scheme", spec.get("scheme"), f"must be one of {sorted(SCHEMES)}")
+
+    # format — optional; absent means "montage" (the default, untouched path that
+    # the rest of the pipeline assumes when the field is absent, so a clean montage
+    # spec is left completely untouched here). A "single_clip" spec must also name
+    # the ONE hero source at top level, so the researcher can find the continuous
+    # window (and so it stays a valid montage spec to fall back to).
+    fmt = spec.get("format")
+    if fmt is not None and fmt not in FORMATS:
+        reject("format", fmt, f"must be one of {sorted(FORMATS)}")
+    elif fmt == "single_clip":
+        hero = spec.get("clip_description")
+        if not (isinstance(hero, str) and hero.strip()):
+            reject("clip_description", hero,
+                   "single_clip needs a top-level clip_description naming the one hero source")
 
     # voice must NOT be present (narrator is fixed in config). Remove + log.
     if "voice" in spec:

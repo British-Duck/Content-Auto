@@ -133,6 +133,18 @@ def _fixup(spec: dict) -> dict:
     if spec.get("scheme") not in VALID_SCHEMES:
         spec["scheme"] = "dark_gold"
     # v2: the CD no longer emits a `voice` field; the narrator is fixed in config.
+
+    # Format normalisation. Default to montage; for single_clip clean the top-level
+    # hero query the same way as screen queries so research finds a real upload.
+    if spec.get("format") not in ("montage", "single_clip"):
+        spec["format"] = "montage"
+    if spec.get("format") == "single_clip":
+        top = spec.get("clip_description")
+        if isinstance(top, str) and top.strip():
+            spec["clip_description"] = _simplify_clip_description(top.strip())
+        if spec.get("key_moment") == "":
+            spec["key_moment"] = None
+
     screens = spec.get("screens", [])
     for s in screens:
         desc = s.get("clip_description")
