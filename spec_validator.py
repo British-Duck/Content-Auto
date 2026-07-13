@@ -27,6 +27,10 @@ AUDIO_MODES = {"vo", "native"}
 CLIP_MODES = {None, "ambient"}
 
 DURATION_MIN, DURATION_MAX = 1.0, 6.0
+# single_clip beats ride one continuous take, so long held beats are the point —
+# a 6s ceiling would chop them and drag the runtime under the 30s floor (seen in
+# the first Bolt draft). The floor stays shared.
+SINGLE_CLIP_DURATION_MAX = 15.0
 TEXT_SIZE_MIN, TEXT_SIZE_MAX = 76, 100
 SCREEN_MIN, SCREEN_MAX = 4, 12
 RUNTIME_MIN, RUNTIME_MAX = 30.0, 50.0
@@ -115,6 +119,9 @@ def validate_spec(spec: dict):
         old = spec.pop("voice")
         repair("voice", old, None, "forbidden in v2 (narrator fixed in config) — field removed")
 
+    # Format-aware duration ceiling (see SINGLE_CLIP_DURATION_MAX).
+    dur_max = SINGLE_CLIP_DURATION_MAX if fmt == "single_clip" else DURATION_MAX
+
     # ── Screens ──────────────────────────────────────────────────────────────
     screens = spec.get("screens")
     if not isinstance(screens, list):
@@ -143,14 +150,15 @@ def validate_spec(spec: dict):
                 s[field] = None
                 repair(f"screens[{i}].{field}", "", None, "empty string set to null")
 
-        # duration — clamp to range (repair); non-numeric is a hard reject
+        # duration — clamp to range (repair); non-numeric is a hard reject.
+        # The ceiling is format-aware: single_clip allows long held beats.
         dur = s.get("duration")
         if not _is_number(dur):
-            reject(f"screens[{i}].duration", dur, f"must be a number in {DURATION_MIN}-{DURATION_MAX}")
-        elif dur < DURATION_MIN or dur > DURATION_MAX:
-            new = float(min(max(dur, DURATION_MIN), DURATION_MAX))
+            reject(f"screens[{i}].duration", dur, f"must be a number in {DURATION_MIN}-{dur_max}")
+        elif dur < DURATION_MIN or dur > dur_max:
+            new = float(min(max(dur, DURATION_MIN), dur_max))
             s["duration"] = new
-            repair(f"screens[{i}].duration", dur, new, f"clamped to {DURATION_MIN}-{DURATION_MAX}")
+            repair(f"screens[{i}].duration", dur, new, f"clamped to {DURATION_MIN}-{dur_max}")
 
         # text_size — clamp to range + coerce int (repair); non-numeric is hard
         ts = s.get("text_size")

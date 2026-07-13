@@ -81,6 +81,35 @@ def test_bad_format_value_rejected():
     assert any("format" in v for v in e.value.violations)
 
 
+def test_single_clip_allows_long_held_beats():
+    # 7-13s beats are the single_clip pacing; they must NOT be clamped to 6s
+    # (the clamp dragged the first Bolt draft to 24.5s, under the 30s floor).
+    screens = [_screen(clip_desc="full race upload", dur=d) for d in (9.0, 13.0, 12.5)]
+    screens.append(_screen(clip_desc="full race upload", dur=6.5))
+    spec = _base_spec(format="single_clip", clip_description="full race upload",
+                      key_moment="the finish", screens=screens)
+    out, repairs = spec_validator.validate_spec(spec)
+    assert [s["duration"] for s in out["screens"]] == [9.0, 13.0, 12.5, 6.5]
+    assert not any("duration" in r for r in repairs)
+
+
+def test_single_clip_still_clamps_past_its_own_ceiling():
+    screens = [_screen(clip_desc="full race upload", dur=d) for d in (20.0, 8.0, 8.0, 8.0)]
+    spec = _base_spec(format="single_clip", clip_description="full race upload",
+                      key_moment="the finish", screens=screens)
+    out, repairs = spec_validator.validate_spec(spec)
+    assert out["screens"][0]["duration"] == spec_validator.SINGLE_CLIP_DURATION_MAX
+    assert any("duration" in r for r in repairs)
+
+
+def test_montage_duration_ceiling_unchanged():
+    spec = _base_spec()
+    spec["screens"][0]["duration"] = 9.0
+    out, repairs = spec_validator.validate_spec(spec)
+    assert out["screens"][0]["duration"] == spec_validator.DURATION_MAX
+    assert any("duration" in r for r in repairs)
+
+
 # ── Spec model (load_spec) ───────────────────────────────────────────────────
 
 def _write(tmp_path, spec):

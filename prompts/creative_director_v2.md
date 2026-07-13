@@ -164,7 +164,10 @@ For "single_clip" you MUST also set, at the TOP LEVEL:
     INSIDE the take, and the narration's payoff line is timed to land on it.
   And write the screens as the TEXT-BEAT TIMELINE over that one clip: each segment's
   duration is how long its text sits on screen; the durations in order ARE the clip's
-  timeline — beat 1 is the take's opening, the last beat is its climax/aftermath. Give
+  timeline — beat 1 is the take's opening, the last beat is its climax/aftermath.
+  single_clip beats may run LONG — up to 15.0s each — because the footage underneath
+  keeps moving; let a beat breathe as long as the take carries it (the 1.0–6.0s
+  ceiling applies to montage segments only). Give
   every spine segment the SAME "clip_description" as the top-level hero source (word for
   word) and its own "clip_moment" (a moment INSIDE the take) — so if the one continuous
   window can't be found, the video still degrades cleanly to a montage of that same
@@ -322,8 +325,9 @@ Technical constraints:
   scheme:           exactly one of the five listed values.
   voice:            fixed single narrator, set in pipeline config — do NOT choose a voice.
   screens:          4–12 segments; typically 5–9. Count follows the story (Rule 5).
-  duration:         1.0–6.0s. Most segments 2–5s; a flash beat can hit 1.0s; a held
-                    payoff up to 6.0s. Length follows emotional weight, never uniform.
+  duration:         montage: 1.0–6.0s. Most segments 2–5s; a flash beat can hit 1.0s;
+                    a held payoff up to 6.0s. single_clip: 1.0–15.0s — long held beats
+                    are the format. Length follows emotional weight, never uniform.
   transition:       the visual transition INTO this segment. "cut" for punch and pace,
                     "crossfade" for flow/continuity, "zoom" (Ken Burns) for emphasis.
                     First segment is always "cut".
