@@ -35,10 +35,9 @@ GEMINI_MODEL = "gemini-2.5-flash"
 #   To upgrade the creative-director "brain": set CREATIVE_MODEL.
 #   To run the Anthropic plan (Sonnet writes, Opus reviews), set:
 #     CREATIVE_MODEL = "claude-sonnet-4-6"
-#     REVIEWER_MODEL = "claude-opus-4-8"
+#     EDITORIAL_CRITIC_MODEL = "claude-opus-4-8"
 #   and add ANTHROPIC_API_KEY to .env. Falls back to GEMINI_MODEL if absent.
 CREATIVE_MODEL = "gemini-2.5-pro"      # creative director (storyboard + spec)
-REVIEWER_MODEL = "gemini-2.5-pro"      # legacy single content reviewer (retired in Step 5)
 EDITORIAL_CRITIC_MODEL = "gemini-2.5-pro"  # Stage 1.5 pre-render editorial critic
 OUTPUT_QA_MODEL = "gemini-2.5-pro"     # post-render Output-QA (must be vision-capable)
 GEMINI_TEMPERATURE = 1.0   # creative director benefits from higher temp
@@ -65,14 +64,10 @@ COST_CEILING_USD = 0.75
 PROD_WIDTH = 1080
 PROD_HEIGHT = 1920
 PROD_FPS = 30
-PROD_CRF = 18
-PROD_PRESET = "medium"
 
 PREVIEW_WIDTH = 540
 PREVIEW_HEIGHT = 960
 PREVIEW_FPS = 24
-PREVIEW_CRF = 28
-PREVIEW_PRESET = "ultrafast"
 
 CROSSFADE_DURATION = 0.3   # seconds; 0 = hard cuts
 
@@ -109,7 +104,6 @@ VOICES = {
     "energetic":     "en-US-ChristopherNeural",
     "calm":          "en-GB-SoniaNeural",
 }
-DEFAULT_VOICE = VOICES["authoritative"]
 
 # Single FIXED narrator for the whole channel (the News Dispatch register is the
 # brand). In v2 the Creative Director no longer chooses a voice — the TTS stage
@@ -140,7 +134,6 @@ SPEC_REVIEW_MAX_RETRIES = 2          # hard cap: at most 2 regenerations (3 CD c
 # ── Quality gate ──────────────────────────────────────────────────────────────
 
 QUALITY_DURATION_TOLERANCE = 0.5   # seconds
-QUALITY_SSIM_FLOOR = 0.85
 
 # ── Thinking budgets (0 = disabled, saves thinking-token cost) ───────────────
 

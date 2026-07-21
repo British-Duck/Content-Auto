@@ -67,7 +67,7 @@ OUT = config.ROOT / "logs" / "pro_retest_results.json"
 
 def main():
     log.info("Creative model = %s | Reviewer model = %s",
-             config.CREATIVE_MODEL, config.REVIEWER_MODEL)
+             config.CREATIVE_MODEL, config.EDITORIAL_CRITIC_MODEL)
     results = {}
     for key, brief in BRIEFS:
         log.info("\n%s\n# PRO REGEN: %s\n%s", "#" * 70, key, "#" * 70)

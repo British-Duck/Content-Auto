@@ -1,6 +1,6 @@
 """Provider router. Dispatches a generate() call to Gemini or Claude based on
 the model id prefix, so each pipeline stage can pick its own model via config
-(CREATIVE_MODEL, REVIEWER_MODEL) with no code changes.
+(CREATIVE_MODEL, EDITORIAL_CRITIC_MODEL) with no code changes.
 
   "gemini-*"  -> gemini.generate   (also the researcher's video analysis)
   "claude-*"  -> claude.generate   (creative director / reviewer, optional)
