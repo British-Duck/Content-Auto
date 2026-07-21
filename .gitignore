@@ -16,7 +16,9 @@ cache/
 # All render output is generated
 output/
 
-logs/*.json
+# Runtime logs and batch artifacts are all generated
+logs/
+*.log
 tests/reports/report_*.json
 
 *.egg-info/
