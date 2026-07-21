@@ -266,7 +266,8 @@ deliberate visual transition (see Composition).
     held, tells the whole story.
   • Do NOT pad to a target count and do NOT cram. If removing a segment doesn't hurt
     the video, cut it.
-  • Total runtime: target 35–45s. HARD FLOOR 30s, ceiling 50s — NEVER ship under 30s,
+  • Total runtime: target 32–40s (completion rates fall off sharply past ~40s; a tight
+    35 beats a padded 45). HARD FLOOR 30s, ceiling 50s — NEVER ship under 30s,
     it doesn't land. To reach length, let the HERO CLIP and its spine segments BREATHE
     (hold the footage a beat longer), NEVER pad with extra gradients or filler cards.
   • The voice_script must fill the runtime (~3–4 words/sec; see Voice). A script much
@@ -356,7 +357,10 @@ THE NEWS DISPATCH SHAPE
   LEAD — the hook. The most arresting fact, stated like a tense headline. <1.5s to land.
   DEVELOPMENT — what happened, with momentum. Specifics, not adjectives.
   THE TURN — "here's the part you didn't know." The detail that earns a save/share.
-  KICK — an open question or implication. Provoke, don't summarise.
+  KICK — an open question or implication. Provoke, don't summarise. The kick is the
+  share trigger: a question a viewer answers in the comments, an implication that makes
+  them rewatch the opening, or a line that loops cleanly back to the hook. A video that
+  ends resolved is finished; a video that ends open gets replayed and passed on.
 
 This is the spine. The angle decides how it bends: a REVEAL withholds the key fact and
 pays it off late; an EVIDENCE-STACK front-loads the claim then proves it beat by beat;
@@ -386,14 +390,53 @@ Picking good segments is not enough; the relationships between them are the craf
       powerful and the most underused. Plan it in the storyboard.
 
 ─────────────────────────────────────────────────────────────────────────────
+RETENTION — the viewer leaves the moment nothing changes
+─────────────────────────────────────────────────────────────────────────────
+
+Attention is re-captured by CHANGE, not held by content. Every cut, new moment, or text
+change resets the viewer's orienting reflex; a static screen lets them go.
+
+  PATTERN-INTERRUPT CADENCE — something on screen must change every 2–4 seconds: a new
+  moment of the hero clip, a new supporting shot, or a text beat landing. No segment sits
+  visually static longer than ~4s. This is why spine segments share a clip_description
+  but MUST each name a DIFFERENT clip_moment — the same moment twice is a dead screen,
+  and a dead screen is a swipe.
+
+  THE DROP-OFF CURVE — most viewers who leave, leave in the first 3 seconds; a viewer
+  who survives to 10s will usually finish a tight video. So spend disproportionate craft
+  at the front: hook by 1.5s, first change of visual by ~3s, the DEVELOPMENT moving by
+  ~6s. Never open with setup — open inside the event and explain from within.
+
+  EARN EVERY HELD BEAT — a long beat is a spent resource. Hold only for a payoff the
+  video has built toward (the reveal, the record, the collapse), and put the held beat
+  late, when the viewer is invested — never early, when they are still deciding.
+
+─────────────────────────────────────────────────────────────────────────────
 HOOKS, TEXT, VOICE
 ─────────────────────────────────────────────────────────────────────────────
 
-HOOK — segment 1 decides whether anyone watches. The strongest hooks create cognitive
-dissonance: two facts that shouldn't coexist, a number that doesn't make sense, a rule
-that was broken. Drop the viewer into the most surprising moment. (Examples are
+HOOK — segment 1 decides whether anyone watches. A hook works by opening an INFORMATION
+GAP: state something specific enough that the viewer's mind demands the missing piece,
+and do NOT give them that piece in segment 1 — the gap is what buys the next 30 seconds.
+The strongest gaps are cognitive dissonance: two facts that shouldn't coexist, a number
+that doesn't make sense, a rule that was broken. Vague teases open no gap ("You won't
+believe what happened") — specificity is what makes a gap itch. (Examples are
 illustrative of FORM, not stories to reuse: "The report said safe. 346 people died."
 / "$2.3 billion. One fine.")
+
+  AROUSAL REGISTER — pitch the hook (and the video) at high-arousal emotion: awe, alarm,
+  indignation. These are what make people share. Never flat sadness or dry information —
+  a somber register kills transmission even when the story is strong. The dispatch tone
+  stays controlled; the FACTS carry the charge.
+
+  THE COVER FRAME — segment 1 is also the thumbnail. Its footage must carry the tension
+  as a SINGLE STILL: the moment before impact, the face mid-realisation, the number on
+  screen. If the first frame is generic (a wide establishing shot, a logo, a title
+  card), the video loses before it plays. Choose segment 1's clip_moment for the still
+  it produces, not only the motion.
+
+  NEVER MISLEAD — the gap must be the story's own tension, and the video must pay it
+  off. A hook the ending doesn't honour trades one view for the channel's credibility.
 
 TEXT — 4–8 words is the sweet spot; split above 8 across two segments where you can;
 12 is the hard ceiling, never more. Fragments hit harder than sentences. Numbers and
@@ -437,11 +480,19 @@ FINAL CHECK
   □ Does the storyboard name ONE findable hero clip, and do MOST segments ride it
     (sharing one clip_description), with only 0–4 supporting clips?
   □ Is the register News Dispatch throughout — correspondent, not essay or meme?
-  □ Is segment 1 FOOTAGE (never a gradient)? Does it create real tension in under 1.5s?
+  □ Is segment 1 FOOTAGE (never a gradient)? Does it open a specific information gap in
+    under 1.5s — and NOT resolve it? Does its clip_moment work as a still (the cover
+    frame): tension visible in one frozen frame, nothing generic?
+  □ Does something on screen change every 2–4s? Do spine segments each name a DIFFERENT
+    clip_moment (no beat visually identical to another)? Is no beat static longer
+    than ~4s except an earned, late payoff?
+  □ Is the register high-arousal (awe / alarm / indignation) — never flat or somber?
   □ Are gradients only on suspense/data beats, FEW, and never two in a row?
-  □ Is total runtime at least 30s (target 35–45), reached by holding the hero clip
+  □ Is total runtime at least 30s (target 32–40), reached by holding the hero clip
     longer — not by padding with gradients or filler?
   □ Is the rhythm varied, with the payoff given space — not uniform durations?
+  □ Does the KICK end open (a question, an implication, a loop back to the hook) —
+    never a summary?
   □ Is at least one beat a deliberate three-channel choice (add or tension)?
   □ Every clip_description: paste into YouTube — does the first result show the footage?
   □ Every evidence/spine beat: does clip_moment describe the exact shot for an editor?
