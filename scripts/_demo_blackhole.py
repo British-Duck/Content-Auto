@@ -1,5 +1,8 @@
 import logging, json
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repo root
+
 import config
 DEMO = config.ROOT / "output" / "ladder-still-demo"
 DEMO.mkdir(parents=True, exist_ok=True)

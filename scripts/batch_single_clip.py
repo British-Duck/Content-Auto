@@ -6,12 +6,15 @@ disaster — exactly the shape single_clip is for. Each is a real event with ver
 findable continuous footage. The CD chooses the format; this batch confirms the
 single_clip path end-to-end and leaves the videos in one folder to watch.
 
-Run:  python batch_single_clip.py
+Run:  python scripts/batch_single_clip.py
 """
 import json
 import logging
 import time
 from pathlib import Path
+
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repo root
 
 import config
 

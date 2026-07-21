@@ -3,12 +3,15 @@ Focused re-run for the single-take CD refinement: regenerate ONLY Baumgartner an
 Hindenburg (Bolt already PASSes and is kept). Same briefs as batch_single_clip.py,
 into the same folder so all three sit together to re-score.
 
-Run:  python batch_single_clip_refine.py
+Run:  python scripts/batch_single_clip_refine.py
 """
 import json
 import logging
 import time
 from pathlib import Path
+
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repo root
 
 import config
 

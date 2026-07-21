@@ -6,12 +6,15 @@ Redirects OUTPUT_DIR + SPECS_DIR to the batch folder BEFORE importing the
 orchestrator, so each video's spec / storyboard / timeline / mp4 / frames all land
 together. Run records still go to logs/ (standard). Writes BATCH_SUMMARY.json.
 
-Run:  python batch_phase_b.py
+Run:  python scripts/batch_phase_b.py
 """
 import json
 import logging
 import time
 from pathlib import Path
+
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repo root
 
 import config
 
