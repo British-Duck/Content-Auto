@@ -78,7 +78,8 @@ python orchestrate.py "Brief..." --force-regen                    # ignore brief
 ```
 
 `.env` holds `GEMINI_API_KEY` (no `ANTHROPIC_API_KEY` yet → Claude models fall back to
-Gemini). Further detail: `PROJECT_HANDOFF.md`/`docs/HANDOFF.md`, `docs/pipeline_map.txt`.
+Gemini). Further detail: `docs/HANDOFF.md` (orientation) and `docs/MIGRATION_PLAN.md`
+(system model + roadmap).
 
 ## Current state (2026-07-14)
 
@@ -104,6 +105,6 @@ Offline-faithful tests (the migration gate — legacy `test_stress.py` /
 `test_single_clip.py`, `test_editorial_metrics.py` — 66 passing.
 
 **Next:** (1) lift the Gemini spend cap (https://ai.studio/spend) and re-run
-`batch_phase_b.py` — the montage-set validation from `eval/6b_validation.md` is still
+`scripts/batch_phase_b.py` — the montage-set validation from `eval/6b_validation.md` is still
 open; re-watch the single-clip set with the now-honest QA. (2) Fill the CD prompt's
 empty EXEMPLARS slot (3–4 hand-authored specs). (3) Phase C Step 7: eval harness.

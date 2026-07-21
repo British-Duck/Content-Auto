@@ -42,7 +42,7 @@ weak path. **Regression check: flag any that look worse than baseline.**
 **⚠ BLOCKED — current-code re-run did not complete.** The Gemini project hit its
 **monthly spending cap** (`429 RESOURCE_EXHAUSTED`) at 01:18 on 2026-06-12, during montage
 video 1's research. Single-clip batch had already finished; montage videos 2–5 never ran.
-**Re-run pending: lift the cap at https://ai.studio/spend, then re-run `batch_phase_b.py`.**
+**Re-run pending: lift the cap at https://ai.studio/spend, then re-run `scripts/batch_phase_b.py`.**
 
 Interim fallback if you want to eyeball something now: the **06-08 montage outputs** in this
 folder are complete but on *slightly older code* (pre the 06-08/09 `researcher.py` alt-query

@@ -116,7 +116,8 @@ run_record.py          per-run JSON record + real-token cost meter
 llm.py / gemini.py / claude.py   provider router + clients
 prompts/               versioned stage system prompts
 tests/                 pytest suite + standalone quality validator
-docs/                  migration plan, system map, handoff notes
+scripts/               one-off batch drivers (historical, kept runnable)
+docs/                  handoff notes + system model / migration plan
 ```
 
 ## Design notes
