@@ -37,9 +37,13 @@ GEMINI_MODEL = "gemini-2.5-flash"
 #     CREATIVE_MODEL = "claude-sonnet-4-6"
 #     EDITORIAL_CRITIC_MODEL = "claude-opus-4-8"
 #   and add ANTHROPIC_API_KEY to .env. Falls back to GEMINI_MODEL if absent.
-CREATIVE_MODEL = "gemini-2.5-pro"      # creative director (storyboard + spec)
-EDITORIAL_CRITIC_MODEL = "gemini-2.5-pro"  # Stage 1.5 pre-render editorial critic
-OUTPUT_QA_MODEL = "gemini-2.5-pro"     # post-render Output-QA (must be vision-capable)
+# Gemini 3 Flash: a generation newer than 2.5 Pro at ~3x lower cost ($0.50/$3 vs
+# $1.25/$10 per 1M) — chosen 2026-07-22 to stretch a small credit balance across many
+# validation runs. Step-up path when budget allows: "gemini-3.6-flash" ($1.50/$7.50,
+# strongest flash tier) or a claude-* id via the dormant router.
+CREATIVE_MODEL = "gemini-3-flash-preview"      # creative director (storyboard + spec)
+EDITORIAL_CRITIC_MODEL = "gemini-3-flash-preview"  # Stage 1.5 pre-render editorial critic
+OUTPUT_QA_MODEL = "gemini-3-flash-preview"     # post-render Output-QA (must be vision-capable)
 GEMINI_TEMPERATURE = 1.0   # creative director benefits from higher temp
 GEMINI_RPM_SLEEP = 2.5     # seconds to sleep between API calls (free tier)
 
@@ -50,6 +54,10 @@ GEMINI_RPM_SLEEP = 2.5     # seconds to sleep between API calls (free tier)
 GEMINI_PRICING = {
     "gemini-2.5-flash": {"input": 0.15, "output": 0.60, "thinking": 3.50},
     "gemini-2.5-pro":   {"input": 1.25, "output": 10.00, "thinking": 10.00},
+    # Gemini 3 generation (thinking billed at the output rate).
+    "gemini-3-flash-preview": {"input": 0.50, "output": 3.00, "thinking": 3.00},
+    "gemini-3.6-flash":       {"input": 1.50, "output": 7.50, "thinking": 7.50},
+    "gemini-3.1-pro-preview": {"input": 2.00, "output": 12.00, "thinking": 12.00},
 }
 # Fallback when a model id is not in the table (logged once when used).
 GEMINI_PRICING_DEFAULT = {"input": 0.15, "output": 0.60, "thinking": 3.50}
