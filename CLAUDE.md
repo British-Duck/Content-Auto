@@ -81,7 +81,7 @@ python orchestrate.py "Brief..." --force-regen                    # ignore brief
 Gemini). Further detail: `docs/HANDOFF.md` (orientation) and `docs/MIGRATION_PLAN.md`
 (system model + roadmap).
 
-## Current state (2026-07-14)
+## Current state (2026-07-21)
 
 **Phase B complete (Steps 4 + 5 + 6a/6b) plus trust fixes.** The pipeline runs end
 to end. Stage 1 uses `creative_director_v2.md` (hero-clip spine rules + `single_clip`
@@ -103,6 +103,12 @@ Offline-faithful tests (the migration gate — legacy `test_stress.py` /
 `test_spec_validator.py`, `test_run_record.py`, `test_regen_cap.py`,
 `test_step5_reviewers.py`, `test_fallback_ladder.py`, `test_hero_spine.py`,
 `test_single_clip.py`, `test_editorial_metrics.py` — 66 passing.
+
+Repo cleanup (2026-07-21): one-off batch drivers moved to `scripts/` (path-shimmed);
+dead config constants removed (incl. retired `REVIEWER_MODEL`); `logs/` untracked and
+gitignored; docs consolidated — `docs/MIGRATION_PLAN.md` is the single system-model +
+roadmap doc, `docs/HANDOFF.md` the rewritten orientation doc; superseded `output/`
+batches pruned (kept the 2026-06-08 phase-b and single-clip watch sets).
 
 **Next:** (1) lift the Gemini spend cap (https://ai.studio/spend) and re-run
 `scripts/batch_phase_b.py` — the montage-set validation from `eval/6b_validation.md` is still
