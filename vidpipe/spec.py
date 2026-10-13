@@ -33,6 +33,24 @@ class Screen:
     subtitle: Optional[str] = None
     clip: Optional[Clip] = None
     clip_description: Optional[str] = None  # used by researcher agent to find footage
+    still: Optional[str] = None  # Ken Burns fallback: path to a representative still image
+
+
+@dataclass
+class HeroClip:
+    """A single source carrying a whole single_clip video: one continuous window
+    plus the key-moment timestamp the payoff lands on. Resolved by the researcher
+    and written onto the spec before render."""
+    url: str
+    window_start: float
+    window_end: float
+    key_moment_ts: Optional[float] = None
+    subject_x: float = 0.5            # 0..1 horizontal focus for the vertical crop
+    source_duration: Optional[float] = None
+
+    @property
+    def window_length(self) -> float:
+        return max(0.0, self.window_end - self.window_start)
 
 
 @dataclass
@@ -44,6 +62,8 @@ class VideoSpec:
     voice: Optional[str] = None
     voice_script: Optional[str] = None
     layout: Optional[str] = None  # "B" | "C"; None = use config.LAYOUT_STYLE
+    format: str = "montage"       # "montage" (default) | "single_clip"
+    hero_clip: Optional[HeroClip] = None  # set only for a resolved single_clip spec
 
 
 def load_spec(path: Path) -> VideoSpec:
@@ -80,6 +100,11 @@ def load_spec(path: Path) -> VideoSpec:
                     log.warning("Screen %d clip has non-positive duration — skipping", i)
                     clip = None
 
+        still = s.get("still")
+        if still and not Path(still).exists():
+            log.warning("Screen %d still image not found (%s) — ignoring", i, still)
+            still = None
+
         screens.append(Screen(
             text=s["text"],
             duration=float(s["duration"]),
@@ -88,7 +113,33 @@ def load_spec(path: Path) -> VideoSpec:
             subtitle=s.get("subtitle"),
             clip=clip,
             clip_description=s.get("clip_description"),
+            still=still,
         ))
+
+    # Single-clip event format (additive — montage specs omit these and are
+    # unaffected). A single_clip spec only takes the dedicated render path once the
+    # researcher has resolved a hero_clip window; otherwise it renders as montage.
+    fmt = data.get("format") or "montage"
+    hero_clip = None
+    hc = data.get("hero_clip")
+    if fmt == "single_clip" and isinstance(hc, dict) and hc.get("url"):
+        try:
+            hero_clip = HeroClip(
+                url=hc["url"],
+                window_start=float(hc["window_start"]),
+                window_end=float(hc["window_end"]),
+                key_moment_ts=(float(hc["key_moment_ts"])
+                               if hc.get("key_moment_ts") is not None else None),
+                subject_x=float(hc.get("subject_x", 0.5)),
+                source_duration=(float(hc["source_duration"])
+                                 if hc.get("source_duration") is not None else None),
+            )
+            if hero_clip.window_length <= 0:
+                log.warning("hero_clip window non-positive — ignoring, will render as montage")
+                hero_clip = None
+        except (KeyError, TypeError, ValueError) as e:
+            log.warning("hero_clip malformed (%s) — ignoring, will render as montage", e)
+            hero_clip = None
 
     spec = VideoSpec(
         id=data["id"],
@@ -98,6 +149,8 @@ def load_spec(path: Path) -> VideoSpec:
         voice=data.get("voice"),
         voice_script=data.get("voice_script"),
         layout=data.get("layout"),
+        format=fmt,
+        hero_clip=hero_clip,
     )
 
     total_dur = sum(sc.duration for sc in spec.screens)

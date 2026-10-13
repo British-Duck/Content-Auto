@@ -8,9 +8,9 @@ before doing any work — execute it **one scoped step at a time**, never ahead.
 
 Entry point: `orchestrate.py` → `run()`. Five stages:
 
-1. **Creative Director** (`creative_director.py`) — brief → spec JSON. Two Gemini calls
-   (generate → self-critique), then `_fixup` + `_force_scheme`. Caches specs by brief
-   hash in `cache/briefs/`.
+1. **Creative Director** (`creative_director.py`) — brief → spec JSON. Single-pass
+   generation (the v1 self-critique call is retired), then `_fixup` + `_force_scheme`.
+   Caches specs by brief hash in `cache/briefs/`.
 2. **Researcher** (`researcher.py`) — fills `clip` for each screen with a YouTube clip.
    yt-dlp search → metadata-first timestamps → Gemini video analysis fallback.
    **Must stay Gemini** (native video analysis). Heavily cached.
@@ -19,19 +19,26 @@ Entry point: `orchestrate.py` → `run()`. Five stages:
    `voiceover.py` adds VO; `clips.py`/`schemes.py` support.
 4. **Quality Gate** (`quality_gate.py`) — ffprobe technicals + extracts one midpoint
    frame per screen to `output/<id>_frames/`.
-5. **Content Reviewer** (`content_reviewer.py`) — Gemini scores the spec JSON, returns
-   PUBLISH/REVISE/REJECT.
+5. **Output-QA** (`output_qa.py`) — post-render vision QA. Feeds the spec + the ffprobe
+   report + the per-segment frames to a vision-capable Gemini call and returns PASS/FAIL.
+   A FAIL surfaces `blocking_issues` and sets the non-publish exit code; flag-and-stop,
+   never re-renders. (Replaced the old `content_reviewer.py` in Step 5.)
 
-**Stage 1.5** (`orchestrate._spec_review_loop`) sits between CD and Researcher: reviews
-the spec pre-render and, **only on a factual_accuracy error**, passes feedback back to
-the CD for at most `SPEC_REVIEW_MAX_RETRIES` (1) revision. (Migration Step 3 caps this
-at two; Step 5 broadens the trigger to editorial REVISE.)
+**Stage 1.5** (`orchestrate._spec_review_loop`) sits between CD and Researcher: the
+**Editorial Critic** (`editorial_critic.py`, prompt `editorial_critic.md`) judges the
+spec's plan pre-render and, **on decision == REVISE**, passes its fixes back to the CD for
+at most `SPEC_REVIEW_MAX_RETRIES` (2) regenerations. A REJECT (or a still-REVISE spec after
+the cap) is flagged for a human and NOT rendered. Facts are never a reject — they flow to
+`facts_to_check` (logged for a human). (Step 5 broadened the trigger from the old
+factual_accuracy hard-reject, which was removed.)
 
 ### Key files
 - `config.py` — all tuneables: per-stage models, dirs, render constants, thinking
   budgets, music, `LAYOUT_STYLE`. Models routed by `llm.py` (`gemini-*`→`gemini.py`,
   `claude-*`→`claude.py`, dormant; falls back to Gemini if key/SDK absent).
 - `cost_tracker.py` — per-run cost meter. `gemini.py` — Gemini client + `parse_json`.
+- `docs/COST_TUNING.md` — cost levers, cache layout, rate limits. `specs/` is generated
+  per run and gitignored (like `output/`, `logs/`, `cache/`).
 - Prompts in `prompts/`. **Stage prompts are loaded at import time** — a missing prompt
   file crashes the stage module on import (see "Current state").
 
@@ -73,13 +80,39 @@ python orchestrate.py "Brief..." --force-regen                    # ignore brief
 ```
 
 `.env` holds `GEMINI_API_KEY` (no `ANTHROPIC_API_KEY` yet → Claude models fall back to
-Gemini). Further detail: `PROJECT_HANDOFF.md`/`docs/HANDOFF.md`, `docs/pipeline_map.txt`.
+Gemini). Further detail: `docs/HANDOFF.md` (orientation) and `docs/MIGRATION_PLAN.md`
+(system model + roadmap).
 
-## Current state (2026-06-04)
+## Current state (2026-07-21)
 
-⚠️ **The pipeline does not run as-is.** The old prompt files `prompts/creative_director.txt`
-and `prompts/content_reviewer.txt` have been removed, but `creative_director.py:21` and
-`content_reviewer.py:19` still load them at import time — so even `--dry-run` crashes with
-`FileNotFoundError`. Only the three v2 `.md` prompts remain. This is expected mid-migration
-and is resolved by Step 4 (point Stage 1 at `creative_director_v2.md`) + Step 5 (wire the
-new reviewer prompts). Until then, runs are blocked.
+**Phase B complete (Steps 4 + 5 + 6a/6b) plus trust fixes.** The pipeline runs end
+to end. Stage 1 uses `creative_director_v2.md` (hero-clip spine rules + `single_clip`
+format, Rule 2.5); Stage 1.5 is the Editorial Critic (trigger = REVISE, 2-pass cap,
+facts → `facts_to_check`, fed deterministic COMPUTED METRICS — script-fit numbers,
+spine counts, near-duplicate clip_descriptions — via `editorial_critic.compute_metrics`);
+the researcher has a footage fallback ladder (alt queries → Ken Burns still → gradient,
+audited per beat in the run record's `footage_ladder`) and resolves `single_clip`
+hero windows; the post-render stage is Output-QA (`output_qa.py`, vision, format-aware:
+single_clip verdicts judge continuity/on-story, not per-segment clip matches).
+
+Recent trust fixes (2026-07-14): format-aware duration ceiling (single_clip beats to
+15s); single_clip truncation guard (`fit_start_to_source`, refuses uncoverable
+sources); `vidpipe/clips.py` shares the researcher's cache dir + YouTube-ID key and
+deletes/validates partial downloads.
+
+Offline-faithful tests (the migration gate — legacy `test_stress.py` /
+`test_output_quality.py` render suites have pre-existing failures, not the gate):
+`test_spec_validator.py`, `test_run_record.py`, `test_regen_cap.py`,
+`test_step5_reviewers.py`, `test_fallback_ladder.py`, `test_hero_spine.py`,
+`test_single_clip.py`, `test_editorial_metrics.py` — 66 passing.
+
+Repo cleanup (2026-07-21): one-off batch drivers moved to `scripts/` (path-shimmed);
+dead config constants removed (incl. retired `REVIEWER_MODEL`); `logs/` untracked and
+gitignored; docs consolidated — `docs/MIGRATION_PLAN.md` is the single system-model +
+roadmap doc, `docs/HANDOFF.md` the rewritten orientation doc; superseded `output/`
+batches pruned (kept the 2026-06-08 phase-b and single-clip watch sets).
+
+**Next:** (1) lift the Gemini spend cap (https://ai.studio/spend) and re-run
+`scripts/batch_phase_b.py` — the montage-set validation from `eval/6b_validation.md` is still
+open; re-watch the single-clip set with the now-honest QA. (2) Fill the CD prompt's
+empty EXEMPLARS slot (3–4 hand-authored specs). (3) Phase C Step 7: eval harness.

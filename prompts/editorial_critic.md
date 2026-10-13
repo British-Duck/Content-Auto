@@ -41,6 +41,44 @@ JUDGE ONLY THESE (everything here is visible in the spec)
    segment whose reason is empty, generic, or unconvincing is a segment that shouldn't
    exist. Flag it.
 
+7. SCRIPT FIT & MIN LENGTH — Does the voice_script fit the runtime, and is the runtime
+   long enough? The pipeline MEASURES these for you and appends them as COMPUTED
+   METRICS (runtime_s, voice_script_words, estimated_read_s, read_overrun_pct) — use
+   those numbers as given; never estimate or recompute them yourself.
+   - If the script materially OVERRUNS the runtime (more than ~15%, i.e. the narration
+     would be cut off mid-sentence by the render), that is a REVISE.
+   - If the total runtime is UNDER 30s, that is a REVISE regardless — short-form needs
+     30–50s (target 35–45s) to land.
+   In the fix, name the spoken estimate and the runtime, and prefer LENGTHENING — hold the
+   hero clip / spine beats longer and extend the script to match — rather than trimming the
+   script below the 30s floor. (A script comfortably shorter than a 30s+ runtime is fine.)
+
+8. SINGLE-TAKE COVERAGE — single_clip only (skip if format is absent or "montage").
+   A single_clip video plays ONE continuous take with no cuts, so every beat — hook
+   through payoff — must describe something visible inside that ONE take. Read the beats
+   and the voice_script: does any beat narrate a moment that would NOT be in one
+   continuous shot of this event? The classic failures:
+     - the clip is the FREEFALL but a beat says "safely on the ground" (the landing is a
+       separate shot);
+     - the clip is the FIRE but a beat describes "the majestic approach" (calm footage
+       from before the fire);
+     - the clip is the FINISH but a beat describes the medal ceremony.
+   If any beat reaches outside the single take, that is a REVISE: the fix is to NARROW
+   the framing so every beat (hook and payoff) sits inside one continuous take — open on
+   the take's start, end on its climax — or to switch the story to "montage". The
+   top-level key_moment must also be a moment INSIDE the take.
+
+9. SPINE INTEGRITY — The hero-clip spine only works when the spine segments share ONE
+   clip_description, WORD FOR WORD (the researcher groups segments by exact string
+   match). COMPUTED METRICS gives you clip_description_counts and
+   near_duplicate_clip_descriptions:
+   - If near_duplicate_clip_descriptions is non-empty, descriptions differing only in
+     case/punctuation have silently broken the spine — REVISE, fix: make them
+     word-for-word identical.
+   - If the storyboard names a hero clip but no clip_description carries 2 or more
+     segments, the plan has no spine — REVISE unless the storyboard justifies a
+     genuine multi-event montage.
+
 ═══════════════════════════════════════════════════════════════════════════════
 DECISION
 ═══════════════════════════════════════════════════════════════════════════════

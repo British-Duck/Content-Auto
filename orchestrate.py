@@ -1,6 +1,7 @@
 """
 Orchestrator — wires the full pipeline:
-  Creative Director → Researcher → Render → Quality Gate → Content Reviewer.
+  Creative Director → Editorial Critic (Stage 1.5) → Researcher → Render
+  → Quality Gate → Output-QA.
 
   python orchestrate.py "brief text"         # from scratch
   python orchestrate.py spec.json            # from existing spec
@@ -43,6 +44,31 @@ def _generate_timeline(spec: dict) -> str:
     """Build a human-readable timeline of the video spec."""
     screens = spec.get("screens", [])
     total = sum(s.get("duration", 0) for s in screens)
+
+    # single_clip rides one continuous source — show the window + per-beat overlay
+    # times rather than per-screen clip sources (there are none).
+    hero = spec.get("hero_clip")
+    if spec.get("format") == "single_clip" and isinstance(hero, dict) and hero.get("url"):
+        w = 72
+        vid = hero["url"].split("v=")[-1][:11]
+        lines = [
+            "=" * w,
+            f"  {spec.get('id', '?')}  |  {spec.get('scheme', '?')}  |  {total:.1f}s  |  SINGLE CLIP",
+            f"  source {vid}  window {hero.get('window_start', 0):.1f}-{hero.get('window_end', 0):.1f}s"
+            f"  key@{hero.get('key_moment_ts')}  subject_x={hero.get('subject_x')}",
+            "=" * w,
+            f"  {'#':>2}  {'IN':>5}  {'OUT':>5}  TEXT",
+            "-" * w,
+        ]
+        t = 0.0
+        for i, s in enumerate(screens):
+            d = s.get("duration", 0)
+            text = (s.get("text") or "")[:40]
+            lines.append(f"  {i+1:>2}  {t:>5.1f}  {t+d:>5.1f}  \"{text}\"")
+            t += d
+        lines.append("=" * w)
+        return "\n".join(lines)
+
     ambient_count = sum(1 for s in screens if s.get("clip_mode") == "ambient")
     clip_count = sum(1 for s in screens if s.get("clip") and isinstance(s["clip"], dict) and s["clip"].get("url"))
 
@@ -59,6 +85,7 @@ def _generate_timeline(spec: dict) -> str:
     for i, s in enumerate(screens):
         clip = s.get("clip")
         has_clip = bool(clip and isinstance(clip, dict) and clip.get("url"))
+        has_still = bool(s.get("still"))
         mode_str = s.get("clip_mode") or ""
 
         if has_clip:
@@ -68,6 +95,10 @@ def _generate_timeline(spec: dict) -> str:
             end = clip.get("end")
             ts = f"{vid_id}@{start:.1f}s" + ("–ambient" if end is None else f"–{end:.1f}s")
             mode_label = "AMBIENT" if mode_str == "ambient" else "CLIP"
+            warn = ""
+        elif has_still:
+            ts = "ken-burns-still"
+            mode_label = "STILL"
             warn = ""
         else:
             ts = ""
@@ -79,7 +110,7 @@ def _generate_timeline(spec: dict) -> str:
         display = f'"{text}"' + (f' / "{sub}"' if sub else "")
 
         lines.append(f"  {i+1:>2}  {s.get('duration', 0):>4.1f}  {mode_label:<16}  {ts:<28}  {display}{warn}")
-        prev_gradient = not has_clip
+        prev_gradient = not (has_clip or has_still)
 
     lines.append("=" * w)
     return "\n".join(lines)
@@ -160,68 +191,131 @@ def _validate_spec(spec: dict) -> list[str]:
     return errors
 
 
-def _factual_score(review: dict):
-    """The reviewer's factual_accuracy score, or None if unavailable."""
-    try:
-        s = review["scores"]["factual_accuracy"]["score"]
-        return s if isinstance(s, (int, float)) else None
-    except (KeyError, TypeError):
+def _hero_clip_description(spec: dict):
+    """The hero clip = the clip_description shared by the most screens (the spine).
+    Returns (description, [screen indices]) or None if the spec has no clips."""
+    from collections import Counter
+    screens = spec.get("screens", [])
+    descs = [s.get("clip_description") for s in screens if s.get("clip_description")]
+    if not descs:
         return None
+    desc, _ = Counter(descs).most_common(1)[0]
+    indices = [i for i, s in enumerate(screens) if s.get("clip_description") == desc]
+    return desc, indices
 
 
-def _spec_review_loop(spec: dict, brief: str, max_retries: int = None,
-                      factual_threshold: int = None):
-    """Review the spec before the expensive research/render stages. If the
-    reviewer flags a FACTUAL ERROR (factual_accuracy below threshold), feed its
-    feedback back to the creative director to fix — at most `max_retries` times.
+def _flag_missing_spine(spec: dict, record) -> None:
+    """Hero-clip composition (Step 6b): if the dominant clip_description carries the
+    spine (>=2 segments) but the researcher resolved NO footage for any of them, the
+    video has no visual spine. Make that loud in the run record — it must never pass
+    silently as a wall of gradients."""
+    hero = _hero_clip_description(spec)
+    if not hero:
+        return
+    desc, indices = hero
+    if len(indices) < 2:
+        return  # a single-clip beat is an ordinary fallback, not a missing spine
+    screens = spec.get("screens", [])
+    resolved = [i for i in indices
+                if isinstance(screens[i].get("clip"), dict) and screens[i]["clip"].get("url")]
+    if not resolved:
+        record.add_flag(
+            f"MISSING SPINE: hero clip {desc!r} (the spine for {len(indices)} segment(s) "
+            f"{indices}) found NO footage at research time — video has no visual spine"
+        )
 
-    Only factual errors trigger a pass-back; other non-PUBLISH issues (weak hook,
-    pacing) are logged and accepted. Returns (best_spec, best_review, attempts).
+
+def _spec_review_loop(spec: dict, brief: str, max_retries: int = None):
+    """Editorial review of the spec before the expensive research/render stages.
+
+    The editorial critic (Step 5) judges the PLAN — hook, arc, rhythm, text, voice,
+    segment reasons. On decision == REVISE its fixes are fed back to the creative
+    director to regenerate, capped at `max_retries` regenerations (default 2, i.e.
+    3 CD calls total). PUBLISH proceeds; REVISE regenerates; REJECT stops and flags.
+
+    Facts are NOT a reject — the critic reports them in facts_to_check, which we
+    aggregate per attempt and surface to a human (logged, never blocking). The old
+    factual_accuracy hard-reject was removed in Step 5.
+
+    Returns (best_spec, best_review, attempts, regenerations, blocking) where
+    `regenerations` is the number of regenerations performed and `blocking` is None
+    when it is safe to proceed, or a dict describing why the run must stop and be
+    flagged (a still-failing spec must never be rendered or looped indefinitely).
+    Each attempt dict carries its decision, biggest_weakness and facts_to_check.
     """
-    from content_reviewer import review_spec
+    from editorial_critic import review_spec
     from creative_director import revise_spec
+    from run_record import get_cost_meter
 
     if max_retries is None:
         max_retries = config.SPEC_REVIEW_MAX_RETRIES
-    if factual_threshold is None:
-        factual_threshold = config.SPEC_REVIEW_FACTUAL_THRESHOLD
 
-    best_spec, best_review, best_score = spec, None, -1.0
+    meter = get_cost_meter()
+    best_spec, best_review = spec, None
     cur = spec
     attempts = []
+    regenerations = 0
+    blocking = None
     for attempt in range(max_retries + 1):
-        review = review_spec(cur)
+        with meter.stage("editorial_critic"):
+            review = review_spec(cur)
         if not review:
-            log.warning("Spec review returned nothing (pass %d) — proceeding with best", attempt + 1)
+            log.warning("Editorial critic returned nothing (pass %d) — proceeding with best",
+                        attempt + 1)
             break
         decision = review.get("decision", "UNKNOWN")
-        score = review.get("overall_score", 0) or 0
-        fac = _factual_score(review)
+        weakness = review.get("biggest_weakness", "")
+        facts = review.get("facts_to_check") or []
         attempts.append({"pass": attempt + 1, "decision": decision,
-                         "score": score, "factual_accuracy": fac})
-        log.info("Spec review pass %d/%d: %s (%.1f/10, factual_accuracy=%s)",
-                 attempt + 1, max_retries + 1, decision, score, fac)
-        if score > best_score:
-            best_spec, best_review, best_score = cur, review, score
+                         "biggest_weakness": weakness, "facts_to_check": facts})
+        log.info("Editorial pass %d/%d: %s — %s",
+                 attempt + 1, max_retries + 1, decision, weakness)
+        # Keep the latest non-rejected spec as the best; fall back to the first seen.
+        if best_review is None or decision in ("PUBLISH", "REVISE"):
+            best_spec, best_review = cur, review
 
-        has_factual_error = fac is not None and fac < factual_threshold
-        if not has_factual_error:
-            if decision != "PUBLISH":
-                log.info("Verdict %s but no factual error (factual_accuracy=%s) — "
-                         "accepting spec without revision", decision, fac)
+        if decision == "REJECT":
+            log.warning("Editorial critic REJECT — the angle/story does not work; "
+                        "FLAGGING FOR HUMAN, not rendering")
+            blocking = {
+                "reason": f"editorial REJECT: {weakness}",
+                "decision": decision,
+                "regenerations": regenerations,
+            }
             break
+
+        if decision != "REVISE":
+            # PUBLISH (or an unknown non-REVISE verdict) — accept and proceed.
+            break
+
+        # decision == REVISE
         if attempt == max_retries:
-            log.warning("Factual error persists (factual_accuracy=%s) after %d revision(s) — "
-                        "proceeding with best spec; FLAG FOR HUMAN REVIEW", fac, max_retries)
+            # Regeneration cap reached and the spec STILL wants a revise — flag, do not render.
+            log.warning("Editorial REVISE persists after %d regeneration(s) — regen cap reached; "
+                        "FLAGGING FOR HUMAN, not rendering", regenerations)
+            blocking = {
+                "reason": f"editorial REVISE after {regenerations} regeneration(s) (cap): {weakness}",
+                "decision": decision,
+                "regenerations": regenerations,
+            }
             break
-        log.info("Factual error (factual_accuracy=%s < %d) → sending feedback to "
-                 "Creative Director for one revision", fac, factual_threshold)
-        revised = revise_spec(brief, cur, review)
+        log.info("Editorial REVISE → regeneration %d/%d via Creative Director",
+                 regenerations + 1, max_retries)
+        with meter.stage("creative_director"):
+            revised = revise_spec(brief, cur, review)
         if not revised:
-            log.warning("Revision failed — proceeding with best spec so far")
+            # Could not regenerate while a REVISE stands — do not ship the draft.
+            log.warning("Regeneration call failed while an editorial REVISE stands — "
+                        "FLAGGING FOR HUMAN, not rendering")
+            blocking = {
+                "reason": "regeneration call failed while an editorial REVISE stands",
+                "decision": decision,
+                "regenerations": regenerations,
+            }
             break
         cur = revised
-    return best_spec, best_review, attempts
+        regenerations += 1
+    return best_spec, best_review, attempts, regenerations, blocking
 
 
 def dry_run(input_arg: str, skip_research: bool = False):
@@ -248,7 +342,7 @@ def dry_run(input_arg: str, skip_research: bool = False):
             cd_calls = 0
         else:
             print("  No cached spec -- Creative Director will generate")
-            cd_calls = 2
+            cd_calls = 1   # v2 is single-pass (the v1 self-critique call is retired)
 
     print()
     print("-" * 55)
@@ -273,17 +367,19 @@ def dry_run(input_arg: str, skip_research: bool = False):
         print("  Researcher:         unknown (spec not generated yet)")
         print("    Typical:           2-6 video calls")
         researcher_max = 6
+    print("  Editorial Critic:   1 text call (pre-render; +1 per regeneration)")
     print("  Render:             local only (ffmpeg)")
     print("  Quality Gate:       local only (ffprobe)")
-    print("  Content Reviewer:   1 text call")
+    print("  Output-QA:          1 vision call (post-render, frames)")
 
-    total_text = cd_calls + 1
+    total_text = cd_calls + 2   # editorial critic + output-QA (both paid Gemini calls)
     total_video_min = researcher_min
     total_video_max = researcher_max
 
     text_cost = total_text * (5000 * 0.15 + 500 * 0.60) / 1_000_000
     cd_thinking = cd_calls * (_est_thinking_tokens(config.THINKING_BUDGET_CREATIVE) * 3.50) / 1_000_000
-    review_thinking = (_est_thinking_tokens(config.THINKING_BUDGET_REVIEWER) * 3.50) / 1_000_000
+    # Two reviewers now: editorial critic (pre-render) + Output-QA (post-render).
+    review_thinking = 2 * (_est_thinking_tokens(config.THINKING_BUDGET_REVIEWER) * 3.50) / 1_000_000
     thinking_cost = cd_thinking + review_thinking
     uncapped = config.THINKING_BUDGET_CREATIVE is None or config.THINKING_BUDGET_REVIEWER is None
 
@@ -313,171 +409,340 @@ def dry_run(input_arg: str, skip_research: bool = False):
 
 def run(input_arg: str, *, preview=False, no_voice=False,
         skip_research=False, force_regen=False) -> dict:
+    from run_record import RunRecord, reset_cost_meter, set_active_record
+
     tracker = reset_tracker()
-    summary = {"stages": {}, "output": None, "quality": None, "review": None, "success": False}
+    meter = reset_cost_meter()
+    summary = {"stages": {}, "output": None, "quality": None, "output_qa": None, "success": False}
     t0 = time.time()
 
     input_path = Path(input_arg)
+    # brief is set when generating from a text brief (enables the v2 gate + review loop).
+    brief = None if (input_path.suffix == ".json" and input_path.exists()) else input_arg
 
-    # Stage 1: Creative Director
-    brief = None  # set when generating from a text brief — enables the review loop
-    if input_path.suffix == ".json" and input_path.exists():
-        log.info("Loading spec: %s", input_path)
-        spec = json.loads(input_path.read_text(encoding="utf-8"))
-        summary["stages"]["creative_director"] = "skipped (spec provided)"
-    else:
-        brief = input_arg
-        log.info("=" * 60)
-        log.info("STAGE 1: Creative Director")
-        log.info("=" * 60)
-        try:
-            from creative_director import generate_spec
-            spec = generate_spec(input_arg, force=force_regen)
-        except Exception as e:
-            log.error("Stage 1 failed: %s", e)
-            summary["stages"]["creative_director"] = f"FAILED: {e}"
-            return summary
-        if not spec:
-            summary["stages"]["creative_director"] = "FAILED: no spec"
-            return summary
-        summary["stages"]["creative_director"] = f"OK — {spec['id']}"
+    # The run record is created up front and ALWAYS written (completion or abort)
+    # via the finally below. Thin hooks in each stage write into it.
+    record = RunRecord(brief=brief, input_arg=input_arg, meter=meter)
+    set_active_record(record)
 
-    # Fail-fast: validate spec before expensive operations
-    spec_errors = _validate_spec(spec)
-    if spec_errors:
-        log.error("Spec validation failed before pipeline:")
-        for err in spec_errors:
-            log.error("  → %s", err)
-        summary["stages"]["validation"] = f"FAILED: {'; '.join(spec_errors)}"
-        return summary
-
-    # Stage 1.5: Spec review + revision loop (text-only, before expensive render).
-    # Only when generated from a brief — a provided .json spec is taken as final.
-    if brief is not None:
-        log.info("=" * 60)
-        log.info("STAGE 1.5: Spec Review & Revision Loop")
-        log.info("=" * 60)
-        try:
-            spec, _loop_review, _attempts = _spec_review_loop(spec, brief)
-            summary["spec_review"] = {
-                "passes": _attempts,
-                "final_decision": (_loop_review or {}).get("decision"),
-                "final_score": (_loop_review or {}).get("overall_score"),
-            }
-            if _loop_review:
-                summary["stages"]["spec_review_loop"] = (
-                    f"{_loop_review.get('decision')} — "
-                    f"{_loop_review.get('overall_score', 0):.1f}/10 "
-                    f"after {len(_attempts)} pass(es)"
-                )
-            else:
-                summary["stages"]["spec_review_loop"] = "no verdict"
-        except Exception as e:
-            log.error("Stage 1.5 failed: %s (continuing with current spec)", e)
-            summary["stages"]["spec_review_loop"] = f"FAILED: {e}"
-
-    # Stage 2: Researcher
-    if skip_research:
-        summary["stages"]["researcher"] = "skipped"
-    else:
-        log.info("=" * 60)
-        log.info("STAGE 2: Researcher")
-        log.info("=" * 60)
-        try:
-            from researcher import research_spec
-            spec = research_spec(spec, selective=True)
-            clips = sum(1 for s in spec.get("screens", []) if s.get("clip"))
-            summary["stages"]["researcher"] = f"OK — {clips} clips"
-        except Exception as e:
-            log.error("Stage 2 failed: %s (continuing)", e)
-            summary["stages"]["researcher"] = f"FAILED: {e}"
-
-    # Save spec and print/save timeline
-    spec_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}.json"
-    spec_path.write_text(json.dumps(spec, indent=2, ensure_ascii=False), encoding="utf-8")
-
-    timeline = _generate_timeline(spec)
-    log.info("\n%s", timeline)
-    timeline_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}_timeline.txt"
-    timeline_path.write_text(timeline, encoding="utf-8")
-
-    # Stage 3: Render
-    log.info("=" * 60)
-    log.info("STAGE 3: Video Pipeline")
-    log.info("=" * 60)
-    output_path = config.OUTPUT_DIR / f"{spec.get('id', 'output')}.mp4"
-    cli_args = [str(spec_path), "-o", str(output_path)]
-    if preview:
-        cli_args.append("--preview")
-    if no_voice:
-        cli_args.append("--no-voice")
+    def _ceiling_abort(stage_label: str) -> bool:
+        """After a paid stage: abort if cumulative cost crossed the ceiling."""
+        if record.enforce_ceiling():
+            log.error("COST CEILING EXCEEDED after %s: $%.4f > $%.4f — aborting before render",
+                      stage_label, record.data["total_cost"], record.data["cost_ceiling"])
+            summary["stages"]["cost_ceiling"] = (
+                f"ABORTED after {stage_label}: ${record.data['total_cost']:.4f} "
+                f"> ${record.data['cost_ceiling']:.4f}"
+            )
+            record.set_final_status("aborted_cost_ceiling")
+            return True
+        return False
 
     try:
-        from vidpipe.cli import main as vidpipe_main
-        rc = vidpipe_main(cli_args)
-        if rc != 0:
-            summary["stages"]["render"] = f"FAILED: exit {rc}"
-            return summary
-        summary["stages"]["render"] = f"OK — {output_path.name}"
-        summary["output"] = str(output_path)
-    except Exception as e:
-        log.error("Stage 3 failed: %s", e)
-        summary["stages"]["render"] = f"FAILED: {e}"
-        return summary
-
-    # Stage 4: Quality Gate
-    log.info("=" * 60)
-    log.info("STAGE 4: Quality Gate")
-    log.info("=" * 60)
-    try:
-        from quality_gate import check_video
-        qr = check_video(output_path, spec, preview=preview)
-        summary["quality"] = qr
-        passed = sum(1 for c in qr["checks"].values() if c["passed"])
-        summary["stages"]["quality_gate"] = (
-            f"{'PASSED' if qr['passed'] else 'FAILED'} — {passed}/{len(qr['checks'])}"
-        )
-    except Exception as e:
-        log.error("Stage 4 failed: %s", e)
-        summary["stages"]["quality_gate"] = f"FAILED: {e}"
-
-    # Stage 5: Content Reviewer
-    log.info("=" * 60)
-    log.info("STAGE 5: Content Reviewer")
-    log.info("=" * 60)
-    try:
-        from content_reviewer import review_spec
-        review = review_spec(spec)
-        summary["review"] = review
-        if review:
-            decision = review.get("decision", "UNKNOWN")
-            score = review.get("overall_score", 0)
-            summary["stages"]["content_reviewer"] = f"{decision} — {score:.1f}/10"
+        # Stage 1: Creative Director
+        if brief is None:
+            log.info("Loading spec: %s", input_path)
+            spec = json.loads(input_path.read_text(encoding="utf-8"))
+            summary["stages"]["creative_director"] = "skipped (spec provided)"
+            record.stage("creative_director", "skipped", note="spec provided")
         else:
-            summary["stages"]["content_reviewer"] = "FAILED: no response"
-    except Exception as e:
-        log.error("Stage 5 failed: %s", e)
-        summary["stages"]["content_reviewer"] = f"FAILED: {e}"
+            log.info("=" * 60)
+            log.info("STAGE 1: Creative Director")
+            log.info("=" * 60)
+            try:
+                from creative_director import generate_spec
+                with meter.stage("creative_director"):
+                    spec = generate_spec(input_arg, force=force_regen)
+            except Exception as e:
+                log.error("Stage 1 failed: %s", e)
+                summary["stages"]["creative_director"] = f"FAILED: {e}"
+                record.stage("creative_director", "FAILED", error=str(e))
+                record.set_final_status("aborted_creative_director")
+                return summary
+            if not spec:
+                summary["stages"]["creative_director"] = "FAILED: no spec"
+                record.stage("creative_director", "FAILED", error="no spec")
+                record.set_final_status("aborted_creative_director")
+                return summary
+            summary["stages"]["creative_director"] = f"OK — {spec['id']}"
+            record.stage("creative_director", "OK", spec_id=spec.get("id"))
 
-    elapsed = time.time() - t0
-    quality_ok = summary.get("quality", {}).get("passed", False)
-    review_ok = summary.get("review", {}).get("decision") == "PUBLISH"
-    summary["success"] = quality_ok and review_ok
-    summary["elapsed"] = round(elapsed, 1)
+        record.bind_spec(spec)
 
-    log.info("=" * 60)
-    log.info("DONE — %.1fs", elapsed)
-    for stage, result in summary["stages"].items():
-        log.info("  %s: %s", stage, result)
-    log.info("=" * 60)
+        # Fail-fast: legacy basic validation (runs for both paths)
+        spec_errors = _validate_spec(spec)
+        if spec_errors:
+            log.error("Spec validation failed before pipeline:")
+            for err in spec_errors:
+                log.error("  -> %s", err)
+            summary["stages"]["validation"] = f"FAILED: {'; '.join(spec_errors)}"
+            record.stage("validation", "FAILED", basic_errors=spec_errors)
+            record.set_final_status("aborted_validation")
+            return summary
 
-    tracker.save()
-    tracker.print_summary()
-    summary["cost"] = tracker.summary()
+        # Stage 1 gate (v2 contract): hard-reject out-of-contract specs and auto-repair
+        # the safe-to-fix ones before any expensive stage. Runs only on CD-generated
+        # specs — a provided .json spec is taken as final (same convention as Stage 1.5).
+        if brief is not None:
+            from spec_validator import validate_spec, SpecValidationError
+            log.info("=" * 60)
+            log.info("STAGE 1 GATE: Spec Validation (v2 contract)")
+            log.info("=" * 60)
+            try:
+                spec, _repairs = validate_spec(spec)
+                summary["spec_validation"] = {"repairs": _repairs}
+                summary["stages"]["spec_validation"] = (
+                    "OK" if not _repairs else f"OK — {len(_repairs)} auto-repair(s)"
+                )
+                record.stage("validation", "OK", repairs=_repairs, violations=[])
+            except SpecValidationError as e:
+                log.error("Spec validation REJECTED — spec will NOT reach research/render:")
+                for v in e.violations:
+                    log.error("  [X] %s", v)
+                summary["spec_validation"] = {"rejected": e.violations}
+                summary["stages"]["spec_validation"] = f"REJECTED: {len(e.violations)} violation(s)"
+                record.stage("validation", "REJECTED", violations=e.violations, repairs=[])
+                record.add_flag(f"spec validation rejected: {len(e.violations)} hard violation(s)")
+                record.set_final_status("rejected_validation")
+                return summary
+        else:
+            record.stage("validation", "OK", note="provided spec — basic checks only")
 
-    _cleanup_intermediates(spec_id=spec.get("id", ""))
+        if _ceiling_abort("creative_director"):
+            return summary
 
-    return summary
+        # Stage 1.5: Spec review + revision loop (text-only, before expensive render).
+        # Only when generated from a brief — a provided .json spec is taken as final.
+        if brief is not None:
+            log.info("=" * 60)
+            log.info("STAGE 1.5: Spec Review & Revision Loop")
+            log.info("=" * 60)
+            try:
+                spec, _loop_review, _attempts, _regens, _blocking = _spec_review_loop(spec, brief)
+                record.data["regenerations"] = _regens
+
+                # Aggregate facts_to_check across all passes — surfaced to a human,
+                # never blocking (facts are the human's job, per the critic's brief).
+                _facts = []
+                for a in _attempts:
+                    for f in a.get("facts_to_check") or []:
+                        if f not in _facts:
+                            _facts.append(f)
+
+                summary["spec_review"] = {
+                    "passes": _attempts,
+                    "regenerations": _regens,
+                    "final_decision": (_loop_review or {}).get("decision"),
+                    "biggest_weakness": (_loop_review or {}).get("biggest_weakness"),
+                    "facts_to_check": _facts,
+                }
+
+                # Populate the editorial_critic run-record block (a Step-2 slot).
+                if _loop_review is not None:
+                    record.stage(
+                        "editorial_critic", _loop_review.get("decision", "UNKNOWN"),
+                        biggest_weakness=_loop_review.get("biggest_weakness"),
+                        scores=_loop_review.get("scores"),
+                        fixes=_loop_review.get("fixes"),
+                        facts_to_check=_facts,
+                        passes=_attempts,
+                        regenerations=_regens,
+                    )
+                    summary["stages"]["spec_review_loop"] = (
+                        f"{_loop_review.get('decision')} after {len(_attempts)} pass(es), "
+                        f"{_regens} regen(s)"
+                    )
+                else:
+                    record.stage("editorial_critic", "no_verdict",
+                                 passes=_attempts, regenerations=_regens)
+                    summary["stages"]["spec_review_loop"] = "no verdict"
+
+                # Facts to verify are logged for a human but never block publishing.
+                if _facts:
+                    record.add_flag("facts to verify (non-blocking): " + " | ".join(_facts))
+
+                # REJECT, regen cap, or a failed regeneration with the spec still
+                # wanting a REVISE: flag for a human and abort BEFORE render.
+                if _blocking is not None:
+                    log.error("Stage 1.5 BLOCKED after %d regeneration(s): %s",
+                              _regens, _blocking["reason"])
+                    record.add_flag(
+                        f"editorial gate: {_blocking['reason']} — "
+                        f"flagged for human, not rendered "
+                        f"(decision={_blocking['decision']}, regenerations={_regens})"
+                    )
+                    _status = ("flagged_editorial_reject"
+                               if _blocking["decision"] == "REJECT"
+                               else "flagged_regen_cap")
+                    record.set_final_status(_status)
+                    summary["stages"]["spec_review_loop"] = (
+                        f"FLAGGED ({_blocking['decision']}) after {_regens} regen(s), not rendered"
+                    )
+                    return summary
+            except Exception as e:
+                log.error("Stage 1.5 failed: %s (continuing with current spec)", e)
+                summary["stages"]["spec_review_loop"] = f"FAILED: {e}"
+
+            # Stage 1.5 is a paid stage — compose with the cost ceiling.
+            if _ceiling_abort("spec_review_loop"):
+                return summary
+
+        # Stage 2: Researcher
+        if skip_research:
+            summary["stages"]["researcher"] = "skipped"
+            record.stage("research", "skipped")
+        else:
+            log.info("=" * 60)
+            log.info("STAGE 2: Researcher")
+            log.info("=" * 60)
+            try:
+                from researcher import research_spec
+                with meter.stage("research"):
+                    spec = research_spec(spec, selective=True)
+                clips = sum(1 for s in spec.get("screens", []) if s.get("clip"))
+                clip_screens = sum(1 for s in spec.get("screens", []) if s.get("clip_description"))
+                summary["stages"]["researcher"] = f"OK — {clips} clips"
+                record.stage("research", "OK", clips_found=clips, clip_screens=clip_screens,
+                             fallbacks=len(record.data["fallback_reasons"]))
+            except Exception as e:
+                log.error("Stage 2 failed: %s (continuing)", e)
+                summary["stages"]["researcher"] = f"FAILED: {e}"
+                record.stage("research", "FAILED", error=str(e))
+
+        # Hero-clip composition (Step 6b): loudly flag a spine that found no footage.
+        # single_clip specs resolve their spine as a top-level hero_clip window (not
+        # per-screen clips), so this montage-only check would false-alarm — skip it.
+        if not skip_research and spec.get("format") != "single_clip":
+            _flag_missing_spine(spec, record)
+
+        if _ceiling_abort("research"):
+            return summary
+
+        # Save spec and print/save timeline
+        spec_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}.json"
+        spec_path.write_text(json.dumps(spec, indent=2, ensure_ascii=False), encoding="utf-8")
+
+        timeline = _generate_timeline(spec)
+        log.info("\n%s", timeline)
+        timeline_path = config.SPECS_DIR / f"{spec.get('id', 'unknown')}_timeline.txt"
+        timeline_path.write_text(timeline, encoding="utf-8")
+
+        # Stage 3: Render
+        log.info("=" * 60)
+        log.info("STAGE 3: Video Pipeline")
+        log.info("=" * 60)
+        output_path = config.OUTPUT_DIR / f"{spec.get('id', 'output')}.mp4"
+        cli_args = [str(spec_path), "-o", str(output_path)]
+        if preview:
+            cli_args.append("--preview")
+        if no_voice:
+            cli_args.append("--no-voice")
+
+        try:
+            from vidpipe.cli import main as vidpipe_main
+            rc = vidpipe_main(cli_args)
+            if rc != 0:
+                summary["stages"]["render"] = f"FAILED: exit {rc}"
+                record.stage("render", "FAILED", exit_code=rc)
+                record.set_final_status("aborted_render")
+                return summary
+            summary["stages"]["render"] = f"OK — {output_path.name}"
+            summary["output"] = str(output_path)
+            record.stage("render", "OK", output=str(output_path))
+        except Exception as e:
+            log.error("Stage 3 failed: %s", e)
+            summary["stages"]["render"] = f"FAILED: {e}"
+            record.stage("render", "FAILED", error=str(e))
+            record.set_final_status("aborted_render")
+            return summary
+
+        # Stage 4: Quality Gate
+        log.info("=" * 60)
+        log.info("STAGE 4: Quality Gate")
+        log.info("=" * 60)
+        try:
+            from quality_gate import check_video
+            qr = check_video(output_path, spec, preview=preview)
+            summary["quality"] = qr
+            passed = sum(1 for c in qr["checks"].values() if c["passed"])
+            summary["stages"]["quality_gate"] = (
+                f"{'PASSED' if qr['passed'] else 'FAILED'} — {passed}/{len(qr['checks'])}"
+            )
+            record.stage("render", "OK", quality_passed=qr["passed"],
+                         quality_checks=f"{passed}/{len(qr['checks'])}")
+        except Exception as e:
+            log.error("Stage 4 failed: %s", e)
+            summary["stages"]["quality_gate"] = f"FAILED: {e}"
+
+        # Stage 5: Output-QA (post-render, vision). Confirms the FINISHED video
+        # matches its plan from the per-segment frames the gate just extracted.
+        # Flag-and-stop: a FAIL stops the publish and surfaces blocking_issues; it
+        # never re-renders or auto-fixes.
+        log.info("=" * 60)
+        log.info("STAGE 5: Output-QA")
+        log.info("=" * 60)
+        try:
+            from output_qa import qa_output
+            frames_dir = (summary.get("quality") or {}).get("frames_dir")
+            probe_report = summary.get("quality") or {}
+            with meter.stage("output_qa"):
+                qa = qa_output(spec, probe_report, frames_dir)
+            summary["output_qa"] = qa
+            if qa:
+                qa_decision = qa.get("decision", "UNKNOWN")
+                blocking_issues = qa.get("blocking_issues") or []
+                summary["stages"]["output_qa"] = (
+                    f"{qa_decision} — {len(blocking_issues)} blocking issue(s)"
+                )
+                record.stage("output_qa", qa_decision,
+                             blocking_issues=blocking_issues,
+                             warnings=qa.get("warnings"),
+                             per_segment=qa.get("per_segment"),
+                             summary=qa.get("summary"))
+                if qa_decision == "FAIL":
+                    for issue in blocking_issues:
+                        record.add_flag(f"output-QA blocking: {issue}")
+            else:
+                summary["stages"]["output_qa"] = "FAILED: no response"
+                record.stage("output_qa", "FAILED", error="no response / no frames")
+        except Exception as e:
+            log.error("Stage 5 failed: %s", e)
+            summary["stages"]["output_qa"] = f"FAILED: {e}"
+            record.stage("output_qa", "FAILED", error=str(e))
+
+        elapsed = time.time() - t0
+        # None-safe: a stage that failed leaves its summary value as None (key present),
+        # so `.get(key, {})` returns None — guard with `or {}`.
+        quality_ok = (summary.get("quality") or {}).get("passed", False)
+        qa_ok = (summary.get("output_qa") or {}).get("decision") == "PASS"
+        summary["success"] = quality_ok and qa_ok
+        summary["elapsed"] = round(elapsed, 1)
+        record.set_final_status("publish" if summary["success"] else "needs_human_review")
+        if not summary["success"]:
+            if not qa_ok:
+                record.add_flag("Output-QA did not PASS — needs human review, not published")
+            elif not quality_ok:
+                record.add_flag("did not clear technical quality gate — needs human review")
+
+        log.info("=" * 60)
+        log.info("DONE — %.1fs", elapsed)
+        for stage, result in summary["stages"].items():
+            log.info("  %s: %s", stage, result)
+        log.info("=" * 60)
+
+        tracker.save()
+        tracker.print_summary()
+        summary["cost"] = tracker.summary()
+
+        _cleanup_intermediates(spec_id=spec.get("id", ""))
+
+        return summary
+    finally:
+        try:
+            path = record.write()
+            summary["run_record"] = str(path)
+        finally:
+            set_active_record(None)
 
 
 def main():

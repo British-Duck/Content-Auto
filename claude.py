@@ -4,7 +4,7 @@ stage's configured model is a "claude-*" id; the researcher stays on Gemini
 because it does native video analysis Claude can't do.
 
 Dormant by default: nothing here runs unless config.CREATIVE_MODEL /
-REVIEWER_MODEL is set to a claude-* id AND ANTHROPIC_API_KEY is present.
+EDITORIAL_CRITIC_MODEL is set to a claude-* id AND ANTHROPIC_API_KEY is present.
 """
 import logging
 import os
