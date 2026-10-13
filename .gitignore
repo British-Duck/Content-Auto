@@ -13,8 +13,9 @@ cache/
 # Local Claude Code settings (machine-specific)
 .claude/
 
-# All render output is generated
+# All render output is generated (specs/ holds per-run specs, storyboards, timelines)
 output/
+specs/
 
 # Runtime logs and batch artifacts are all generated
 logs/

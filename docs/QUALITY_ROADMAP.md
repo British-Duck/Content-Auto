@@ -89,7 +89,7 @@ What the spec *plans* determines the ceiling of everything downstream.
   rule, no loop-ending mechanics. Encode §2's first-3-seconds and middle checklists as
   hard craft rules. *(This session.)*
 - **Exemplars.** The EXEMPLARS slot has been empty since v2 shipped, while 5
-  high-scoring specs sit unused in `specs/pro/`. Few-shot exemplars are the
+  high-scoring v1-era specs sit unused in `specs/pro/` (local only; `specs/` is gitignored). Few-shot exemplars are the
   best-evidenced cheap lever in LLM generation (Brown et al. 2020); 3 curated,
   hook-upgraded exemplars anchor the register far harder than rules can. *(This session.)*
 - **Critic as the same standard.** The editorial critic must score what the CD is told

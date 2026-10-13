@@ -8,9 +8,9 @@ before doing any work — execute it **one scoped step at a time**, never ahead.
 
 Entry point: `orchestrate.py` → `run()`. Five stages:
 
-1. **Creative Director** (`creative_director.py`) — brief → spec JSON. Two Gemini calls
-   (generate → self-critique), then `_fixup` + `_force_scheme`. Caches specs by brief
-   hash in `cache/briefs/`.
+1. **Creative Director** (`creative_director.py`) — brief → spec JSON. Single-pass
+   generation (the v1 self-critique call is retired), then `_fixup` + `_force_scheme`.
+   Caches specs by brief hash in `cache/briefs/`.
 2. **Researcher** (`researcher.py`) — fills `clip` for each screen with a YouTube clip.
    yt-dlp search → metadata-first timestamps → Gemini video analysis fallback.
    **Must stay Gemini** (native video analysis). Heavily cached.
@@ -37,6 +37,8 @@ factual_accuracy hard-reject, which was removed.)
   budgets, music, `LAYOUT_STYLE`. Models routed by `llm.py` (`gemini-*`→`gemini.py`,
   `claude-*`→`claude.py`, dormant; falls back to Gemini if key/SDK absent).
 - `cost_tracker.py` — per-run cost meter. `gemini.py` — Gemini client + `parse_json`.
+- `docs/COST_TUNING.md` — cost levers, cache layout, rate limits. `specs/` is generated
+  per run and gitignored (like `output/`, `logs/`, `cache/`).
 - Prompts in `prompts/`. **Stage prompts are loaded at import time** — a missing prompt
   file crashes the stage module on import (see "Current state").
 

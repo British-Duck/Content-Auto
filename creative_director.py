@@ -1,8 +1,8 @@
 """
 Stage 1 — Creative Director.
 
-Two-call Gemini chain (generate → self-critique) that turns a text brief
-into a validated video spec JSON. Caches specs by brief hash to avoid
+Single-pass generation (the v1 self-critique call is retired) that turns a
+text brief into a validated video spec JSON. Caches specs by brief hash to avoid
 regenerating identical briefs.
 """
 import hashlib

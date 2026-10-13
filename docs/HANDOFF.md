@@ -31,10 +31,10 @@ Models are chosen per stage in `config.py` and routed by `llm.py` (prefix `gemin
 analysis.
 
 ```
-CREATIVE_MODEL         = "gemini-2.5-pro"   # creative director
-EDITORIAL_CRITIC_MODEL = "gemini-2.5-pro"   # Stage 1.5 pre-render critic
-OUTPUT_QA_MODEL        = "gemini-2.5-pro"   # post-render vision QA
-GEMINI_MODEL           = "gemini-2.5-flash" # researcher + default
+CREATIVE_MODEL         = "gemini-3-flash-preview"  # creative director
+EDITORIAL_CRITIC_MODEL = "gemini-3-flash-preview"  # Stage 1.5 pre-render critic
+OUTPUT_QA_MODEL        = "gemini-3-flash-preview"  # post-render vision QA
+GEMINI_MODEL           = "gemini-2.5-flash"        # researcher + default
 ```
 
 To try Claude on a stage: set its model to a `claude-*` id, add `ANTHROPIC_API_KEY` to
