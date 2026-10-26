@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
+      - name: Lint
+        run: ruff check .
+
       # No API key, network or ffmpeg: the offline gate stubs all three.
       - name: Run offline test gate
         run: >

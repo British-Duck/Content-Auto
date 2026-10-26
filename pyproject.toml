@@ -1,0 +1,11 @@
+# Tool configuration only. The repo is a set of scripts run from its root, not an
+# installable package, so there is no [project] table. pytest is configured in pytest.ini.
+
+[tool.ruff]
+target-version = "py311"
+extend-exclude = ["cache", "output", "logs", "specs"]
+
+[tool.ruff.lint]
+# Correctness rules: pyflakes (unused imports, undefined names) and pycodestyle
+# errors (bare except, imports not at top, syntax). Style rules are not enforced.
+select = ["F", "E4", "E7", "E9"]

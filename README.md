@@ -296,6 +296,9 @@ were captured before the renderer changed, so their SSIM and keyframe checks are
 expected to fail and they are not part of the gate. `tests/run_tests.py` is a
 standalone validator that can be pointed at any rendered MP4.
 
+`ruff check .` lints with the correctness rules set in `pyproject.toml`; CI runs it
+before the tests.
+
 ## Repository layout
 
 ```
