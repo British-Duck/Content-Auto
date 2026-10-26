@@ -1,17 +1,22 @@
 """
-Output quality tests — run automatically after every build.
+Output quality tests — legacy v1 suite, validated against tests/baselines/, which
+predate the current renderer. Excluded from the default run (see pytest.ini), so
+every invocation needs -m legacy.
 
 Default (no args): builds a 2-screen fixture video and validates it.
+    pytest tests/test_output_quality.py -m legacy
 Against a real build:
-    pytest tests/test_output_quality.py --video output.mp4 --spec spec.json
+    pytest tests/test_output_quality.py -m legacy --video output.mp4 --spec spec.json
 Against a preview build:
-    pytest tests/test_output_quality.py --video preview.mp4 --spec spec.json --preview
+    pytest tests/test_output_quality.py -m legacy --video preview.mp4 --spec spec.json --preview
 """
 from __future__ import annotations
 
 import pytest
 
 from tests.quality import CheckResult, QualityReport
+
+pytestmark = pytest.mark.legacy
 
 
 def _require(report: QualityReport, name: str) -> CheckResult:

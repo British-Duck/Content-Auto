@@ -1,11 +1,13 @@
 """
 Stress tests — run the pipeline against edge-case specs and validate output.
 
+Legacy v1 suite: compares renders against tests/baselines/, which predate the
+current renderer, so it is excluded from the default run (see pytest.ini).
 All tests are marked @pytest.mark.slow.
 Tests that download clips are also marked @pytest.mark.network.
 
-Run all:         pytest tests/test_stress.py -m slow
-Run no-network:  pytest tests/test_stress.py -m "slow and not network"
+Run all:         pytest tests/test_stress.py -m legacy
+Run no-network:  pytest tests/test_stress.py -m "legacy and not network"
 """
 from __future__ import annotations
 
@@ -18,6 +20,8 @@ import pytest
 
 from tests.conftest import FIXTURES_DIR, PROJECT_ROOT, run_pipeline
 from tests.quality import VideoQualityValidator
+
+pytestmark = pytest.mark.legacy
 
 BASELINES = Path(__file__).parent / "baselines"
 

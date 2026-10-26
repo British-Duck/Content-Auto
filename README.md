@@ -208,11 +208,12 @@ A completed run produces the following. All of these are generated and git-ignor
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest -m "not slow and not network"
+python -m pytest
 ```
 
-The core suite is 66 tests across eight modules and runs **offline**. It needs no API
-key, network access or ffmpeg I/O:
+A plain `pytest` runs 69 tests **offline**, with no API key, network access or ffmpeg
+I/O. The core of it is the 66-test gate that CI runs on every push (Python 3.11 and
+3.13):
 
 ```
 tests/test_spec_validator.py    tests/test_run_record.py
@@ -221,17 +222,25 @@ tests/test_fallback_ladder.py   tests/test_hero_spine.py
 tests/test_single_clip.py       tests/test_editorial_metrics.py
 ```
 
+plus three frame-timestamp tests in `tests/test_quality_gate.py`.
+
 These tests are *offline-faithful*. They run the real orchestrator lifecycle with only
 the network, model and ffmpeg boundaries stubbed. That means they exercise the actual
 control flow: the spec-contract gate, the bounded revision loop, the fallback ladder,
 the run-record and cost-meter wiring, and the single-clip render maths.
 
-The older render suites (`test_stress.py`, `test_output_quality.py`) date from v1 and
-compare against stored visual baselines. Two of their SSIM/keyframe checks fail
-because the renderer has changed since the baselines were captured, so they are not
-part of the gate. Tests marked `slow` build real videos and tests marked `network`
-download real clips; both are opt-in. `tests/run_tests.py` is a standalone validator
-that can be pointed at any rendered MP4.
+Three markers are excluded by default (see `pytest.ini`) and are opt-in:
+
+| Marker | Tests | Run with |
+|---|---|---|
+| `slow` | Build real videos with ffmpeg | `pytest -m slow` |
+| `network` | Download real clips | `pytest -m network` |
+| `legacy` | The v1 render suites `test_stress.py` and `test_output_quality.py` | `pytest -m legacy` |
+
+The `legacy` suites compare renders against visual baselines in `tests/baselines/` that
+were captured before the renderer changed, so their SSIM and keyframe checks are
+expected to fail and they are not part of the gate. `tests/run_tests.py` is a
+standalone validator that can be pointed at any rendered MP4.
 
 ## Repository layout
 
