@@ -319,6 +319,11 @@ def _spec_review_loop(spec: dict, brief: str, max_retries: int = None):
 
 
 def dry_run(input_arg: str, skip_research: bool = False):
+    """Print the projected API calls and cost per stage without making any calls.
+
+    ``input_arg`` is a text brief or a path to a spec JSON. A brief whose spec is
+    already cached is costed as needing no Creative Director call.
+    """
     input_path = Path(input_arg)
     spec = None
 
@@ -409,6 +414,14 @@ def dry_run(input_arg: str, skip_research: bool = False):
 
 def run(input_arg: str, *, preview=False, no_voice=False,
         skip_research=False, force_regen=False) -> dict:
+    """Run the full pipeline on a text brief or a spec JSON path.
+
+    A brief goes through the Creative Director, the spec contract and the editorial
+    review loop. A spec file is taken as final: after a basic structural check it goes
+    straight to research. Every run writes a run record to
+    ``logs/``, including runs that abort. Returns a summary dict of per-stage results;
+    ``summary["success"]`` is True only if both the Quality Gate and Output-QA passed.
+    """
     from run_record import RunRecord, reset_cost_meter, set_active_record
 
     tracker = reset_tracker()
@@ -746,6 +759,7 @@ def run(input_arg: str, *, preview=False, no_voice=False,
 
 
 def main():
+    """Command-line entry point. Exits 0 only if the run succeeded (see ``run``)."""
     p = argparse.ArgumentParser(prog="orchestrate",
                                 description="Short-form video content pipeline")
     p.add_argument("input", help="Text brief (quoted) or .json spec path")

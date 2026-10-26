@@ -963,6 +963,14 @@ def _research_single_clip(spec: dict) -> Optional[dict]:
 # ── Main research function ────────────────────────────────────────────────────
 
 def research_spec(spec: dict, selective: bool = True) -> dict:
+    """Stage 2: resolve footage for a spec, updating it in place, and return it.
+
+    A single_clip spec gets one continuous hero window in ``spec["hero_clip"]``; if
+    none is found it is demoted to montage and flagged. A montage spec gets a ``clip``
+    per screen via the footage fallback ladder, and each screen's tier is recorded in
+    the run record. With ``selective`` (the default), clips already resolved in the
+    spec are kept rather than searched for again.
+    """
     log.info("Stage 2: Researcher — %s", spec.get("id", "?"))
 
     # Single-clip event format: resolve the ONE continuous window the whole video
