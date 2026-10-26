@@ -1,5 +1,7 @@
 # Content-Auto
 
+[![tests](https://github.com/British-Duck/Content-Auto/actions/workflows/tests.yml/badge.svg)](https://github.com/British-Duck/Content-Auto/actions/workflows/tests.yml)
+
 An automated pipeline that turns a one-line editorial brief into a finished 1080×1920
 short-form news video: script, sourced footage, render and narration. It includes
 machine review before and after rendering, and a hard per-run cost ceiling.

@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  offline-suite:
+    name: Offline suite (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      # No API key, network or ffmpeg: the offline gate stubs all three.
+      - name: Run offline test gate
+        run: >
+          python -m pytest -m "not slow and not network"
+          tests/test_spec_validator.py
+          tests/test_run_record.py
+          tests/test_regen_cap.py
+          tests/test_step5_reviewers.py
+          tests/test_fallback_ladder.py
+          tests/test_hero_spine.py
+          tests/test_single_clip.py
+          tests/test_editorial_metrics.py
