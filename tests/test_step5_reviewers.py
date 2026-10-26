@@ -47,7 +47,9 @@ def _wire(monkeypatch, tmp_path, *, qa_result, frames_dir="frames", review_fn=No
           generate_fn=None):
     """Stub research/render/quality + the two reviewers so run() executes offline.
     Returns render_calls (a list appended to once per render call)."""
-    import orchestrate, researcher, quality_gate
+    import orchestrate
+    import researcher
+    import quality_gate
 
     monkeypatch.setattr(config, "SPECS_DIR", tmp_path)
     monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)

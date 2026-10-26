@@ -8,7 +8,7 @@ DEMO = config.ROOT / "output" / "ladder-still-demo"
 DEMO.mkdir(parents=True, exist_ok=True)
 config.OUTPUT_DIR = DEMO
 config.SPECS_DIR = DEMO
-import orchestrate
+import orchestrate  # noqa: E402  must follow the OUTPUT_DIR/SPECS_DIR redirect
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-5s [%(name)s] %(message)s", datefmt="%H:%M:%S")
 brief = ("In April 2019 the Event Horizon Telescope released the first ever image of a "
     "black hole, at the centre of galaxy M87, 55 million light-years away. The black "

@@ -137,7 +137,9 @@ def _wire_stubs(monkeypatch, render_calls, tmp_path):
     """Stub research (emits real research cost + a fallback), render, quality, reviewer,
     and the cache cleanup — so the REAL run() lifecycle writes a real record offline.
     Redirect SPECS_DIR/OUTPUT_DIR to a temp dir so the working tree is never touched."""
-    import orchestrate, researcher, quality_gate
+    import orchestrate
+    import researcher
+    import quality_gate
     from run_record import get_cost_meter, get_active_record
 
     monkeypatch.setattr(config, "SPECS_DIR", tmp_path)

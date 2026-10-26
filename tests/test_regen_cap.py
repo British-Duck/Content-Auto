@@ -154,7 +154,9 @@ def _wire_brief_run(monkeypatch, review_fn, tmp_path):
     """Stub the CD (generate + revise), reviewer, research, render, quality and
     cleanup so the real run() drives a brief through Stage 1.5 offline. Redirects
     SPECS_DIR/OUTPUT_DIR to a temp dir. Returns (cd_calls, render_calls)."""
-    import orchestrate, researcher, quality_gate
+    import orchestrate
+    import researcher
+    import quality_gate
 
     monkeypatch.setattr(config, "SPECS_DIR", tmp_path)
     monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
