@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.conftest import FIXTURES_DIR, PROJECT_ROOT, run_pipeline
+from tests.conftest import FIXTURES_DIR, run_pipeline
 from tests.quality import VideoQualityValidator
 
 pytestmark = pytest.mark.legacy

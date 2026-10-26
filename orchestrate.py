@@ -18,7 +18,7 @@ import time
 from pathlib import Path
 
 import config
-from cost_tracker import get_tracker, reset_tracker
+from cost_tracker import reset_tracker
 
 log = logging.getLogger("orchestrate")
 
@@ -332,7 +332,7 @@ def dry_run(input_arg: str, skip_research: bool = False):
         print(f"Source: spec file ({input_path})")
         cd_calls = 0
     else:
-        print(f"Source: text brief")
+        print("Source: text brief")
         print(f"  \"{input_arg[:100]}{'...' if len(input_arg) > 100 else ''}\"")
         from creative_director import _brief_hash
         cache_file = config.BRIEF_CACHE_DIR / f"{_brief_hash(input_arg)}.json"
@@ -358,7 +358,7 @@ def dry_run(input_arg: str, skip_research: bool = False):
                           if not (s.get("clip") and isinstance(s.get("clip"), dict)
                                   and s["clip"].get("url"))]
         print(f"  Researcher:         {len(needs_research)} screen(s) need clips")
-        print(f"    Best case (metadata hits): 0 video calls")
+        print("    Best case (metadata hits): 0 video calls")
         researcher_max = len(needs_research) * 2
         print(f"    Worst case:        {researcher_max} video call(s)")
     elif spec and skip_research:
@@ -397,7 +397,7 @@ def dry_run(input_arg: str, skip_research: bool = False):
     print(f"  Thinking tokens:    ${thinking_cost:.4f}" +
           (f"  (uncapped stages estimated at {_UNCAPPED_THINKING_EST} tokens)" if uncapped else ""))
     print(f"  Video calls:        ${video_cost_min:.4f} - ${video_cost_max:.4f}")
-    print(f"  ----------------------------")
+    print("  ----------------------------")
     print(f"  Total:              ${total_min:.4f} - ${total_max:.4f}")
     print()
     print("Thinking budgets: creative={}, critique={}, timestamps={}, reviewer={}".format(
