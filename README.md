@@ -10,6 +10,14 @@ machine review before and after rendering, and a hard per-run cost ceiling.
 > end. It is partway through a planned migration to its v2 architecture
 > (see [Status and roadmap](#status-and-roadmap)).
 
+<p align="center">
+  <img src="docs/images/example-gradient-beats.jpg" width="552"
+       alt="Two 9:16 frames rendered by the pipeline on a dark green gradient: 'One Leaked Document' and '$8,000,000,000'">
+</p>
+<p align="center"><sub>Two data beats from the <a href="#example-run">example run</a>, drawn
+entirely by the renderer. Footage frames are not shown because they contain third-party
+YouTube material.</sub></p>
+
 ## Contents
 
 1. [Overview](#overview)
@@ -17,15 +25,16 @@ machine review before and after rendering, and a hard per-run cost ceiling.
 3. [Requirements](#requirements)
 4. [Installation](#installation)
 5. [Usage](#usage)
-6. [Configuration](#configuration)
-7. [Outputs](#outputs)
-8. [Testing](#testing)
-9. [Repository layout](#repository-layout)
-10. [Design principles](#design-principles)
-11. [Status and roadmap](#status-and-roadmap)
-12. [Limitations](#limitations)
-13. [Documentation](#documentation)
-14. [License](#license)
+6. [Example run](#example-run)
+7. [Configuration](#configuration)
+8. [Outputs](#outputs)
+9. [Testing](#testing)
+10. [Repository layout](#repository-layout)
+11. [Design principles](#design-principles)
+12. [Status and roadmap](#status-and-roadmap)
+13. [Limitations](#limitations)
+14. [Documentation](#documentation)
+15. [License](#license)
 
 ## Overview
 
@@ -122,8 +131,8 @@ Python dependencies (`requirements.txt`):
 ## Installation
 
 ```bash
-git clone <repository-url>
-cd <repository>
+git clone https://github.com/British-Duck/Content-Auto.git
+cd Content-Auto
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -169,6 +178,51 @@ scheme, the pipeline always uses it.
 
 **Exit codes.** The exit code is zero only if both the technical Quality Gate and
 Output-QA pass. A spec that the editorial critic rejected is flagged and not rendered.
+
+## Example run
+
+Taken from a real run record (`logs/ftx-collapse-sam-bankman-fried_20260608_101719.json`,
+8 June 2026). The Creative Director ran on `gemini-2.5-pro`, the configuration at the
+time. The brief:
+
+```
+In November 2022 the crypto exchange FTX collapsed within days after a leaked balance
+sheet triggered a bank run. Founder Sam Bankman-Fried had quietly used about 8 billion
+dollars of customer deposits to prop up his trading firm Alameda. The company filed for
+bankruptcy and he was later convicted of fraud. Use dark_green, collapse angle.
+```
+
+| Stage | Result | Cost (USD) |
+|---|---|---|
+| Creative Director | 7-screen spec, structure "reveal" | 0.081 |
+| Spec contract | Passed, no repairs needed | — |
+| Editorial Critic | `REVISE`, then `PUBLISH` after one regeneration | 0.070 |
+| Researcher | 4 direct clips, 1 clip via an alternate query, 2 deliberate gradients | 0.032 |
+| Render and Quality Gate | 32.7 s MP4, 7/7 technical checks | local |
+| Output-QA | `PASS`, no blocking issues | 0.031 |
+| **Total** | Ceiling 0.75 | **0.214** |
+
+The footage ladder recorded which tier each screen landed on:
+
+| Screen | Tier | Detail |
+|---|---|---|
+| 0, 5, 6 | `clip` | Reused from the cross-run clip knowledge base |
+| 2 | `clip` | Found by searching the spec's clip description |
+| 4 | `alt_query_clip` | First query missed; found on an alternate phrasing |
+| 1, 3 | `intentional_gradient` | Planned data beats, shown in the image above |
+
+Two points from the record show the review stages working:
+
+- The critic's first pass returned `REVISE` because the spec ran 23.5 s, under the 30 s
+  floor, which would also have cut the narration short. The regenerated spec passed.
+- The opening screen claims a "$26 billion" peak net worth, a figure the brief does not
+  contain. The critic listed it in `facts_to_check` for a human instead of blocking the
+  run, by design.
+
+Across the 30 rendered runs recorded in `logs/`, the median cost was $0.19 per video and
+the highest was $0.30, all with the Creative Director on `gemini-2.5-pro`. The current
+defaults (`gemini-3-flash-preview`) have no recorded runs yet. An Output-QA `PASS` means
+the render matches the plan; it is not a judgement that the video is good.
 
 ## Configuration
 
@@ -308,6 +362,9 @@ Quality priorities beyond the migration are set out in
   project is a technical prototype, not a publishing tool.
 - **Factual accuracy is not verified automatically.** Claims are surfaced for human
   review, not checked.
+- **Output-QA sees one frame per segment.** It judges whether footage plausibly fits the
+  claim, not where it came from. In one passing Apollo 11 run it accepted a modern NASA
+  JPL control-room celebration as the 1969 landing.
 - **Model-dependent quality.** Output quality and cost depend on preview-tier models
   whose behaviour and pricing may change.
 - **No formal evaluation yet.** Quality has so far been judged by watching output
