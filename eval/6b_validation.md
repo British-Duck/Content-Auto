@@ -2,11 +2,11 @@
 
 Premise of 6b: *execution* (footage) is the binding constraint, and the hero-clip
 spine + Ken Burns stills + single_clip format should lift quality from the first
-batch's **~2/5** toward **4/5**. Only the eye confirms it — fill the **Eyeball** column.
+batch's **~2/5** toward **4/5**. Only the eye confirms it, which is what the **Eyeball** column records.
 
 - **QA** = Output-QA vision verdict (PASS = execution matched the plan; FAIL = surfaced blocking_issues). A PASS is *coherence, not quality* — it does not mean 4/5.
-- **Eyeball (1–5)** = Jack's score. 5 = ship, 4 = target bar, 2 = first-batch level. **Left blank for you.**
-- **Baseline** = prior score from `eval/baseline_scores.json` (montage only; placeholder until filled).
+- **Eyeball (1–5)** = human score. 5 = ship, 4 = target bar, 2 = first-batch level. Not yet recorded for this run.
+- **Baseline** = prior score from `eval/baseline_scores.json` (montage only; per-video scores were not recorded, so the aggregate ~2/5 applies).
 - **REGRESSION** flag = a montage video that looks worse than its baseline.
 
 Runs: regenerated **2026-06-12** on current 6b code (source post-dated the 06-08/09 outputs).
