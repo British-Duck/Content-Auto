@@ -93,8 +93,8 @@ contract, music, throughput. Don't build the factory before validating the produ
   single-continuous-moment stories. Trust fixes followed: format-aware duration ceiling,
   single_clip truncation guard, shared validated clip cache.
 
-**Open before Phase C:** the 6b montage-set validation (`eval/6b_validation.md`) is
-blocked on the Gemini spend cap; re-run `scripts/batch_phase_b.py` and re-watch, plus
+**Open before Phase C:** the 6b montage-set validation (`eval/6b_validation.md`) was
+cut short by an API spend limit; re-run `scripts/batch_phase_b.py` and re-watch, plus
 re-score the single-clip set under the now-honest QA. Keep re-running and watching until
 quality clears ~4/5.
 

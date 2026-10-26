@@ -4,7 +4,7 @@ Short-form vertical video pipeline (brief → spec → footage → render → QA
 Currently mid-migration from v1 to **News Dispatch v2**. Read `docs/MIGRATION_PLAN.md`
 before doing any work — execute it **one scoped step at a time**, never ahead.
 
-## Architecture (current v1 wiring)
+## Architecture (current wiring)
 
 Entry point: `orchestrate.py` → `run()`. Five stages:
 
@@ -40,7 +40,7 @@ factual_accuracy hard-reject, which was removed.)
 - `docs/COST_TUNING.md` — cost levers, cache layout, rate limits. `specs/` is generated
   per run and gitignored (like `output/`, `logs/`, `cache/`).
 - Prompts in `prompts/`. **Stage prompts are loaded at import time** — a missing prompt
-  file crashes the stage module on import (see "Current state").
+  file crashes the stage module on import.
 
 ## v2 spec schema (target — see `prompts/creative_director_v2.md`)
 
@@ -56,7 +56,7 @@ Per-screen: `text`, `reason` (why this segment+format), `duration` (1.0–6.0s),
 **`voice` is removed** — a single fixed narrator lives in config.
 Constraints: 4–12 screens (typ. 5–9), total runtime 30–50s.
 
-New prompts staged in `prompts/`: `creative_director_v2.md` (Stage 1),
+Stage prompts in `prompts/`: `creative_director_v2.md` (Stage 1),
 `editorial_critic.md` (pre-render reviewer), `output_qa.md` (post-render QA).
 
 ## Working principles (follow these)
@@ -68,7 +68,7 @@ New prompts staged in `prompts/`: `creative_director_v2.md` (Stage 1),
 - **Make silent failures loud** — always log *why* anything falls back.
 - **New spec fields are additive;** the renderer must tolerate unknown fields.
 - Show the diff and the acceptance-check result for each step before continuing.
-- Work on the migration branch; no destructive commands.
+- Work on a branch, one task per commit; no destructive commands.
 
 ## Run commands
 
@@ -83,10 +83,10 @@ python orchestrate.py "Brief..." --force-regen                    # ignore brief
 Gemini). Further detail: `docs/HANDOFF.md` (orientation) and `docs/MIGRATION_PLAN.md`
 (system model + roadmap).
 
-## Current state (2026-07-21)
+## Current state (2026-10-26)
 
-**Phase B complete (Steps 4 + 5 + 6a/6b) plus trust fixes.** The pipeline runs end
-to end. Stage 1 uses `creative_director_v2.md` (hero-clip spine rules + `single_clip`
+**Phases A and B are complete** (see `docs/MIGRATION_PLAN.md` Part 2). The pipeline
+runs end to end. Stage 1 uses `creative_director_v2.md` (hero-clip spine rules + `single_clip`
 format, Rule 2.5); Stage 1.5 is the Editorial Critic (trigger = REVISE, 2-pass cap,
 facts → `facts_to_check`, fed deterministic COMPUTED METRICS — script-fit numbers,
 spine counts, near-duplicate clip_descriptions — via `editorial_critic.compute_metrics`);
@@ -95,24 +95,19 @@ audited per beat in the run record's `footage_ladder`) and resolves `single_clip
 hero windows; the post-render stage is Output-QA (`output_qa.py`, vision, format-aware:
 single_clip verdicts judge continuity/on-story, not per-segment clip matches).
 
-Recent trust fixes (2026-07-14): format-aware duration ceiling (single_clip beats to
-15s); single_clip truncation guard (`fit_start_to_source`, refuses uncoverable
-sources); `vidpipe/clips.py` shares the researcher's cache dir + YouTube-ID key and
-deletes/validates partial downloads.
+Models: the judgement stages default to `gemini-3-flash-preview` (since 2026-07-22; no
+recorded production runs on it yet); the researcher stays on `gemini-2.5-flash`.
+Quality priorities beyond the migration are in `docs/QUALITY_ROADMAP.md`.
 
-Offline-faithful tests (the migration gate — legacy `test_stress.py` /
-`test_output_quality.py` render suites have pre-existing failures, not the gate):
-`test_spec_validator.py`, `test_run_record.py`, `test_regen_cap.py`,
+Tests: plain `pytest` runs 69 offline tests, the 66-test migration gate
+(`test_spec_validator.py`, `test_run_record.py`, `test_regen_cap.py`,
 `test_step5_reviewers.py`, `test_fallback_ladder.py`, `test_hero_spine.py`,
-`test_single_clip.py`, `test_editorial_metrics.py` — 66 passing.
+`test_single_clip.py`, `test_editorial_metrics.py`) plus `test_quality_gate.py`.
+CI (`.github/workflows/tests.yml`) runs the gate on Python 3.11 and 3.13. The v1
+render suites `test_stress.py` / `test_output_quality.py` are marked `legacy`
+(stale visual baselines) and run only with `-m legacy`.
 
-Repo cleanup (2026-07-21): one-off batch drivers moved to `scripts/` (path-shimmed);
-dead config constants removed (incl. retired `REVIEWER_MODEL`); `logs/` untracked and
-gitignored; docs consolidated — `docs/MIGRATION_PLAN.md` is the single system-model +
-roadmap doc, `docs/HANDOFF.md` the rewritten orientation doc; superseded `output/`
-batches pruned (kept the 2026-06-08 phase-b and single-clip watch sets).
-
-**Next:** (1) lift the Gemini spend cap (https://ai.studio/spend) and re-run
-`scripts/batch_phase_b.py` — the montage-set validation from `eval/6b_validation.md` is still
-open; re-watch the single-clip set with the now-honest QA. (2) Fill the CD prompt's
-empty EXEMPLARS slot (3–4 hand-authored specs). (3) Phase C Step 7: eval harness.
+**Open work:** (1) re-run the Phase B montage validation set
+(`scripts/batch_phase_b.py`) and record eyeball scores in `eval/6b_validation.md`.
+(2) Fill the CD prompt's empty EXEMPLARS slot (3–4 hand-authored specs).
+(3) Phase C Step 7: eval harness.

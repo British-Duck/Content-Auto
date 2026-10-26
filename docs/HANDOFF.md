@@ -53,8 +53,8 @@ next (eval harness, brief contract, footage hit-rate, renderer wiring of
 `transition`/`audio_mode`).
 
 Immediate open items:
-1. Re-run the Phase B watch set (`scripts/batch_phase_b.py`) once the Gemini spend cap
-   is lifted, and score it against `eval/6b_validation.md`.
+1. Re-run the Phase B watch set (`scripts/batch_phase_b.py`) and score it against
+   `eval/6b_validation.md`.
 2. Fill the CD prompt's empty EXEMPLARS slot with 3–4 hand-authored specs.
 3. Phase C Step 7: the eval harness.
 
